@@ -2,6 +2,7 @@ from flask import redirect, render_template, request, url_for, g, jsonify, Respo
 from routes import common
 from models_mysql import users_orm, accounts_orm, assets_orm, courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm
 
+
 def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/")
     @goldis_blueprint.route("/home")
@@ -29,4 +30,9 @@ def make_routes(goldis_blueprint):
         # users_orm.Users.delete_user_by_id(24)
 
         all_courses = courses_orm.Courses.get_all_courses()
-        return render_template("index.html", user=user, user_account= None, all_courses=all_courses, all_notifications=all_notifications, flash_messages=flash_messages, db_number=db_number)
+        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_notifications=all_notifications, flash_messages=flash_messages, db_number=db_number)
+
+    @goldis_blueprint.route("/landing_page")
+    def landing_page():
+        user = common.get_user_from_token()
+        return render_template('landing_page.html', user=user)

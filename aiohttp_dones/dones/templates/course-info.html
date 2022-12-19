@@ -34,7 +34,12 @@
                   </span>
             </div>#}
           </div>
-          <a {% if course.price == '0' or course.is_enrolled %}href="/course-overview/{{course.id}}"{% else %}href="#payment_modal" data-toggle="modal"{% endif %} class="btn btn-success">خرید</a>
+          <a {% if course.price == '0' or course.is_enrolled %}href="/course-overview/{{course.id}}"{% else %}href="#payment_modal" data-toggle="modal"{% endif %} class="btn btn-success">
+            {% if course.price == '0' %}
+              ورود
+            {% else %}
+              خرید            
+            {% endif %}</a>
         </div>
       </div>
       <div class="col-12 col-lg-8">
