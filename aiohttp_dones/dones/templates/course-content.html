@@ -86,13 +86,13 @@
         <div class="cc-quiz-row">
           <div>آخرین نمره:</div>
           <div>
-            {% if quiz.quiz_type == '1' %}{{quiz.last_score}}{% else %}-------{% endif %}
+            {% if quiz.quiz_type == '1' and quiz.last_score %}{{quiz.last_score}}{% else %}-------{% endif %}
           </div>
         </div>
         <div class="cc-quiz-row">
           <div>بهترین نمره:</div>
           <div>
-            {% if quiz.quiz_type == '1' %}{{quiz.best_score}}{% else %}-------{% endif %}
+            {% if quiz.quiz_type == '1' and quiz.best_score %}{{quiz.best_score}}{% else %}-------{% endif %}
           </div>
         </div>
         <div class="cc-quiz-row">

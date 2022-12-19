@@ -49,7 +49,7 @@ def make_routes(goldis_blueprint):
         return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': item_id, 'all_notifications':all_notifications}
 
     # comments page
-    @goldis_blueprint.route('/comments/course_info_<course.id>')
+    @goldis_blueprint.route('/comments/course_info_<course_id>')
     def comments_course_info(course_id):
         user = common.get_user_from_token()
         page_number = None
