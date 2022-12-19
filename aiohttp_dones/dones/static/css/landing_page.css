@@ -1,0 +1,219 @@
+@font-face {
+  font-family: iranSans;
+  src: url(../fonts/IRANSansWeb_400.woff);
+}
+* {
+  box-sizing: border-box;
+  font-family: iranSans;
+}
+body {
+  background-color: #f2f2f2;
+  direction: rtl;
+  overflow-x: hidden;
+}
+section {
+  margin-bottom: 100px;
+}
+section:nth-child(1) {
+  margin-top: 100px;
+}
+p {
+  font-size: 1.5rem;
+  color: #f2f2f2;
+}
+.header {
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+}
+.header img {
+  /* height: 100vh; */
+  width: 700px;
+  /* object-fit: cover; */
+}
+.mybtn {
+  background-color: #ff7000;
+  color: #f2f2f2;
+  transition: 0.4s;
+  outline: none;
+  padding: 10px 20px;
+  border: none;
+}
+.mybtn:hover {
+  background-color: #ff7000;
+  color: #f2f2f2;
+  scale: 1.1;
+}
+.cards div {
+  width: 30%;
+  border: 2px solid #ff7000;
+  margin: 10px;
+  padding: 30px;
+  box-shadow: 0 0 8px #ff7000;
+  background-color: #fff;
+  transition: 0.4s;
+}
+.cards div:nth-child(odd) {
+  border: 2px solid #10a19d;
+  box-shadow: 0 0 8px #10a19d;
+}
+.cards div:hover {
+  scale: 1.05;
+}
+.carosCard {
+  position: relative;
+  border-radius: 30px;
+}
+.counter {
+  position: absolute;
+  top: 100px;
+  right: 73%;
+  display: flex;
+  text-align: center;
+  padding: 10px;
+}
+.counter .countdown p {
+  margin: 20px;
+  text-align: center;
+  font-size: 2em;
+  font-weight: 600;
+  color: #000;
+}
+.counter .countdown span {
+  margin: 15px;
+  font-size: 1em;
+  font-weight: 700;
+  color: #000;
+}
+.vHaji {
+  width: 100%;
+  max-width: 600px;
+}
+.carousel p {
+  color: #000;
+}
+.footer {
+  padding: 30px 80px;
+}
+.footer img {
+  width: 300px;
+}
+.pheader {
+  position: absolute;
+  top: 270px;
+  right: 200px;
+}
+.pheader2 {
+  position: absolute;
+  top: 300px;
+  right: 33%;
+  font-size: 60px;
+  transition: 0.5s;
+  text-shadow: 0 0 10px #ff7000;
+}
+.pheader2:hover {
+  top: 330px;
+}
+.secondeDiv {
+  background-color: #10a19d;
+  padding: 100px 50px;
+}
+.myInput {
+  width: 300px;
+  padding: 7px 15px;
+  margin: 5px 0;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+/* carousel */
+
+.carousel-inner .carousel-item.active,
+.carousel-inner .carousel-item-next,
+.carousel-inner .carousel-item-prev {
+  display: flex;
+  justify-content: space-around;
+}
+
+.carousel-inner .carousel-item-right.active,
+.carousel-inner .carousel-item-next {
+  transform: translateX(33%);
+}
+
+.carousel-inner .carousel-item-left.active,
+.carousel-inner .carousel-item-prev {
+  transform: translateX(-33%);
+}
+
+.carousel-inner .carousel-item-right,
+.carousel-inner .carousel-item-left {
+  transform: translateX(0);
+}
+.movie-card {
+  width: 200px;
+}
+.movie-card img {
+  border-radius: 50%;
+  height: 150px;
+  width: 150px;
+}
+/* .carosCard p {
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
+  color: #111;
+}
+.carosCard h4 {
+  position: absolute;
+  bottom: 40px;
+  left: 15px;
+  color: #111;
+}
+.carosCard:hover {
+  box-shadow: 0 0 30px #555 inset;
+}
+.shadowImg:hover {
+  box-shadow: 0 0 50px #000 inset;
+  filter: grayscale(50%);
+}
+.owl-carousel button span {
+  color: #000;
+  font-size: 50px;
+} */
+@media screen and (max-width: 1100px) {
+  .counter {
+    top: 4px;
+    right: 30%;
+  }
+  .pheader2 {
+    right: 28%;
+  }
+}
+@media screen and (max-width: 992px) {
+  .cards div {
+    width: 90%;
+  }
+  .secondeDiv {
+    padding: 100px 120px;
+  }
+  .pheader2 {
+    right: 25%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .secondeDiv {
+    padding: 100px 50px;
+  }
+  .vHaji {
+    margin-top: 50px;
+  }
+}
+@media screen and (max-width: 650px) {
+  .header img {
+    width: 600px;
+  }
+  .pheader2 {
+    right: 10%;
+  }
+}
