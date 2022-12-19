@@ -62,3 +62,31 @@ def make_routes(goldis_blueprint):
         pages_count = (comments_count[0] // comments_count_per_page)
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
         return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
+
+    @goldis_blueprint.route('/comments/course_overview_<course_id>')
+    def comments_course_overview(course_id):
+        user = common.get_user_from_token()
+        page_number = None
+        comments_count_per_page = 20
+        course_id = f'course_overview_{course_id}'
+        a_page_section_comments = comments_orm.Comments.get_comments_by_section_id(course_id, page_number= None, comments_count_per_page= comments_count_per_page, reversed_ordering= True)
+        if page_number == None:
+            a_page_section_comments = a_page_section_comments[0:19]
+        comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
+        pages_count = (comments_count[0] // comments_count_per_page)
+        all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
+        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
+
+    @goldis_blueprint.route('/comments/course_content_<course_id>')
+    def comments_course_content(course_id):
+        user = common.get_user_from_token()
+        page_number = None
+        comments_count_per_page = 20
+        course_id = f'course_content_{course_id}'
+        a_page_section_comments = comments_orm.Comments.get_comments_by_section_id(course_id, page_number= None, comments_count_per_page= comments_count_per_page, reversed_ordering= True)
+        if page_number == None:
+            a_page_section_comments = a_page_section_comments[0:19]
+        comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
+        pages_count = (comments_count[0] // comments_count_per_page)
+        all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
+        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
