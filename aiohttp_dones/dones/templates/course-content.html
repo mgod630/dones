@@ -1,0 +1,160 @@
+{% extends "layout.html" %}
+{% block styles %}
+<link rel="stylesheet" href="/static/css/mejs/mediaelementplayer.min.css" />
+<link rel="stylesheet" href="/static/css/course-content.css?2">
+{% endblock %}
+{% block content %}
+{% if allowed_view_results == 'True' %}
+<br>
+<h4 style='text-align: center'><a href="/quiz-results/{{quizzes[0].id}}/{{user_id}}">نتیجه ی آزمون</a></h4>
+{% endif %}
+<div class="container course-content-container">
+  <div class="white-box mt-3 mb-3">
+    <div class="wb-header wbh-purple">
+      <div class="wb-icon"><i class="fal fa-book-open"></i></div>
+      <div class="chp-title">
+        <div>{{course_item.title}}</div>
+        <div>{{course.title}}</div>
+      </div>
+      <a href="/redirect-to-last-page/True" class="btn btn-outline-light">
+        بازگشت <i class="fas fa-chevron-left"></i>
+      </a>
+    </div>
+    <div class="section-header sch-course" id="course_section">
+      <i class="fas fa-graduation-cap ml-1"></i> آموزش
+      {% if quizzes %}
+      <a class="btn btn-outline-secondary" href="#quiz_section"><i class="fas fa-file-check ml-1"></i> برو به آزمون</a>
+      {% endif %}
+    </div>
+    <div>
+    {{course_item.description|safe}}
+    </div>
+    {% if quizzes %}
+    <div class="section-header sch-quiz" id="quiz_section">
+      <i class="fas fa-file-check ml-1"></i> آزمون
+      <a class="btn btn-outline-secondary" href="#course_section"><i class="fas fa-graduation-cap ml-1"></i> برو به آموزش</a>
+    </div>
+    {#
+    <div class="table-responsive">
+      <table class="table table-striped quizzes-list">
+        <thead class="thead-light">
+          <tr>
+            <th>نام آزمون</th>
+            <th>تاریخ شروع</th>
+            <th>تاریخ پایان</th>
+            <th>تعداد شرکت</th>
+            <th>آخرین نمره</th>
+            <th>بهترین نمره</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for quiz in quizzes %}
+          <tr>
+            <td>{{quiz.title}}</td>
+            <td>{{quiz.jalali_start_datetime}}</td>
+            <td>{{quiz.jalali_end_datetime}}</td>
+            <td>{{quiz.attendance_max}}</td>
+            <td>{{quiz.last_score}}</td>
+            <td>{{quiz.best_score}}</td>
+            <td><a class="btn btn-warning" href="/quiz/{{quiz.id}}">ورود به آزمون</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    #}
+    <div class="quizzes-container">
+      {% for quiz in quizzes %}
+      <div class="cc-quiz">
+        <div class="cc-quiz-row">
+          <div>نام آزمون:</div>
+          <div>{{quiz.title}}</div>
+        </div>
+        <div class="cc-quiz-row">
+          <div>تاریخ شروع:</div>
+          <div>{{quiz.jalali_start_datetime}}</div>
+        </div>
+        <div class="cc-quiz-row">
+          <div>تاریخ پایان:</div>
+          <div>{{quiz.jalali_end_datetime}}</div>
+        </div>
+        <div class="cc-quiz-row">
+          <div>تعداد شرکت:</div>
+          <div>{{quiz.attendance_max}}</div>
+        </div>
+        <div class="cc-quiz-row">
+          <div>آخرین نمره:</div>
+          <div>
+            {% if quiz.quiz_type == '1' %}{{quiz.last_score}}{% else %}-------{% endif %}
+          </div>
+        </div>
+        <div class="cc-quiz-row">
+          <div>بهترین نمره:</div>
+          <div>
+            {% if quiz.quiz_type == '1' %}{{quiz.best_score}}{% else %}-------{% endif %}
+          </div>
+        </div>
+        <div class="cc-quiz-row">
+          <a class="btn btn-warning" href="/quiz/{{quiz.id}}">ورود به آزمون</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  <div class="users-comments white-box mb-3">
+    <div class="wb-header wbh-grey">
+      <div class="wb-icon"><i class="fal fa-comment"></i></div>
+      <h2>دیدگاه شرکت کنندگان</h2>
+    </div>
+    <div id="all_comments" class="relative-wrapper" data-id="{{course_item.id}}">
+      {% include 'spinner.html' %}
+    </div>
+    <hr>
+    <div class="mb-1 text-center">
+      <a href="/comments/course_content_{{course_item.id}}" class="btn btn-info">ورود به بخش نظرات</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="quiz_start_modal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">توجه!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          مدت زمان مجاز برای پاسخ دهی به این آزمون <b></b> دقیقه می‌باشد. در
+          صورت کلیک بر روی گزینه «شروع آزمون»، فرصت شرکت در آزمون شروع شده و
+          <span class="md-danger">فقط تا ساعت <b></b></span> قادر به ثبت پاسخ‌های
+          خود خواهید بود.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-primary">شروع آزمون</a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/mediaelement-and-player.min.js"></script>
+<script>
+  $(function () {
+    if ($('.mejs').length > 0) $('.mejs').mediaelementplayer();
+    const comments = [
+      {template: 'comments_static.html', data: 'all_comments', id: 'all_comments'}
+    ]
+    const courseId = $("#all_comments").data("id")
+    loadJson(`/json-get-comments-and-notifications-by-section-id/course_content_${courseId}`, comments)
+  })
+</script>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "layout.html" %} {% block styles %}
+<link rel="stylesheet" href="/static/css/course-overview.css" />
+<link rel="stylesheet" href="/static/css/course-details.css" />
+{% endblock %} {% block content %}
+<div class="course-info-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-4 right-col">
+        <div class="course-image d-none d-lg-block" style="background-image: url({{course.image_path}})"></div>
+        <div class="white-box">
+          <div class="course-info-details">
+            <div class="info-bit">
+                  <span>تاریخ آغاز:</span><span>{{course.jalali_start_datetime}}</span>
+            </div>
+            <div class="info-bit">
+                  <span>تاریخ پایان:</span><span>{{course.jalali_end_datetime}}</span>
+            </div>
+            <div class="info-bit">
+                  <span>مدرس:</span><span>{{course.institute}}</span>
+            </div>
+          {#<div class="info-bit">
+              <span>قیمت:</span><span>
+                {% if course.price == '0' %}
+                  رایگان
+                {% else %}
+                  {{ '{0:,}'.format(course.price|int) }} ریال
+                {% endif %}
+              </span>
+            </div>#}
+          </div>
+          {% if course.price != '0' and not course.is_enrolled %}
+          <a href="#payment_modal" data-toggle="modal" class="btn btn-success btn-block">خرید</a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-12 col-lg-8">
+        <div class="course-info-text">
+          <h2>{{course.title}} 
+            <a href="/redirect-to-last-page/True" class="btn btn-outline-light">بازگشت <i class="fas fa-chevron-left"></i></a>
+          </h2>
+          <div class="course-image d-block d-lg-none" style="background-image: url({{course.image_path}})"></div>
+          <p>{{course.welcome_text|safe}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container course-chapters">
+  <div class="row">
+    {% set colors = ["blue-green","lime","cyan","yellow","pink","orange","green","gray","blue-green", "lime","cyan","yellow","pink","orange","green","gray","blue-green", "lime","cyan","yellow","pink","orange","green","gray","blue-green"] %}
+    {% if course_items %}
+    {% for course_item in course_items %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="crd-chapters white-box {{colors[loop.index]}}">
+        <div class="crd-header">
+          <div class="crd-row">{{loop.index}}</div>
+          <div class="crd-title">{{course_item.title|truncate(65, True)}}</div>
+        </div>
+        <div class="course-dates">
+          <span><span class="d-none d-sm-inline">تاریخ</span> آغاز: {{course_item.jalali_start_datetime}}</span>
+          <div class="v-divider"></div>
+          <span><span class="d-none d-sm-inline d-lg-none d-xl-inline">تاریخ</span> پایان: {{course_item.jalali_end_datetime}}</span>
+        </div>
+        <div class="crd-body">
+          <a href="/course-content/{{course.id}}/{{course_item.id}}" class="btn btn-block btn-outline-secondary"><i class="fal fa-books"></i> ورود</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+  <div class="users-comments white-box mb-3">
+    <div class="wb-header wbh-grey">
+      <div class="wb-icon"><i class="fal fa-comment"></i></div>
+      <h2>پرسش و پاسخ</h2>
+    </div>
+    <div id="all_comments" class="relative-wrapper" data-id="{{course.id}}">
+      {% include 'spinner.html' %}
+    </div>
+    <hr>
+    <div class="mb-1 text-center">
+      <a href="/comments/course_overview_{{course.id}}" class="btn btn-info">ورود به تالار گفتگو</a>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="payment_modal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">خرید</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          {% if course and 'price' in course %}
+          شما درخواست خرید <b>{{course.title}}</b> با قیمت
+          <b>{{ '{0:,}'.format(course.price|int) }}</b> ریال را دارید.
+          {%endif%}
+        </p>
+        <div class="gateways-header">انتخاب درگاه</div>
+        <div class="gateways-container">
+          <img src="/static/template/gateways/pg_zarinpal.png"></img>
+            <div>
+                <i class="cstm-radio"></i>
+                پارسیان
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="/parsian-payment-gateway?course_id={{course.id}}" data-cid="{{course.id}}" id="payment_link" class="btn btn-success" style="width: 151px;">پرداخت</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/moment.min.js"></script>
+<script>
+  $(function(){
+    const structure = [
+      {template: 'comments_static.html', data: 'all_comments', id: 'all_comments'}
+    ]
+    const courseId = $("#all_comments").data("id")
+    loadJson(`/json-get-comments-and-notifications-by-section-id/course_overview_${courseId}`, structure)
+    $(".gateway").click(function(){
+      if ($(this).hasClass("disabled")) return;
+      $(".gateway").removeClass("active");
+      $(this).addClass("active");
+      $("#payment_link").attr("href","/" + $(this).data("id") + "?course_id=" + $("#payment_link").data("cid"))
+    });
+  });
+</script>
+{% endblock %}

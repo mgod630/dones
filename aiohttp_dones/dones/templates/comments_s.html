@@ -1,0 +1,71 @@
+{% macro render_message(msg) -%}
+<div class="comment-wrapper" {% if msg.depth %}style="padding-right: {{msg.depth*25}}px;"{% endif %}>
+    <div class="comment">
+        <div class="usc-image">
+            <img src="/static/template/profile.jpg" />
+        </div>
+        <div class="usc-buttons">
+            {% if comments_options.can_reply and user and not msg.depth%}<a href="#reply_container" class="reply-button" data-postid="{{msg.id}}">پاسخ</a>{% endif %}
+            {#<a href="#" class="has-icon"><i class="fal fa-thumbs-up"></i></a>#}
+            {#<a href="#" class="has-icon"><i class="fal fa-thumbs-down"></i></a>#}
+        </div>
+        <div class="usc-body">
+            <div class="usc-name">{{msg.sender_name}} {# - msg.post_date #}</div>
+            <p>{{msg.comment_text}}</p>
+        </div>
+    </div>
+</div>
+{% if msg.replies %}
+{% for reply in msg.replies %}
+{{ render_message(reply) }}
+{% endfor %}
+{% endif %}
+{%- endmacro %}
+<div class="comments-wrapper">
+    {% if comments_options.can_reply and user %}
+    <div id="reply_container">
+        <div class="d-flex">
+            <div>
+                <div class="notices mb-1 d-none">پاسخ به <span id="adressee">ناشناس</span id="cancel_reply">: <span id="cancel_reply">(انصراف)</span></div>
+                <div class="notices mb-1">دیدگاه شما:</div>
+            </div>
+            <div class="text-danger mr-auto collapse" id="result_message"></div>
+        </div>
+        <input type="hidden" id="section_id" value="{{section_id}}">
+        <input type="hidden" id="reply_to" value="-1">
+        <textarea rows="4" class="form-control mb-2" id="reply_text" placeholder="چیزی بنویسید"></textarea>
+        <button class="btn btn-success" id="post_comment">ارسال</button>
+    </div>
+    <hr>
+    {% endif %}
+    {% if all_comments %}
+    {% for comment in all_comments %}
+    {{ render_message(comment) }}
+    {% endfor %}
+    {% else %}
+    <div class="text-center mb-5 mt-5 text-secondary">تا کنون پرسش یا دیدگاهی ارسال نشده است</div>
+    {% endif %}
+    {% if comments_options.comments_page %}
+    <hr>
+    <div class="mb-1 text-center">
+      <a href="{{comments_options.comments_page}}" class="btn btn-info">{{comments_options.link_text}}</a>
+    </div>
+    {% endif %}
+</div>
+{% if pages_count and pages_count > 1 %}
+<nav>
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if current_page == 1 %}disabled{% endif %}">
+          <a class="page-link" href="{% if current_page == 1 %}#{% else %}?page_number={{current_page-1}}{% endif %}" tabindex="-1">قبلی</a>
+        </li>
+        {% for page in range (1,pages_count+1) %}
+        <li class="page-item {% if current_page == page %}active{% endif %}">
+            <a class="page-link" href="{% if current_page == page %}#{% else %}?page_number={{page}}{% endif %}">{{page}}</a>
+        </li>
+        {% endfor %}
+        <li class="page-item {% if current_page == pages_count %}disabled{% endif %}">
+          <a class="page-link" href="{% if current_page == pages_count %}#{% else %}?page_number={{current_page+1}}{% endif %}">بعدی</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}

@@ -1,0 +1,137 @@
+.chp-title {
+    color: #fff;
+}
+.chp-title>div:first-child {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+.chp-title>div:last-child {
+    font-size: 14px;
+    font-weight: 100;
+}
+@media(max-width: 767px){
+    .chapter-header .btn {
+        margin: 0;
+        position: absolute;
+        left: 6px;
+        top: 6px;
+    }
+}
+
+.cr-header {
+    margin: -15px -15px 15px;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 10px 15px;
+    border-radius: 3px 3px 0 0;
+    background-color: #cccccc;
+}
+.anc-container .cr-header {
+    color: #543f00;
+    background-color: #ffc107;
+}
+.cr-header i {
+    margin-left: 10px;
+    top: 10px;
+    vertical-align: middle;
+    font-size: 24px;
+}
+.anc-row {
+    border-bottom: 1px solid #cccccc;
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+}
+.anc-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.anc-row i {
+    vertical-align: middle;
+    color: #292929;
+    margin-left: 6px;
+}
+
+ul.nav-tabs {
+    padding: 0;
+    border-bottom: 2px solid #eaeaea;
+}
+.nav-tabs .nav-link {
+    border: none;
+    border-radius: 0;
+    color: #7b7b7b;
+    font-weight: 700;
+}
+.nav-fill .nav-item {
+    background-color: #f1f1f1;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: #fff;
+    background-color: #2e8640;
+}
+
+.md-danger {
+    background-color: red;
+    color: #fff;
+    padding: 4px 8px 2px;
+    border-radius: 8px;
+    line-height: 1;
+    display: inline-block;
+}
+
+.quizzes-list .btn {
+    font-size: 14px;
+}
+.section-header {
+    margin-bottom: 15px;
+    border-bottom: 1px solid;
+    padding-bottom: 5px;
+    font-size: 18px;
+}
+.section-header.sch-course {
+    border-bottom-color: #2e8640;
+    color: #2e8640;
+}
+.section-header.sch-quiz {
+    border-bottom-color: #3434a0;
+    color: #3434a0;
+}
+.section-header a {
+    float: left;
+    font-size: 14px;
+    padding: 3px 6px;
+}
+.section-header a i {
+    margin-top: 3px;
+}
+.quizzes-container {
+    display: flex;
+}
+.cc-quiz {
+    flex: 1 1 25%;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #ececec;
+}
+.cc-quiz-row {
+    display: flex;
+    padding: 5px 8px 2px 8px;
+    background-color: #f7f7f7;
+}
+.cc-quiz-row:nth-child(even){
+    background-color: #ececec;
+}
+.cc-quiz-row:last-child {
+    padding: 5px 8px;
+}
+.cc-quiz-row>div:first-child {
+    text-align: left;
+    width: 90px;
+    font-weight: 600;
+    color: #292929;
+    padding-left: 15px;
+}
+.cc-quiz-row>a {
+    margin: 0 auto;
+}

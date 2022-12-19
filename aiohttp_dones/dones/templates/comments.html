@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="white-box mt-3 mb-3">
+        <div class="wb-header wbh-purple">
+          <div class="wb-icon"><i class="fal fa-comments"></i></div>
+          <h2>{{comments_title}}</h2>
+          <a href="/redirect-to-last-page/True" class="btn btn-outline-light">بازگشت <i class="fas fa-chevron-left"></i></a>
+        </div>
+        <div class="comments-wrapper">
+          <div id="reply_container">
+              <div class="d-flex">
+                  <div>
+                      <div class="notices mb-1 d-none">پاسخ به <span id="adressee">ناشناس</span id="cancel_reply">: <span id="cancel_reply">(انصراف)</span></div>
+                      <div class="notices mb-1">دیدگاه شما:</div>
+                  </div>
+                  <div class="text-danger mr-auto collapse" id="result_message"></div>
+              </div>
+              <input type="hidden" id="section_id" value="{{section_id}}">
+              <input type="hidden" id="reply_to" value="-1">
+              <textarea rows="4" class="form-control mb-2" id="reply_text" placeholder="چیزی بنویسید"></textarea>
+              <button class="btn btn-success" id="post_comment">ارسال</button>
+          </div>
+          <hr>
+          <div id="comments_container" class="relative-wrapper" data-id="{{section_id}}">
+            {% include 'spinner.html' %}
+          </div>
+          <nav id="pagination" class="collapse"></nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$(function(){
+  let pageNumber = 1;
+  $("#pagination").on("click", ".page-item", function(){
+    if ($(this).hasClass("active") || $(this).hasClass("disabled")) return
+    $("#comments_container").empty().append($.parseHTML('<div class="busy-overlay"><div class="spinner"></div></div>'))
+    const clickedData = $(this).data("page")
+    targetPage = clickedData !== "prev" && clickedData !== "next" ? clickedData : clickedData === "prev" ? pageNumber-1 : pageNumber+1
+    loadComments(targetPage)
+  })
+  const sectionId = $("#comments_container").data("id")
+  const structure = [
+    {template: 'comments_dynamic.html', data: 'all_comments', id: 'comments_container'}
+  ]
+  const loadComments = function(targetPage){
+    loadJson(`/json-get-comments-and-notifications-by-section-id/${sectionId}?page_number=${targetPage}`, structure, function(pageStatus){
+      current_page = pageStatus.current_page
+      pageNumber = current_page
+      pages_count = pageStatus.pages_count
+      $("#pagination").empty().addClass("collapse")
+      if (pages_count > 1) {
+        let pagination = '<ul class="pagination justify-content-center">'
+        pagination += `<li class="page-item ${current_page === 1 ? 'disabled' : ''}" data-page="prev"><span class="page-link">قبلی</span></li>`
+        const dummy = [...Array(pages_count).keys()].map((item)=> 
+          pagination += `<li class="page-item ${current_page === item + 1 ? 'active' : ''}" data-page="${item + 1}"><span class="page-link">${item+1}</span></li>`
+        )
+        pagination += `<li class="page-item ${current_page === pages_count ? 'disabled' : ''}" data-page="next"><span class="page-link">بعدی</span></li>`
+        $("#pagination").append($.parseHTML(pagination)).removeClass("collapse")
+      }
+    })
+  }
+  loadComments(1)
+});
+</script>
+{% endblock %}

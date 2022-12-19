@@ -1,0 +1,48 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'attenders' %}
+{% block inner_content %}
+<style>
+    .no-item {
+        text-align: center;
+        margin-top: 70px;
+        color: #717171;
+    }
+    .table {
+        width: 350px;
+        margin: 0 auto;
+    }
+    .table td {
+        padding: 5px;
+        vertical-align: middle;
+    }
+    .table td:last-child {
+        width: 1%;
+    }
+</style>
+<h4 class="text-center mb-2">پاسخ آزمون‌های  {{attender.full_name}}</h4>
+<hr>
+{% if list_datetim %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ردیف</th>
+            <th>تاریخ شرکت در آزمون</th>
+            <th>نمایش</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for index, answer in list_datetim.items() %}
+        <tr>
+            <td>{{index+1}}</td>
+            <td>{{answer}}</td>
+            <td>
+                <a href="/student-quiz-result/{{quiz_id}}/{{attender.id}}/{{index}}" class="btn btn-primary">نمایش</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <div class="no-item">این کاربر تا کنون در آزمونی شرکت نکرده است.</div>
+{% endif %}
+{% endblock %}

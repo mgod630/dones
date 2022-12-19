@@ -1,0 +1,79 @@
+{% extends "layout.html" %} {% block styles %}
+<link rel="stylesheet" href="/static/css/index.css?4" />
+{% endblock %} {% block content %}
+<div class="banner">
+  <img src="../static/template/banner (2).jpg" />
+  <div class="banner-text-container">
+    <p>
+      همه آدم ها باید راجب بیتکوین اطلاعات داشته باشد<br />چون بیتکوین بدون شک
+      یکی از مهمترین دستاوردهای بشر است.<br />
+      <i>لئون لوو</i>
+    </p>
+  </div>
+</div>
+<div class="courses-container">
+  <div class="container">
+    <div class="white-box mb-3">
+      <div class="wb-header wbh-yellow">
+        <div class="wb-icon"><i class="fal fa-exclamation"></i></div>
+        <h2>اطلاعیه</h2>
+      </div>
+      <div class="anc-text cs-scrollbar">
+        {% if all_notifications %} {% for notif in all_notifications %}
+        <div class="anc-row">
+          <i class="far fa-badge"></i>
+          {{notif.notification_text|safe}}
+        </div>
+        {% endfor %} {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      {% if all_courses %} {% for course in all_courses %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="cmp-card">
+          <!--<div class="cmp-card">-->
+          <a href="/course-info/{{course.id}}">
+            <div
+              class="crd-image"
+              style="background-image: url({{course.image_path}});"
+            >
+              <div class="inst-image">
+                <div class="inner-wrapper">
+                  <img src="{{course.logo_path}}" alt="" />
+                </div>
+              </div>
+            </div>
+          </a>
+          <div class="crd-header">
+            <div class="crd-row">{{loop.index}}</div>
+            <div class="crd-title">{{course.title}}</div>
+          </div>
+          <div class="crd-detail">
+            <span>تاریخ آغاز:</span
+            ><span>{{course.jalali_start_datetime}}</span>
+          </div>
+          <div class="crd-detail">
+            <span>تاریخ پایان:</span><span>{{course.jalali_end_datetime}}</span>
+          </div>
+          <div class="crd-detail">
+            <span>مدرس:</span><span>{{course.institute}}</span>
+          </div>
+          {#
+          <div class="crd-detail">
+            <span>قیمت:</span
+            ><span>
+              {% if course.price == '0' %} رایگان {% else %} {{
+              '{0:,}'.format(course.price|int) }} تومان {% endif %}
+            </span>
+          </div>
+          #}
+          <a href="/course-info/{{course.id}}" class="btn btn-primary btn-block"
+            >مشاهده</a
+          >
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

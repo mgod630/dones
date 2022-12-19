@@ -1,0 +1,74 @@
+.course-chapters>.row>.col-12{
+    margin-bottom: 25px;
+}
+.course-dates {
+    margin: 0 -15px 15px;
+    padding: 5px 15px 3px;
+    background-color: #616161;
+    color: #fff;
+    font-weight: 100;
+    font-size: 13px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.course-dates .v-divider {
+    border-left: 1px solid #797979;
+    height: 13px;
+}
+.crd-header {
+    margin: -15px -15px 0;
+    background-color: #007bff;
+    color: #fff;
+    height: 55px;
+    display: flex;
+    overflow: hidden;
+    border-radius: 3px 3px 0 0;
+}
+.crd-row {
+    width: 60px;
+    height: 55px;
+    background-color: rgba(0, 0, 0, 0.1);
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    flex-shrink: 0;
+    padding-top: 12px;
+}
+.crd-title {
+    margin: auto;
+    padding: 5px 10px;
+    text-align: justify;
+    font-size: 16px;
+}
+.crd-body .btn i{
+    margin-left: 3px;
+}
+.crd-chapters {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.crd-chapters.lime .crd-header {
+    background-color: #a1cd3a;
+}
+.crd-chapters.cyan .crd-header {
+    background-color: #44c3d4;
+}
+.crd-chapters.yellow .crd-header {
+    background-color: #fdbe0f;
+}
+.crd-chapters.pink .crd-header {
+    background-color: #f16777;
+}
+.crd-chapters.orange .crd-header {
+    background-color: #f8901f;
+}
+.crd-chapters.green .crd-header {
+    background-color: #68c06c;
+}
+.crd-chapters.gray .crd-header {
+    background-color: #b9b0b1;
+}
+.crd-chapters.blue-green .crd-header {
+    background-color: #4fc2b3;
+}

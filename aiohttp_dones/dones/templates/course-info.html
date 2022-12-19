@@ -1,0 +1,185 @@
+{% extends "layout.html" %} {% block styles %}
+<link rel="stylesheet" href="/static/css/mejs/mediaelementplayer.min.css" />
+<link rel="stylesheet" href="/static/css/course-info.css?3" />
+<link rel="stylesheet" href="/static/css/course-details.css" />
+{% endblock %}
+{% block content %}
+<div class="course-info-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-4 right-col">
+        <div class="course-image d-none d-lg-flex" style="background-image: url({{course.image_path}})">
+          {% if course.video_path %}
+          <div class="show-video-modal" data-target="#video_modal" data-toggle="modal"><i class="fas fa-play"></i></div>
+          {% endif %}
+        </div>
+        <div class="white-box">
+          <div class="course-info-details">
+            <div class="info-bit">
+                  <span>تاریخ آغاز:</span><span>{{course.jalali_start_datetime}}</span>
+            </div>
+            <div class="info-bit">
+                  <span>تاریخ پایان:</span><span>{{course.jalali_end_datetime}}</span>
+            </div>
+            <div class="info-bit">
+                  <span>مدرس:</span><span>{{course.institute}}</span>
+            </div>
+          {#<div class="info-bit">
+                  <span>قیمت:</span><span>
+                    {% if course.price == '0' %}
+                      رایگان
+                    {% else %}
+                      {{ '{0:,}'.format(course.price|int) }} ریال
+                    {% endif %}
+                  </span>
+            </div>#}
+          </div>
+          <a {% if course.price == '0' or course.is_enrolled %}href="/course-overview/{{course.id}}"{% else %}href="#payment_modal" data-toggle="modal"{% endif %} class="btn btn-success">خرید</a>
+        </div>
+      </div>
+      <div class="col-12 col-lg-8">
+        <div class="course-info-text">
+          <h2>{{course.title}}</h2>
+          <div class="course-image d-flex d-lg-none" style="background-image: url({{course.image_path}})">
+            {% if course.video_path %}
+            <div class="show-video-modal" data-target="#video_modal" data-toggle="modal"><i class="fas fa-play"></i></div>
+            {% endif %}
+          </div>
+          <p>{{course.description|safe}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="white-box mb-3">
+    <div class="wb-header wbh-yellow">
+      <div class="wb-icon"><i class="fal fa-exclamation"></i></div>
+      <h2>اطلاعیه‌ها</h2>
+    </div>
+    <div class="anc-text cs-scrollbar" id="notifications">
+      {% include 'spinner.html' %}
+    </div>
+  </div>
+  {% if course.body_html %}
+  <div class="white-box mb-3">
+    {{course.body_html|safe}}
+  </div>
+  {% endif %}
+  {#
+  <div class="similar-courses white-box mb-3">
+    <div class="cr-header">
+      <i class="far fa-boxes"></i><span>دوره‌های مشابه</span>
+    </div>
+    <div class="smc-wrapper">
+      <div class="row">
+        <div class="col-12 col-md-4">
+          <a href="#" class="smc-card">
+            <div class="smc-image" style="background-image: url(/static/template/course_default_small.jpg);"></div>
+            <div class="smc-title">
+              دوره کارورزی متقاضیان استخدام در شرکت ملی نفت
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  #}
+  <div class="users-comments white-box mb-3">
+    <div class="wb-header wbh-grey">
+      <div class="wb-icon"><i class="fal fa-comment"></i></div>
+      <h2>دیدگاه شرکت کنندگان</h2>
+    </div>
+    <div id="all_comments" data-id="{{course.id}}" class="relative-wrapper">
+      {% include 'spinner.html' %}
+    </div>
+    <hr>
+    <div class="mb-1 text-center">
+      <a href="/comments/course_info_{{course.id}}" class="btn btn-info" id="comments_link">ورود به بخش نظرات</a>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="payment_modal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">خرید</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          شما درخواست خرید <b>{{course.title}}</b> با قیمت
+          <b>{{ '{0:,}'.format(course.price|int) }}</b> ریال را دارید.
+        </p>
+        <div class="gateways-header">انتخاب درگاه</div>
+        <div class="gateways-container">
+          <div class="gateway active" data-id="parsian-payment-gateway">
+            <img src="../static/template/parsian_bank.png"></img>
+            <div>
+                <i class="cstm-radio"></i>
+                پارسیان
+              </div>
+          </div>
+        </div>
+        <!-- <div class="mt-2">
+          <label>کد تخفیف دارید، وارد کنید:</label>
+          <input class="form-control" type="text" style="width: 165px;display: inline-block;" id="discount_code">
+        </div> -->
+      </div>
+      <div class="modal-footer text-center">
+        <a href="/parsian-payment-gateway?course_id={{course.id}}" data-cid="{{course.id}}" data-base_link="/parsian-payment-gateway?course_id={{course.id}}" id="payment_link" class="btn btn-success" style="width: 151px;">پرداخت</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="video_modal">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <video src='{{course.video_path}}' data-mejsoptions='{"stretching": "responsive"}' class='mejs__player course_video'></video>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/mediaelement-and-player.min.js"></script>
+<script>
+$(function(){
+  const structure = [
+    {template: 'comments_static.html', data: 'all_comments', id: 'all_comments'},
+    {template: 'notifications.html', data: 'all_notifications', id: 'notifications'}
+  ]
+  const courseId = $("#all_comments").data("id")
+  loadJson(`/json-get-comments-and-notifications-by-section-id/course_info_${courseId}`, structure)
+  $("#discount_code").on('keyup', function(e){
+    const baseLink = $("#payment_link").data('base_link')
+    const params = e.target.value !== '' ? '&takhfif_name='+e.target.value : ''
+    $("#payment_link").attr("href", baseLink+params)
+  });
+  /*
+  $(".gateway").click(function(){
+    if ($(this).hasClass("disabled")) return;
+    $(".gateway").removeClass("active");
+    $(this).addClass("active");
+    $("#payment_link").attr("href","/" + $(this).data("id") + "?course_id=" + $("#payment_link").data("cid"))
+  });*/
+  $('#video_modal').on('shown.bs.modal', function (e) {
+    var calulatedHeight = $(".mejs__container.course_video").width()/1.78;
+    $(".mejs__container.course_video").css("height", calulatedHeight)
+  });
+  $('#video_modal').on('hidden.bs.modal', function (e) {
+    $('video').each(function() {
+      $(this)[0].pause();
+    });
+  });
+});
+</script>
+{% endblock %}

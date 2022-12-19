@@ -1,0 +1,20 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'system' %}
+{% block inner_content %}
+<div class="d-flex" style="position: absolute;left: 0;right: 0;top: 0;bottom: 0;">
+    <div style="margin: auto;">
+        <a href="/dm-make-fake-data" class="btn btn-warning">
+          <i class="fas fa-box-full"></i>
+          ایجاد محتوای آزمایشی
+        </a>
+        <a href="/dm-stop-app" class="btn btn-warning">
+          <i class="fas fa-ban"></i>
+          توقف برنامه
+        </a>
+        <a href="/dm-flushdb" class="btn btn-danger">
+          <i class="fas fa-skull-crossbones"></i>
+          حذف محتوا
+        </a>
+    </div>
+</div>
+{% endblock %}

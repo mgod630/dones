@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fa-ir">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#2e8640" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#2e8640" />
+    <link
+      rel="shortcut icon"
+      href="/static/template/favicon.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="/static/css/fontawesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/login.css?5" />
+    {% block styles %}{% endblock %}
+    <title>سماح - ورود</title>
+  </head>
+  <body>
+    {% import 'login-fields-macro.html' as mcr_inputs %}
+    <div class="login-header">
+      <a href="/">
+        <img
+          src="../static/template/goldis-logo-horizontal.png"
+          style="width: 200px; height: 80px"
+        />
+      </a>
+      <div class="login-errors">
+        <div class="flash">
+          {% if status == 'user_not_found' %}
+          <div class="flash-message fm-danger">
+            کاربری با این مشخصات وجود ندارد.
+          </div>
+          {% elif status == 'email_already_exist' %}
+          <div class="flash-message fm-danger">
+            با این ایمیل قبلاً ثبت نام نموده اید.
+          </div>
+          {% elif status == 'email_isnt_valid' %}
+          <div class="flash-message fm-danger">آدرس ایمیل صحیح نمی‌باشد.</div>
+          {% elif status == 'mobile_already_exist' %}
+          <div class="flash-message fm-danger">
+            با این شماره موبایل قبلاً ثبت نام نموده اید.
+          </div>
+          {% elif status == 'mobile_isnt_valid' %}
+          <div class="flash-message fm-danger">شماره موبایل صحیح نمی‌باشد.</div>
+          {% elif status == 'password_isnt_valid' %}
+          <div class="flash-message fm-danger">
+            کلمه عبور قابل قبول نمی‌باشد.
+          </div>
+          {% elif status == 'full_name_is_empty' %}
+          <div class="flash-message fm-danger">
+            لطفاً نام کامل خود را وارد نمایید.
+          </div>
+          {% elif status == 'username_already_exist' %}
+          <div class="flash-message fm-danger">
+            این نام کاربری قبلاً استفاده شده است.
+          </div>
+          {% elif status == 'email_sent'%}
+          <div class="flash-message fm-info">
+            لینک بازنشانی کلمه عبور برای شما ایمیل شد.
+          </div>
+          {% elif status == 'verification_code_sent'%}
+          <div class="flash-message fm-info">
+            پیامک بازنشانی کلمه عبور برای شما ارسال شد.
+          </div>
+          {% elif status == 'verification_code_is_incorrect'%}
+          <div class="flash-message fm-danger">پین وارد شده صحیح نمی باشد.</div>
+          {% elif status == 'flash' %}
+          <div class="flash-message fm-info">{{ message|safe }}</div>
+          {% endif %}
+        </div>
+        <div class="flash">
+          <div class="flash-message fm-danger collapse" id="glogin_error">
+            خطای غیر منتظره‌ای رخ داد. لطفاً با پشتیبانی تماس بگیرید.
+          </div>
+          <div class="flash-message fm-success collapse" id="glogin_welcome">
+            <span></span> عزیز، به دوتست خوش آمدید!
+          </div>
+          <div class="flash-message fm-info collapse" id="glogin_signup">
+            حساب گوگل شما در دوتست ثبت نشده است. تا لحظاتی دیگر به صفحه ثبت نام
+            هدایت خواهید شد.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="login-panel-wrapper">
+      <div class="login-panel">
+        {% include 'spinner.html' %}
+        <div
+          class="login-body {% if status == 'verification_code_sent' or status == 'verification_code_is_incorrect' %}expand2{% endif %}"
+        >
+          <div id="mobile_buttons">
+            <div
+              id="mb_login"
+              class="{% if status != 'verification_code_sent' and status != 'verification_code_is_incorrect'%}active{% endif %}"
+            >
+              ورود
+            </div>
+            <div id="mb_signup">ثبت نام</div>
+          </div>
+          <form
+            id="login_form"
+            action="/login-post"
+            class="{% if status == 'verification_code_sent' or status == 'verification_code_is_incorrect' %}collapse{% else %}active{% endif %}"
+            method="post"
+          >
+            {{ mcr_inputs.input('mobile', section='lg', required=true)}} {{
+            mcr_inputs.input('password', section='lg', required=true)}}
+            <!-- <i class="fas fa-eye"></i> -->
+            <!-- <input type="checkbox" onclick="myFunction()" />نمایش کلمه عبور -->
+            <div class="form-footer">
+              <button class="button solid-green" type="button">ورود</button>
+              <div class="forgotten-password">
+                کلمه عبور را فراموش کرده‌اید؟
+              </div>
+            </div>
+          </form>
+          <form
+            id="signup_form"
+            action="/signup-post"
+            class="collapse"
+            method="post"
+          >
+            {{ mcr_inputs.input('fullname', required=true)}} {{
+            mcr_inputs.input('mobile', required=true)}} {{
+            mcr_inputs.input('password', section='sg', required=true)}}
+            <div class="form-footer">
+              <button class="button solid-blue" type="button">ثبت نام</button>
+            </div>
+          </form>
+          <form
+            id="reset_form"
+            action="/login"
+            style="display: none"
+            method="post"
+          >
+            <p class="subtle" style="text-align: right; margin: 0 15px 12px">
+              برای بازنشانی کلمه عبور، شماره موبایلی که با آن ثبت نام کرده‌اید
+              را وارد نمایید.
+            </p>
+            {{ mcr_inputs.input('mobile', section='rp', required=true)}}
+            <div class="form-footer">
+              <button class="button solid-purple" type="button">
+                ارسال پین
+              </button>
+            </div>
+          </form>
+          <form
+            id="resend_code_form"
+            action="/login"
+            style="display: none"
+            method="post"
+          >
+            <input name="rp_mobile" />
+          </form>
+          <form
+            id="set_password_form"
+            action="/login"
+            style="{% if not (status == 'verification_code_sent' or status == 'verification_code_is_incorrect') %}display: none;{% endif %}"
+            method="post"
+          >
+            <p class="subtle" style="text-align: right; margin: 0 15px 12px">
+              پین ۴ رقمی دریافت شده و کلمه عبور دلخواه را وارد نماید
+            </p>
+            <p id="resend_code">ارسال مجدد پین (<span>120</span> ثانیه)</p>
+            <input
+              class="collapse"
+              name="rp_mobile"
+              value="{{ user.mobile }}"
+              type="hidden"
+            />
+            {{ mcr_inputs.input('verification_code', section='rp',
+            required=true)}} {{ mcr_inputs.input('new_password', section='rp',
+            required=true)}} {{ mcr_inputs.input('new_password_repeat',
+            section='rp', required=true)}}
+            <div class="form-footer">
+              <button class="button solid-purple" type="button">
+                بازنشانی
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/login.js?5"></script>
+  </body>
+</html>

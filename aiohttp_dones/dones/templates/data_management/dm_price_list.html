@@ -1,0 +1,71 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'price_list' %}
+{% block inner_content %}
+<style>.table .btn{height: 27px}</style>
+<button class="btn btn-primary btn-sm mb-3" type="button" data-toggle="collapse" data-target="#collapse">ایجاد تعرفه جدید</button>
+<div class="collapse mb-3 {% if price_list_id  %}d-block{% endif %}" id="collapse">
+    <form action="{% if price_list_id  %}/dm-price-list/{{price_list_id}}{% else %}/dm-price-list{% endif %}" method="POST">
+        <div class="form-row">
+            <div class="form-group col-md-3 d-none">
+                <label>id:</label>
+                <input type="text" class="form-control" name="id" value="{% if price_list_id %}{{update_price_list.id}}{% endif %}" disabled>
+            </div>
+            <div class="form-group col-md-6">
+                <label>عنوان</label>
+                <input type="text" class="form-control" name="title" value="{% if price_list_id %}{{update_price_list.title}}{% endif %}">
+            </div>
+            <div class="form-group col-md-6">
+                <label>str_items_list:</label>
+                <input type="text" class="form-control" name="str_items_list" value="{% if price_list_id %}{{update_price_list.str_items_list}}{% endif %}">
+            </div>
+            <div class="form-group col-md-6">
+                <label>قیمت</label>
+                <input type="text" class="form-control" name="price" value="{% if price_list_id %}{{update_price_list.price}}{% endif %}">
+            </div>
+            <div class="form-group col-md-6">
+                <label>image_path:</label>
+                <input type="text" class="form-control" name="image_path" value="{% if price_list_id %}{{update_price_list.image_path}}{% endif %}">
+            </div>
+            <div class="form-group col-md-6">
+                <label>button_caption:</label>
+                <input type="text" class="form-control" name="button_caption" value="{% if price_list_id %}{{update_price_list.button_caption}}{% endif %}">
+            </div>
+            <div class="form-group col-md-6">
+                <label>button_link:</label>
+                <input type="text" class="form-control" name="button_link" value="{% if price_list_id %}{{update_price_list.button_link}}{% endif %}">
+            </div>
+        </div>
+        <button class="btn btn-success dm-submit" type="submit">ثبت</button>
+    </form>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>عنوان</th>
+                <th>str_items_list</th>
+                <th>button_caption</th>
+                <th>قیمت</th>
+                <th>image_path</th>
+                <th>button_link</th>
+                <th>ویرایش</th>
+                <th>حذف</th>
+            </tr>
+        </thead>
+        {% if price_list %}
+        {% for price in price_list %}
+        <tr>
+            <td>{{price.title}}</td>
+            <td>{{price.str_items_list}}</td>
+            <td>{{price.button_caption}}</td>
+            <td>{{price.price}}</td>
+            <td>{{price.image_path}}</td>
+            <td>{{price.button_link}}</td>
+            <td><a class="btn btn-success btn-sm" href="/dm-price-list/{{price.id}}"><i class="far fa-cog"></i></a></td>
+            <td><a class="btn btn-warning btn-sm" href="/dm-delete-price-list/{{price.id}}"><i class='far fa-trash-alt'></i></a></td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,195 @@
+.course-info-container {
+    background-color: #ffffff;
+    background-image: linear-gradient(45deg,rgba(0, 0, 0, 0.03) 25%,transparent 25%,transparent 50%,rgba(0, 0, 0, 0.03) 50%,rgba(0, 0, 0, 0.03) 75%,transparent 75%,transparent);
+    background-size: 2rem 2rem;
+    padding: 15px;
+    border-bottom: 1px solid #f5f5f5;
+    margin-bottom: 20px;
+}
+.course-info-text {
+    background-color: white;
+    padding: 15px;
+    border-radius: 3px;
+    box-shadow: 0px 1px 4px #cecece;
+}
+.course-info-text h2 {
+    font-size: 19px;
+    font-weight: 700;
+    background-color: #38338e;
+    color: #fff;
+    padding: 15px 15px 15px 100px;
+    margin: -15px -15px 15px;
+    border-radius: 3px 3px 0 0;
+    position: relative;
+}
+.course-info-text h2 .btn {
+    height: 33px;
+    font-size: 14px;
+    padding: 6px 10px 4px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+.course-info-text h2 .btn i{
+    margin-right: 5px;
+}
+.course-info-text .course-image {
+    margin-bottom: 10px;
+    box-shadow: none;
+}
+@media(min-width: 992px) {
+    .course-info-text {
+        height: 100%;
+    }
+}
+
+.right-col{
+    display: flex;
+    flex-direction: column;
+}
+@media (max-width: 991px) {
+    .right-col{
+        order: 5;
+        margin-top: 5px;
+    }
+}
+.right-col .white-box{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.right-col .white-box .btn{
+    margin-top: auto;
+    color: #fff;
+}
+.info-bit {
+    margin-bottom: 3px;
+    padding: 3px 6px;
+    border-bottom: 1px solid #f3f3f3;
+}
+.info-bit span:first-child {
+    display: inline-block;
+    font-weight: 600;
+    margin-left: 5px;
+    width: 70px;
+}
+.course-info-details {
+    margin-bottom: 10px;
+}
+.course-info-details .col-12:first-child .info-bit span:first-child{
+    width: 65px;
+}
+@media (max-width: 991px) {
+    .course-info-text .btn {
+        margin-left: auto;
+    }
+    .course-info-details {
+        margin-bottom: 10px;
+        padding-left: 0;
+        flex-basis:100%;
+    }
+}
+@media (max-width: 767px) {
+    .course-info-text .btn {
+        margin-left: auto;
+    }
+}
+@media (max-width: 575px){
+    .info-bit span:first-child {
+        width: 66px;
+    }
+}
+.course-image {
+    background-color: #efefef;
+    border-radius: 3px;
+    background-image: url(../template/course_default_small.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: 0px 1px 4px #cecece;
+    min-height: 195px;
+    margin-bottom: 10px;
+}
+#payment_modal .modal-footer {
+    justify-content: center;
+}
+.gateways-header {
+    width: 80px;
+    background-color: white;
+    text-align: center;
+    margin: 0 auto -11px auto;
+    position: relative;
+}
+.gateways-container {
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-top: 1px solid #e9ecef;
+}
+.gateway {
+    text-align: center;
+    border: 1px solid #eaeaea;
+    border-radius: 3px;
+    margin: 2px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s;
+    width: calc(33% - 4px);
+    position: relative;
+}
+.gateway img {
+    border-radius: 3px;
+}
+.gateway.active,
+.gateway:hover:not(.disabled) {
+    border-color: #9c9c9c;
+}
+.gateway div {
+    margin: 3px;
+    border-top: 1px solid #ececec;
+    padding-top: 3px;
+    color: #949494;
+}
+.cstm-radio {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1px solid #94949b;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 2px;
+}
+.gateway.active div {
+    color: #333;
+}
+.gateway.active .cstm-radio {
+    border-color: #333;
+
+}
+.gateway.active .cstm-radio::after {
+    position: absolute;
+    content: " ";
+    width: 7px;
+    height: 7px;
+    background-color: #333;
+    right: 1px;
+    top: 1px;
+    border-radius: 50%;
+}
+.gateway.disabled>span {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding-top: 49%;
+    z-index: 2;
+    transition: all 0.2s;
+}
+.gateway.disabled:hover > span {
+    opacity: 1;
+}

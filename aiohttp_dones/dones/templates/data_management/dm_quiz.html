@@ -1,0 +1,103 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'courses' %}
+{% block inner_content %}
+<form action="{% if quiz_id  %}/dm-quiz/{{course_item_id}}/{{quiz_id}}{% else %}/dm-quiz/{{ course_item_id }}{% endif %}" method="POST">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-step">
+                <label>عنوان آزمون:</label>
+                <input class="form-control" type="text" name="title" value="{% if quiz_id %}{{update_quiz.title}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="form-step">
+                <label>آیدی:</label>
+                <input class="form-control" type="text" name="title" value="{% if quiz_id %}{{update_quiz.id}}{% endif %}" disabled>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="form-step">
+                <label>تاریخ شروع:</label>
+                <input class="form-control ltr" type="text" name="unix_start_datetime" value="{% if quiz_id %}{{update_quiz.jalali_start_datetime}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="form-step">
+                <label>تاریخ پایان:</label>
+                <input class="form-control ltr" type="text" name="unix_end_datetime" value="{% if quiz_id %}{{update_quiz.jalali_end_datetime}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="form-step">
+                <label>تعداد سوالات:</label>
+                <input type="number" min="0" class="form-control" name="question_count" value="{% if quiz_id %}{{update_quiz.question_count}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="form-step">
+                <label>مدت آزمون:</label>
+                <input type="number" min="0" class="form-control" name="duration" value="{% if quiz_id %}{{update_quiz.duration}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="form-step">
+                <label>تعداد شرکت کننده ها:</label>
+                <input type="number" min="0" class="form-control" name="attendance_max" value="{% if quiz_id %}{{update_quiz.attendance_max}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="form-step">
+                <label>نوع آزمون:</label>
+                <select id="inputState" class="form-control" name="quiz_type">
+                    <option value="1" {% if quiz_id and update_quiz.quiz_type == '1' %}selected{% endif %}>دارای پاسخ صحیح</option>
+                    <option value="2" {% if quiz_id and update_quiz.quiz_type == '2' %}selected{% endif %}>توصیفی و بدون پاسخ صحیح</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-step">
+                <label>توضیحات:</label>
+                <textarea name="description" class="form-control" cols="30" rows="3">{% if quiz_id %}{{update_quiz.description}}{% endif %}</textarea>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-success dm-submit">ثبت</button>
+</form>
+<hr>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>عنوان</th>
+            <th>تاریخ شروع</th>
+            <th>تاریخ پایان</th>
+            <th>توضیحات</th>
+            <th>تعداد سوالات</th>
+            <th>مدت آزمون</th>
+            <th>تعداد شرکت کننده</th>
+            <th>سوالات</th>
+            <th>نتایج</th>
+            <th>شرکت کنندگان</th>
+            <th>ویرایش</th>
+            <th>حذف</th>
+        </tr>
+    </thead>
+    {% if quizs %}
+    {% for quiz in quizs %}
+    <tr>
+        <td>{{quiz.title}}</td>
+        <td>{{quiz.jalali_start_datetime}}</td>
+        <td>{{quiz.jalali_end_datetime}}</td>
+        <td>{{quiz.description}}</td>
+        <td>{{quiz.question_count}}</td>
+        <td>{{quiz.duration}}</td>
+        <td>{{quiz.attendance_max}}</td>
+        <td><a class="btn btn-info btn-sm" href="/dm-question/{{quiz.id}}"><i class='fas fa-question'></i></a></td>
+        <td><a class="btn btn-primary btn-sm" href="/dm-quiz-users-answers/{{quiz.id}}"><i class='far fa-eye'></i></a></td>
+        <td><a class="btn btn-success btn-sm" href="/quiz-registered-users/{{quiz.id}}"><i class="far fa-user"></i></a></td>
+        <td><a class="btn btn-success btn-sm" href="/dm-quiz/{{course_item_id}}/{{quiz.id}}"><i class="far fa-cog"></i></a></td>
+        <td><a class="btn btn-warning btn-sm" href="/dm-delete-quiz/{{quiz.id}}"><i class='far fa-trash-alt'></i></a></td>
+    </tr>
+    {% endfor %}
+{% endif %}
+</table>
+{% endblock %}

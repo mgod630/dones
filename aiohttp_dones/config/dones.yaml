@@ -1,0 +1,16 @@
+application_name: dones
+root_url: "http://localhost:9001" #https://app.goldis.app
+mysql:
+  database: aiohttp_dones
+  user: aiohttp_user
+  password: aiohttp_pass
+  host: 'localhost'
+  port: 5432
+redis:
+  host: 'localhost'
+  port: 6379
+  db: 0 # 0 = Test, 1 = dones production, 2 = hejamat.
+  minsize: 1
+  maxsize: 5
+host: 'localhost'
+port: 9002

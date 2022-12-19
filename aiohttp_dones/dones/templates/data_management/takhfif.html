@@ -1,0 +1,95 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'takhfif' %}
+{% block inner_content %}
+<style>
+    .table .btn {
+        height: 27px
+    }
+
+    .search-field {
+        max-width: 150px;
+        direction: ltr;
+        text-align: left;
+        margin: 0 auto 0 5px;
+    }
+</style>
+    <form action="{% if takhfif_id  %}/dm-takhfif/{{ takhfif_id }}{% else %}/dm-takhfif{% endif %}" method="POST">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>عنوان تخفیف</label>
+                <input class="form-control" type="text" placeholder="عنوان تخفیف" name="title"
+                    value="{% if takhfif_id  %}{{update_takhfif.title}}{% endif %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label>کد تخفیف</label>
+                <input class="form-control" type="text" placeholder="کد تخفیف" name="takhfif_name"
+                    value="{% if takhfif_id  %}{{update_takhfif.takhfif_name}}{% endif %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label>درصد تخفیف</label>
+                <input class="form-control" type="text" placeholder="درصد تخفیف" name="discount_percent"
+                    value="{% if takhfif_id  %}{{update_takhfif.discount_percent}}{% endif %}">
+            </div>
+        </div>
+        <button class="btn btn-success dm-submit" type="submit">ثبت</button>
+    </form>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>عنوان تخفیف</th>
+                <th>کد تخفیف</th>
+                <th>درصد تخفیف</th>
+                <th>ویرایش</th>
+                <th>حذف</th>
+            </tr>
+        </thead>
+        {% if all_takhfifs %}
+        {% for takhfif in all_takhfifs %}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{takhfif.title}}</td>
+            <td>{{takhfif.takhfif_name}}</td>
+            <td>{{takhfif.discount_percent}}</td>
+            <td><a class="btn btn-success btn-sm" href="/dm-takhfif/{{takhfif.id}}"><i class="far fa-cog"></i></a></td>
+            <td><a class="btn btn-warning btn-sm" href="/dm-delete-takhfif/{{takhfif.id}}"><i class='far fa-trash-alt'></i></a></td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+    {% if page_count > 0 %}
+    <nav class="page" aria-label="Page navigation">
+        <ul class="pagination">
+            {% set number = page_count %}
+            {% set page_number = page_number %}
+            {% set min_page = page_number - 2 %}
+            {% set max_page = page_number + 2 %}
+            {% if min_page < 1 %}{% set min_page=1 %}{% endif %} {% set max_page=min_page + 3 %} {% if max_page>number
+                %}{% set max_page = number %}{% endif %}
+                {% set min_page = max_page - 3 %}
+                {% if min_page < 1 %}{% set min_page=1 %}{% endif %} <li
+                    class="page-item {% if page_number == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/dm-takhfif?page_number=1" aria-label="first">اولین</a>
+                    </li>
+                    <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
+                        <a class="page-link" href="/dm-takhfif?page_number={{page_number-1}}"
+                            aria-label="Previous">قبلی</a>
+                    </li>
+                    {%- for page in range(1, number) %}
+                    <li class="page-item {% if page == page_number %}activing{% endif %}">
+                        <a class="page-link" href="/dm-takhfif?page_number={{page}}">{{page}}</a>
+                    </li>
+                    {% endfor %}
+                    <li class="page-item {% if page_number == max_page %}disabled{% endif %}">
+                        <a class="page-link" href="/dm-takhfif?page_number={{page_number+1}}" aria-label="Next">بعدی</a>
+                    </li>
+                    <li class="page-item {% if page_number == number %}disabled{% endif %}">
+                        <a class="page-link" href="/dm-takhfif?page_number={{number}}" aria-label="last">آخرین</a>
+                    </li>
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

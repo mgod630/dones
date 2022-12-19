@@ -1,0 +1,394 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'attenders' %}
+{% block inner_content %}
+<style>
+.quiz-stats {
+    display: flex;
+    margin-bottom: 15px;
+}
+.quiz-stats>div {
+    background-color: #f2f2f2;
+    padding: 6px 10px 5px;
+    border-radius: 5px;
+    margin: 2px;
+    flex: 1;
+}
+.results-title {
+    display: flex;
+    padding-bottom: 3px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.results-title h4{
+    margin: auto 0 auto auto;
+}
+.results-title img{
+    width: 45px;
+    margin: auto 0 auto 0;
+}
+.quiz-stats span {
+    font-weight: bold;
+    margin-left: 5px;
+}
+.titled-frame {
+    border: 2px solid #99caff;
+    padding: 5px;
+    border-radius: 8px;
+}
+.titled-frame:not(:last-child) {
+    margin-bottom: 31px;
+}
+.tf-title {
+    font-weight: bold;
+    background-color: #ffffff;
+    display: inline-block;
+    position: relative;
+    top: -15px;
+    padding: 0 18px;
+    color: #0066d4;
+}
+.table-title {
+    margin: 0 auto -10px;
+    width: 115px;
+    text-align: center;
+    color: #de1c42;
+    background-color: #fff;
+    position: relative;
+}
+.table-title-border {
+    border-bottom: 1px solid #ff99ad;
+    margin-bottom: 20px;
+}
+.katel .table {
+    margin-bottom: 0;
+}
+.katel .table-responsive:not(:last-child) {
+    margin-bottom: 30px;
+}
+.big-score {
+    width: 250px;
+    margin: 0 auto 15px;
+    text-align: center;
+    background-color: #47a034;
+    padding: 15px;
+    border-radius: 10px;
+    color: #fff;
+}
+.big-score div:first-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+}
+.big-score div:last-child{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.mbti-result {
+    display: flex;
+    flex-wrap: wrap;
+}
+.mbti-type {
+    text-align: center;
+    background-color: #f2f2f2;
+    padding-top: 6px;
+}
+.mbti-trait {
+    flex: 0 0 calc(50% - 2px);
+    margin: -1px 1px 0;
+    text-align: center;
+    padding-right: 118px;
+    position: relative;
+    height: 32px;
+    border-bottom: 1px solid #dee2e6;
+    border-top: 1px solid #dee2e6;
+}
+.mbti-trait:nth-child(even) {
+    padding-right: 0;
+    padding-left: 118px;
+}
+.mbti-trait label {
+    display: block;
+    margin-bottom: 0;
+    padding: 5px 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 115px;
+    text-align: right;
+}
+.mbti-trait:nth-child(even) label {
+    text-align: left;
+    direction: ltr;
+    right: auto;
+    left: 0;
+}
+.mbti-trait .value {
+    color: #ffF;
+    padding-top: 8px;
+    white-space: nowrap;
+    height: 100%;
+}
+.mbti-trait:nth-child(odd) .value {
+    float: left;
+}
+.mbti-trait label span {
+    width: 41px;
+    height: 21px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 29px;
+    padding-top: 2px;
+    vertical-align: middle;
+    color: white;
+}
+</style>
+<div class="results-title">
+    <h4>{{quiz_name_fa}}</h4>
+    <img src="/static/template/samah_logo.png">
+</div>
+{% if attender %}
+<div class="titled-frame">
+    <div class="tf-title">اطلاعات شرکت کننده</div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>نام شرکت کننده</th>
+                    <th>شماره موبایل</th>
+                    <th>جنسیت</th>
+                    <th>سن</th>
+                    <th>مدرک تحصیلی</th>
+                    <th>شغل</th>
+                    <th>وضعیت تاهل</th>
+                    <th>تاریخ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{attender.full_name}}</td>
+                    <td>{{attender.mobile}}</td>
+                    <td>{% if attender.gender %}{% if attender.gender == 'male'%}مرد{% elif attender.gender == 'female' %}زن{% endif %}{% else %}-{% endif %}</td>
+                    <td>{% if attender.age %}{{attender.age}}{% else %}-{% endif %}</td>
+                    <td>{% if attender.grade %}{{attender.grade}}{% else %}-{% endif %}</td>
+                    <td>{% if attender.job %}{{attender.job}}{% else %}-{% endif %}</td>
+                    <td>{% if attender.marital_status %}{% if attender.marital_status == 'single'%}مجرد{% elif attender.marital_status == 'married' %}متاهل{% endif %}{% else %}-{% endif %}</td>
+                    <td>{% if attender.datatime %}{{attender.datatime}}{% else %}-{% endif %}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<div class="titled-frame">
+    <div class="tf-title">اطلاعات آزمون</div>
+    <div class="quiz-stats">
+        <div><span>تاریخ شرکت در آزمون:</span> {{jalali_date_time}}</div>
+        <div><span>زمان شرکت در آزمون:</span> {% if time != '-1' %}{{time}}{% else %}-{% endif %}</div>
+    </div>
+</div>
+
+{% if quiz_name == 'katel' %}
+<div class="titled-frame katel">
+    <div class="tf-title">نیم رخ روانی</div>
+
+    <div class="table-title">نتایج کلی</div>
+    <div class="table-title-border"></div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>نمره خام B</th>
+                    <th>بی پاسخ</th>
+                    <th>تعداد گزینه (ب)</th>
+                </tr>
+            </thead>
+            {% if result_attender_answers %}
+            <tbody>
+                <tr>
+                    <td>{{result_attender_answers.b}}</td>
+                    <td>{{result_attender_answers.empty_answers}}</td>
+                    <td>{{level_attender_answers.answer_count_2}}</td>
+                </tr>
+            </tbody>
+            {% endif %}
+        </table>
+    </div>
+
+    <div class="table-title">ترازهای عمومی</div>
+    <div class="table-title-border"></div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Q4</th><th>Q3</th><th>Q2</th><th>Q1</th><th>O</th><th>N</th><th>M</th><th>L</th><th>I</th><th>H</th><th>G</th><th>F</th><th>E</th><th>C</th><th>B</th><th>A</th>
+            </tr>
+        </thead>
+        {% if level_attender_answers %}
+        <tbody>
+            <tr>
+                <td>{{level_attender_answers.q4}}</td>
+                <td>{{level_attender_answers.q3}}</td>
+                <td>{{level_attender_answers.q2}}</td>
+                <td>{{level_attender_answers.q1}}</td>
+                <td>{{level_attender_answers.o}}</td>
+                <td>{{level_attender_answers.n}}</td>
+                <td>{{level_attender_answers.m}}</td>
+                <td>{{level_attender_answers.l}}</td>
+                <td>{{level_attender_answers.i}}</td>
+                <td>{{level_attender_answers.h}}</td>
+                <td>{{level_attender_answers.g}}</td>
+                <td>{{level_attender_answers.f}}</td>
+                <td>{{level_attender_answers.e}}</td>
+                <td>{{level_attender_answers.c}}</td>
+                <td>{{level_attender_answers.b}}</td>
+                <td>{{level_attender_answers.a}}</td>
+            </tr>
+        </tbody>
+        {% endif %}
+        </table>
+    </div>
+
+    <div class="table-title">عوامل مرتبه دوم</div>
+    <div class="table-title-border"></div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Creativity</th>
+                    <th>Leadership</th>
+                    <th>Adjustment</th>
+                    <th>Control</th>
+                    <th>Independence</th>
+                    <th>Tough-minded</th>
+                    <th>Anxiety</th>
+                    <th>Extraversion</th>
+                </tr>
+            </thead>
+            {% if second_order_factors %}
+            <tbody>
+                <tr>
+                    <td>{{second_order_factors.creativity}}</td>
+                    <td>{{second_order_factors.leadership_power}}</td>
+                    <td>{{second_order_factors.compatibility}}</td>
+                    <td>{{second_order_factors.instinct_control}}</td>
+                    <td>{{second_order_factors.independence}}</td>
+                    <td>{{second_order_factors.flexibility}}</td>
+                    <td>{{second_order_factors.anxiety}}</td>
+                    <td>{{second_order_factors.extraversion}}</td>
+                </tr>
+            </tbody>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if quiz_name == 'Intelligence' %}
+<div class="titled-frame">
+    <div class="tf-title">آزمون هوش</div>
+    <div class="big-score">
+        <div>تعداد پاسخ‌های صحیح</div>
+        <div>{{right_answer}}</div>
+    </div>
+</div>
+<img src="/static/template/raven-for-web.jpg" style="max-width: 100%;" />
+{% endif %}
+
+{% if quiz_name == 'Neo' %}
+{% if right_answer %}
+<div class="titled-frame">
+    <div class="tf-title">آزمون نئو</div>
+    <div class="big-score">
+        <div>مجموع امتیاز ها</div>
+        {% for key, res in right_answer.items()%}
+        <div>{{key}} : {{res}}</div>
+        {% endfor  %}
+    </div>
+</div>
+{% endif %}
+{% endif %}
+
+{% if quiz_name == 'personality_type' %}
+{% set colors = ['#365cff','#dc3544','#3983fa','#e55e42','#3bbefc','#f49a3a','#36e7ff','#ffc300'] %}
+<div class="titled-frame">
+    <div class="tf-title">نتایج آزمون</div>
+    <h4 class="mbti-type">{{result_str}}</h4>
+    <div class="mbti-result">
+        {% for trait in result_attender_answers %}
+        <div class="mbti-trait">
+            <label><span style="background-color: {{colors[loop.index0]}};">{{trait.title}}</span> {{trait.label}}</label>
+            <div class="value" style="width: {{trait.percent}}%;background-color: {{colors[loop.index0]}};">{{trait.score}}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if quiz_name == 'desire_measurement' %}
+<table class="table table-striped">
+    {% if result_attender_answers %}
+    <tbody>
+        {% for key, value in result_attender_answers.items() %}
+        <tr>
+            <th>{{key}}</th>
+            <td>{{value}}</td>
+        </tr>
+        {% endfor %}
+    </thead>
+    {% endif %}
+</table>
+{% endif %}
+
+{% if quiz_name == 'afsordeghi' %}
+<div class="titled-frame">
+    <div class="tf-title">آزمون افسردگی</div>
+    <div class="big-score">
+        <div>نتیجه</div>
+        <div>{{result_attender_answers}}</div>
+    </div>
+</div>
+{% endif %}
+{% if quiz_name == 'Neo_complete' %}
+<table class="table table-striped">
+    {% if right_answer %}
+    <tbody>
+        {% for key, value in right_answer.items() %}
+        <tr>
+            <td><strong class="d-block text-center" style="color: #005B59">{{key}}  :  {{value}}</strong></td>
+        </tr>
+        {% endfor %}
+    </thead>
+    {% endif %}
+</table>
+{% endif %}
+
+{% if quiz_name == 'multiple_intelligence' %}
+<table class="table table-striped">
+    {% if result_attender_answers %}
+    <tbody>
+        {% for key, value in result_attender_answers.items() %}
+        <tr>
+            <th>{{key}}</th>
+            <td>{{value}}</td>
+        </tr>
+        {% endfor %}
+    </thead>
+    {% endif %}
+</table>
+
+{% endif %}
+
+{% if quiz_name == 'no_name_quiz' %}
+<div class="titled-frame">
+    <div class="tf-title">{{quiz_name_fa}}</div>
+    <div class="big-score">
+        <div>تعداد پاسخ‌های صحیح</div>
+        <div>{{right_answer}}</div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends "data_management/dm_layout.html" %} {% set current_tab = 'users' %}
+{% block inner_content %}
+<style>
+  .table .btn {
+    height: 27px;
+  }
+
+  .search-field {
+    max-width: 150px;
+    direction: ltr;
+    text-align: left;
+    margin: 0 auto 0 5px;
+  }
+</style>
+<form action="/get-user-by-mobile" method="GET" class="mb-3 d-flex">
+  <button
+    class="btn btn-primary btn-sm"
+    type="button"
+    data-toggle="collapse"
+    data-target="#collapse"
+  >
+    ایجاد کاربر جدید
+  </button>
+  <input
+    class="form-control search-field"
+    name="mobile"
+    placeholder="09xxxxxxxxx"
+    type="text"
+    maxlength="11"
+  />
+  <button class="btn btn-success btn-sm">جستجو</button>
+</form>
+
+<div class="collapse mb-3 {% if user_id %}d-block{% endif %}" id="collapse">
+  <form
+    action="{% if user_id  %}/dm-users/{{ user_id }}{% else %}/dm-users{% endif %}"
+    method="POST"
+  >
+    <div class="form-row">
+      <div class="form-group col-md-3">
+        <label>نام و نام خانوادگی</label>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="نام و نام خانوادگی"
+          name="full_name"
+          value="{% if user_id  %}{{update_user.full_name}}{% endif %}"
+        />
+      </div>
+      <div class="form-group col-md-3">
+        <label>شماره موبایل</label>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="شماره موبایل"
+          name="mobile"
+          value="{% if user_id  %}{{update_user.mobile}}{% endif %}"
+        />
+      </div>
+      <div class="form-group col-md-3">
+        <label>کد ملی</label>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="کد ملی"
+          name="national_id"
+          value="{% if user_id  %}{{update_user.national_id}}{% endif %}"
+        />
+      </div>
+      <div class="form-group col-md-3 {% if user_id %}d-none{% endif %}">
+        <label>رمزعبور</label>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="رمزعبور"
+          name="password"
+          value="{% if user_id  %}{{update_user.password}}{% endif %}"
+        />
+      </div>
+      <div class="form-group col-md-3">
+        <label>نوع کاربر</label>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="نوع کاربر"
+          name="user_type"
+          value="{% if user_id  %}{{update_user.user_type}}{% endif %}"
+        />
+      </div>
+      <div class="form-group col-md-4">
+        {% if user_id %}
+        <input
+          rows="5"
+          type="hidden"
+          class="form-control"
+          name="auth_key"
+          value="{% if user_id  %}{{update_user.auth_key}}{% endif %}"
+        />
+        {% endif %}
+      </div>
+    </div>
+    <button class="btn btn-success dm-submit" type="submit">ثبت</button>
+  </form>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>نوع کاربر</th>
+        <th>نام کاربر</th>
+        <th>موبایل</th>
+        <th>جنسیت</th>
+        <th>سن</th>
+        <th>تحصیلات</th>
+        <th>شغل</th>
+        <th>وضعیت تاهل</th>
+        <th>تنظیمات</th>
+      </tr>
+    </thead>
+    {% if users %} {% for user in users %}
+    <tr>
+      <td>{{(start_index) - (loop.index)}}</td>
+      <td>
+        {% if user.user_type == -2 %}ادمین{% elif user.user_type == -1
+        %}سازمان/گروه{% else %}عادی{% endif %}
+      </td>
+      <td>{{user.full_name}}</td>
+      <td>{{user.mobile}}</td>
+      <td>
+        {% if user.gender %}{% if user.gender == 'male'%}مرد{% elif user.gender
+        == 'female' %}زن{% endif %}{% endif %}
+      </td>
+      <td>{% if user.age %}{{user.age}}{% endif %}</td>
+      <td>{% if user.grade %}{{user.grade}}{% endif %}</td>
+      <td>{% if user.job %}{{user.job}}{% endif %}</td>
+      <td>
+        {% if user.marital_status %}{% if user.marital_status ==
+        'single'%}مجرد{% elif user.marital_status == 'married' %}متاهل{% endif
+        %}{% endif %}
+      </td>
+      <td>
+        <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
+          ><i class="far fa-cog"></i
+        ></a>
+      </td>
+    </tr>
+    {% endfor %} {% endif %}
+  </table>
+  {% if page_count > 0 %}
+  <nav class="page" aria-label="Page navigation">
+    <ul class="pagination">
+      {% set number = page_count %} {% set page_number = page_number %} {% set
+      min_page = page_number - 2 %} {% set max_page = page_number + 2 %} {% if
+      min_page < 1 %}{% set min_page=1 %}{% endif %} {% set max_page=min_page +
+      3 %} {% if max_page>number %}{% set max_page = number %}{% endif %} {% set
+      min_page = max_page - 3 %} {% if min_page < 1 %}{% set min_page=1 %}{%
+      endif %}
+      <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
+        <a class="page-link" href="/dm-users?page_number=1" aria-label="first"
+          >اولین</a
+        >
+      </li>
+      <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
+        <a
+          class="page-link"
+          href="/dm-users?page_number={{page_number-1}}"
+          aria-label="Previous"
+          >قبلی</a
+        >
+      </li>
+      {%- for page in range(1, number) %}
+      <li class="page-item {% if page == page_number %}activing{% endif %}">
+        <a class="page-link" href="/dm-users?page_number={{page}}">{{page}}</a>
+      </li>
+      {% endfor %}
+      <li class="page-item {% if page_number == max_page %}disabled{% endif %}">
+        <a
+          class="page-link"
+          href="/dm-users?page_number={{page_number+1}}"
+          aria-label="Next"
+          >بعدی</a
+        >
+      </li>
+      <li class="page-item {% if page_number == number %}disabled{% endif %}">
+        <a
+          class="page-link"
+          href="/dm-users?page_number={{number}}"
+          aria-label="last"
+          >آخرین</a
+        >
+      </li>
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

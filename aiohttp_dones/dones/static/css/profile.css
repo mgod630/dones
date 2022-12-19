@@ -1,0 +1,33 @@
+.white-box{
+    margin-top: 15px;
+}
+.form-field {
+    margin: 0 0 15px;
+}
+.custom-checkbox{
+    cursor: pointer;
+}
+.cc-check {
+    text-align: center;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cecece;
+    border-radius: 4px;
+    color: #696969;
+    vertical-align: middle;
+}
+.profile-picture {
+    padding: 5px;
+    text-align: center;
+}
+.profile-picture img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+.cc-check i {
+    display: none;
+}
+.custom-checkbox.checked .cc-check i {
+    display: inline;
+}

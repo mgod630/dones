@@ -1,0 +1,263 @@
+{% extends "layout.html" %} {% block styles %}
+<link rel="stylesheet" type="text/css" href="/static/css/soon.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/magnific-popup.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/quiz-content.css?3" />
+{% endblock %} {% block content %}
+<div class="container pt-3 quiz-content-container">
+  <div class="white-box mb-5">
+    <div class="wb-header wbh-purple">
+      <div class="wb-icon"><i class="fal fa-file-check"></i></div>
+      <h2>{{quiz.title}}</h2>
+    </div>
+    {% if quiz.description %}
+    <div class="alert alert-danger quiz-notices">{{quiz.description|safe}}</div>
+    {% endif %}
+  </div>
+  <form action="/set-user-answers" method="POST">
+    {% if questions %} {% for qst in questions %}
+    <div class="question-block" data-id="{{qst.id}}">
+      {% if 'http' in qst.question_text %}
+      <div class="question-text p-0">
+        <a href="{{qst.question_text}}" class="image-popup">
+          <img class="image d-block mx-auto" src="{{qst.question_text}}" />
+        </a>
+      </div>
+      {% else %}
+      <div class="question-text">
+        <div class="question-number">{{loop.index}}</div>
+        {{qst.question_text|safe}}
+      </div>
+      {% endif %}
+      <div class="radiogroup">
+        {% set answer = qst.options | string() %} {% set options =
+        answer.split('|&|') %} {% for option in options %}
+        <div
+          class="wrapper {% if qst.user_answer == loop.index|string %}checked{% endif %}"
+          data-value="{{loop.index}}"
+        >
+          <label class="label">
+            <div class="indicator"></div>
+            {% if 'http' in option %}
+            <a href="{{option}}" class="image-popup gallery-item">
+              <img src="{{option}}" alt="Image" class="image" />
+            </a>
+            {% else %}
+            <span class="text">{{option}}</span>
+            {% endif %}
+          </label>
+        </div>
+        {% endfor %}
+        <div
+          class="wrapper no-answer {% if qst.user_answer == '0' %}checked{% endif %}"
+          data-value="0"
+        >
+          <label class="label">
+            <div class="indicator"></div>
+            <span class="text">بی پاسخ</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% endif %}
+    <div class="text-center">
+      <button class="btn btn-success btn-lg" id="send_answers" type="button">
+        ارسال پاسخ‌ها
+      </button>
+    </div>
+    <div
+      id="confirm_modal"
+      class="modal"
+      tabindex="-1"
+      role="dialog"
+      id="quiz_start_modal"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">توجه!</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-danger collapse" id="blank_answers_alert">
+              هنوز به <span>0</span> سوال پاسخ نداده اید!
+            </div>
+            <p>
+              با تایید این پیام کلیه پاسخ های شما به صورت نهایی ثبت شده و از
+              آزمون خارج خواهید شد. امکان بازگشت و ویرایش پاسخ ها به هیچ وجه
+              مقدور نخواهد بود. آیا مطمئن هستید؟
+            </p>
+            <hr />
+            <div class="submit-buttons text-center">
+              <button
+                class="btn btn-warning btn-lg"
+                id="btn_submit"
+                type="submit"
+              >
+                بله مطمئن هستم
+              </button>
+              <button
+                class="btn btn-default btn-lg"
+                type="button"
+                data-dismiss="modal"
+              >
+                خیر. بازگشت به آزمون
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="quiz_id" value="{{quiz.id}}" />
+    <input type="hidden" name="all_answers" value="" />
+  </form>
+</div>
+<div class="sticky-bottom">
+  <div class="container sb-flex">
+    <div
+      class="soon"
+      id="quiz_countdown"
+      data-due="in {{quiz.duration|int-1}} minutes"
+      data-event-complete="quiz_done"
+      data-event-tick="tick"
+      data-layout="inline label-small"
+      data-scale-max="s"
+      data-scale-hide="empty"
+      data-format="m,s"
+      data-separator=":"
+      data-face="slot slide"
+      data-singular="true"
+      data-labels-hours=" "
+      data-labels-minutes=" "
+      data-labels-seconds=" "
+    >
+      <div class="countdown-title">زمان باقیمانده</div>
+    </div>
+  </div>
+</div>
+<div
+  id="time_modal"
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  id="quiz_start_modal"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">توجه!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          فقط یک دقیقه تا پایان آزمون باقیمانده است. لطفا هرچه سریعتر نسبت به
+          ثبت نهایی پاسخ‌های خود توسط دکمه سبز رنگ «ارسال پاسخ» اقدام نمایید
+        </p>
+        <hr />
+        <div class="submit-buttons text-center">
+          <button
+            class="btn btn-primary btn-lg"
+            type="button"
+            data-dismiss="modal"
+          >
+            تایید
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script src="/static/js/soon.min.js"></script>
+<script src="/static/js/jquery.magnific-popup.min.js"></script>
+<script src="/static/js/magnific-popup-options.js"></script>
+<script>
+  $(function () {
+    $(".image-popup").magnificPopup({
+      type: "image",
+      gallery: {
+        enabled: false,
+      },
+    });
+    window.onbeforeunload = function () {
+      return "در صورت استفاده از دکمه بازگشت هیچ کدام از پاسخ های شما ثبت نشده و نمره شما صفر در نظر گرفته می‌شود. لطفا بر روی دکمه Cancel کلیک نمایید و توسط دکمه سبز رنگ «ارسال پاسخ» جواب‌های خود را ثبت نمایید.";
+    };
+    $(document).on("submit", "form", function (event) {
+      window.onbeforeunload = null;
+    });
+    $(".radiogroup .wrapper").click(function (e) {
+      if ($(this).hasClass("checked")) {
+        $(this).closest(".radiogroup").find(".wrapper").removeClass("checked");
+        $(this)
+          .closest(".radiogroup")
+          .find(".wrapper.no-answer")
+          .addClass("checked");
+      } else {
+        $(this).closest(".radiogroup").find(".wrapper").removeClass("checked");
+        $(this).addClass("checked");
+      }
+    });
+    $("#send_answers").click(function () {
+      const blankAnswersCount = collectAnswers();
+      if (blankAnswersCount > 0) {
+        $("#blank_answers_alert").removeClass("collapse");
+        $("#blank_answers_alert span").text(blankAnswersCount);
+      } else {
+        $("#blank_answers_alert").addClass("collapse");
+      }
+      $("#confirm_modal").modal("show");
+    });
+    $("#btn_submit").click(function () {
+      if (isSubmitting) {
+        $(this).preventDefault();
+        return;
+      }
+      $("#btn_submit").addClass("disabled");
+      isSubmitting = true;
+    });
+  });
+  var modalBeenShown = false;
+  var isSubmitting = false;
+  function collectAnswers() {
+    let allAnswers = [];
+    let blankAnswersCount = 0;
+    $(".question-block").each(function () {
+      if ($(this).find(".wrapper.checked").data("value") == 0)
+        blankAnswersCount++;
+      allAnswers.push({
+        qid: (questionId = $(this).data("id").toString()),
+        ans: $(this).find(".wrapper.checked").data("value").toString(),
+      });
+    });
+    $("[name='all_answers']").val(JSON.stringify(allAnswers));
+    return blankAnswersCount;
+  }
+  function quiz_done() {}
+  function tick(milliseconds, due) {
+    if (milliseconds < 60000 && !modalBeenShown) {
+      modalBeenShown = true;
+      $("#time_modal").modal("show");
+    }
+    if (milliseconds <= 0 && !isSubmitting) {
+      if (isSubmitting) return;
+      collectAnswers();
+      $("#btn_submit").addClass("disabled");
+      $("form").submit();
+      isSubmitting = true;
+    }
+  }
+</script>
+{% endblock %}

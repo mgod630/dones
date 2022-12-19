@@ -1,0 +1,104 @@
+.show-video-modal {
+    background-color: rgb(255, 193, 7, 0.7);
+    margin: auto;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding: 13px 0 0 3px;
+    font-size: 18px;
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.show-video-modal:hover {
+    background-color: rgb(255, 193, 7, 1);
+}
+.show-video-modal i {
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.mejs__container, .mejs__container * {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+.anc-text {
+    min-height: 80px;
+    position: relative;
+    overflow: auto;
+    max-height: 184px;
+    margin-left: -5px;
+    padding-left: 5px;
+    padding-bottom: 1px;
+}
+.anc-row {
+    border-bottom: 1px solid #cccccc;
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    font-size: 14px;
+    text-indent: -12px;
+    padding-right: 25px;
+}
+.anc-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.anc-row i {
+    vertical-align: middle;
+    color: #292929;
+    margin-left: 6px;
+}
+
+.smc-card {
+    position: relative;
+    font-size: 14px;
+    display: block;
+    color: #222;
+    min-height: 44px;
+    background-color: #f7f7f7;
+    border-radius: 4px;
+    overflow: hidden;
+    padding: 5px 55px 5px 10px;
+    text-align: justify;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: 0.2s background-color,0.2s color;
+}
+.smc-card:hover {
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+}
+.smc-image {
+    border-radius: 3px;
+    background-size: cover;
+    background-position: center;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    right: 6px;
+    top: 6px;
+}
+#video_modal .modal-body{
+    padding: 0;
+}
+#video_modal .modal-header {
+    background-color: #ffc107;
+    border-bottom-color: #ffc107;;
+    background: linear-gradient(45deg, #f3b000 0,#ffc107 40%, #ffcb2e 100%);
+}
+#video_modal .close {
+    font-size: 30px;
+    color: white;
+    padding: 0;
+    margin: -3px auto -8px 0;
+    opacity: 0.7;
+    
+}
+#video_modal .close:focus{
+    outline: none;
+    
+}
+#video_modal .close span {
+    text-shadow: 0 1px 0 #000;
+}

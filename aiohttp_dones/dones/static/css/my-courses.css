@@ -1,0 +1,77 @@
+.white-box{
+    margin-top: 15px;
+}
+.wb-header {
+    display: flex;
+    margin-bottom: 20px;
+    background-color: #38338e;
+    padding: 5px;
+    margin: -15px -15px 15px;
+    border-radius: 3px 3px 0 0;
+}
+.wb-header h2{
+    flex: 1;
+    font-size: 19px;
+    font-weight: 700;
+    color: #fff;
+    margin: auto 0;
+}
+.wb-icon {
+    border-radius: 50%;
+    background-color: #4641a7;
+    width: 50px;
+    height: 50px;
+    padding-top: 9px;
+    font-size: 22px;
+    text-align: center;
+    color: #ffffff;
+    margin-left: 15px;
+}
+.cp-header {
+    display: flex;
+    padding: 5px 10px 5px 5px;
+    align-items: center;
+    border-radius: 4px 4px 0 0;
+    background-color: #f7f7f7;
+    border: 1px solid #b7b7b7;
+    flex-wrap: wrap;
+}
+.course-title {
+    flex: 1;
+}
+@media (max-width: 500px){
+    .course-buttons {
+        text-align: left;
+        flex: 1 0 100%;
+        margin-top: 10px;
+    }
+}
+.cp-header .btn {
+    font-size: 14px;
+    padding-top: 6px;
+}
+.cp-header .btn .fa-caret-up{
+    display: none;
+}
+.cp-header .btn.displaying .fa-caret-down{
+    display: none;
+}
+.cp-header .btn.displaying .fa-caret-up{
+    display: inline-block;
+}
+.course-buttons{
+    margin-right: auto;
+}
+.cp-body {
+    padding: 5px;
+    border: 1px solid #e4e4e4;
+    border-top: none;
+}
+.table {
+    margin-bottom: 0;
+}
+.week-title {
+    text-align: center;
+    background-color: #006837;
+    color: #fff;
+}

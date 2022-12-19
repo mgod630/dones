@@ -1,0 +1,85 @@
+{% if user.user_type == -2 %}
+<div class="sb-tabs mb-1">
+  <a
+    href="/data-management"
+    class="square-button {% if current_tab == 'glance' %}active{% endif %}"
+  >
+    <div class="hb-icon">
+      <i class="fal fa-eye"></i>
+    </div>
+    <div class="hb-title">در یک نگاه</div>
+  </a>
+  <a
+    href="/dm-users"
+    class="square-button {% if current_tab == 'users' %}active{% endif %}"
+  >
+    <div class="hb-icon">
+      <i class="fal fa-users"></i>
+    </div>
+    <div class="hb-title">کاربران</div>
+  </a>
+  <a
+    href="/dm-courses"
+    class="square-button {% if current_tab == 'courses' %}active{% endif %}"
+  >
+    <div class="hb-icon">
+      <i class="fal fa-books"></i>
+    </div>
+    <div class="hb-title">دوره ها</div>
+  </a>
+  <a
+    href="/dm-notification/main"
+    class="square-button {% if current_tab == 'notifications' %}active{% endif %}"
+  >
+    <div class="hb-icon">
+      <i class="fal fa-comment-alt-exclamation"></i>
+    </div>
+    <div class="hb-title">اطلاعیه ها</div>
+  </a>
+  <a
+    href="/dm-news"
+    class="square-button {% if current_tab == 'news' %}active{% endif %}"
+  >
+    <div class="hb-icon">
+      <i class="fal fa-books"></i>
+    </div>
+    <div class="hb-title">خبر ها</div>
+  </a>
+  <a
+    href="/dm-consultation"
+    class="square-button {% if current_tab == 'consultation' %}active{% endif %}"
+  >
+    <div class="hb-icon">
+      <i class="fal fa-server"></i>
+    </div>
+    <div class="hb-title">مشاوره</div>
+  </a>
+  <a
+    href="/dm-price-list"
+    class="square-button {% if current_tab == 'price_list' %}active{% endif %}"
+  >
+    <div class="hb-icon">
+      <i class="fal fa-server"></i>
+    </div>
+    <div class="hb-title">تعرفه ها</div>
+  </a>
+  <a
+    href="/dm-takhfif"
+    class="square-button {% if current_tab == 'takhfif' %}active{% endif %}"
+  >
+    <div class="hb-icon">
+      <i class="fal fa-server"></i>
+    </div>
+    <div class="hb-title">تخفیف ها</div>
+  </a>
+  <a
+    href="/dm-system"
+    class="square-button {% if current_tab == 'system' %}active{% endif %}"
+  >
+    <div class="hb-icon">
+      <i class="fal fa-server"></i>
+    </div>
+    <div class="hb-title">سیستم</div>
+  </a>
+</div>
+{% endif %}

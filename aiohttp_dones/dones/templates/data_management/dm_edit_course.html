@@ -1,0 +1,103 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'courses' %}
+{% block inner_content %}
+<style>
+    .ltr{
+        direction: ltr;
+        text-align: left;
+    }
+</style>
+<h4 class="text-center mb-2">{% if course_id  %}ویرایش دوره{% else %}ایجاد دوره{% endif %}</h4>
+<hr>
+<form action="{% if course_id  %}/dm-courses/{{course_id}}{% else %}/dm-courses{% endif %}" method="POST">
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>شناسه:</label>
+                <input type="text" class="form-control ltr" name="id" value="{% if course_id %}{{update_course.id}}{% endif %}" disabled>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>عنوان:</label>
+                <input type="text" class="form-control" name="title" value="{% if course_id  %}{{update_course.title}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>تاریخ آغاز:</label>
+                <input type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_start_datetime" value="{% if course_id  %}{{update_course.jalali_start_datetime}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>تاریخ پایان:</label>
+                <input type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_end_datetime" value="{% if course_id  %}{{update_course.jalali_end_datetime}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>قیمت (تومان):</label>
+                <input type="text" class="form-control ltr" name="price" value="{% if course_id  %}{{update_course.price}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>نام موسسه:</label>
+                <input type="text" class="form-control" name="institute" value="{% if course_id  %}{{update_course.institute}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>آدرس لوگو:</label>
+                <input type="text" class="form-control ltr" name="logo_path" value="{% if course_id  %}{{update_course.logo_path}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>آدرس عکس دوره:</label>
+                <input type="text" class="form-control ltr" name="image_path" value="{% if course_id  %}{{update_course.image_path}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>آدرس ویدیو:</label>
+                <input type="text" class="form-control ltr" name="video_path" value="{% if course_id  %}{{update_course.video_path}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-step">
+                <label>تعداد آیتم‌های رایگان:</label>
+                <input type="text" class="form-control ltr" name="free_items_count" value="{% if course_id  %}{{update_course.free_items_count}}{% endif %}">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-step">
+                <label>توضیحات:</label>
+                <textarea class="form-control" name="description" rows="4">
+                    {%- if course_id  -%}{{update_course.description|trim}}{%- endif -%}
+                </textarea>
+            </div>
+            <div class="form-step">
+                <label>متن خوش آمد گویی:</label>
+                <textarea class="form-control" name="welcome_text" rows="6">
+                    {%- if course_id  -%}{{update_course.welcome_text|trim}}{%- endif -%}
+                </textarea>
+            </div>
+            <div class="form-step">
+                <label>متن بدنه:</label>
+                <textarea class="form-control" name="body_html" rows="6">
+                    {%- if course_id  -%}{{update_course.body_html|trim}}{%- endif -%}
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-success dm-submit">ثبت</button>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+$(function(){
+})
+</script>
+{% endblock %}

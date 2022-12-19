@@ -1,0 +1,313 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'courses' %}
+{% block inner_content %}
+<style>
+    .courses-list td{
+        vertical-align: middle;
+        padding: 2px 5px;
+    }
+    .courses-list td:last-child{
+        white-space: nowrap;
+        width: 1%;
+    }
+    .courses-list td:last-child i{
+        vertical-align: sub;
+    }
+    .course-media {
+        display: flex;
+    }
+    .course-media>div{
+        flex: 1;
+        margin: 2px;
+    }
+    .course-image img, .course-video video {
+        width: 100%;
+        height: 100%;
+    }
+    .modal-header img {
+        height: 56px;
+        max-width: 100%;
+        border-radius: 5px;
+        border: 2px solid #eaeaea;
+    }
+    .modal-title {
+        margin: auto 10px auto 0;
+    }
+    .course-details {
+        border: 1px solid #d0d0d0;
+        padding: 4px 7px;
+        border-radius: 5px;
+    }
+    .singleline-field {
+        border-bottom: 1px solid #d0d0d0;
+        padding-bottom: 1px;
+        margin-bottom: 4px;
+    }
+    .singleline-field:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+    .singleline-field span:first-child {
+        width: 70px;
+        display: inline-block;
+        color: #8c8c8c;
+    }
+    .singleline-field span:last-child {
+        font-weight: bold;
+        color: #282828;
+    }
+    .course-actions{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .course-actions>a {
+        flex: 1 1 48%;
+        text-align: right;
+        font-size: 14px;
+        margin: 2px;
+    }
+    .logo-container img{
+        width: 100%;
+        max-width: 50px;
+        height: auto;
+    }
+</style>
+<div class="text-left mb-1">
+    <button class="btn btn-success" data-toggle="modal" data-target="#new_course">ایجاد دوره جدید</button>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped courses-list">
+        <thead>
+            <tr>
+                <th></th>
+                <th>عنوان</th>
+                <th>تاریخ اغاز</th>
+                <th>قیمت</th>
+                <th></th>
+            </tr>
+        </thead>
+        {% if all_courses %}
+        {% for course in all_courses %}
+        <tr>
+            <td>
+                <div class="logo-container">
+                    <img src="{{course.logo_path}}">
+                </div>
+            </td>
+            <td>{{course.title}}</td>
+            <td>{{course.jalali_start_datetime}}</td>
+            <td>{{course.price}}</td>
+            <td>
+                <button class="btn btn-success show-settings" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}"{% endfor %} >
+                    <i class="far fa-cog"></i>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="course_settings">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <img src="#"/>
+            <h5 class="modal-title"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="course-details-wrapper">
+                <div class="course-media">
+                    <div class="course-image">
+                        <img src="#">
+                    </div>
+                    <div class="course-video">
+                        <video controls>
+                            <source src="#" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <div class="course-details">
+                            <div class="singleline-field">
+                                <span>نام موسسه:</span>
+                                <span></span>
+                            </div>
+                            <div class="singleline-field">
+                                <span>تاریخ آغاز:</span>
+                                <span></span>
+                            </div>
+                            <div class="singleline-field">
+                                <span>تاریخ پایان:</span>
+                                <span></span>
+                            </div>
+                            <div class="singleline-field">
+                                <span>قیمت:</span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <div class="course-actions">
+                            <a class="btn btn-outline-primary" hf="/dm-enroll-user/" href="#">
+                                <i class="far fa-user"></i>
+                                کاربران
+                            </a>
+                            <a class="btn btn-outline-primary" hf="/dm-course-items/" href="#">
+                                <i class="far fa-list"></i>
+                                آیتم‌ها
+                            </a>
+                            <a class="btn btn-outline-primary" hf="/dm-notification/" href="#">
+                                <i class="far fa-bell-exclamation"></i>
+                                اطلاعیه‌ها
+                            </a>
+                            <a class="btn btn-outline-primary" hf="/dm-copy-course/" href="#">
+                                <i class="far fa-copy"></i>
+                                کپی
+                            </a>
+                            <a class="btn btn-outline-success" hf="/dm-courses/" href="#">
+                                <i class="far fa-pen"></i>
+                                ویرایش
+                            </a>
+                            <a class="btn btn-outline-danger" hf="/dm-delete-course/" href="#">
+                                <i class="far fa-trash-alt"></i>
+                                حذف
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="new_course">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ایجاد دوره جدید</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% if course_id  %}/dm-courses/{{course_id}}{% else %}/dm-courses{% endif %}" method="POST">
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>شناسه:</label>
+                                <input type="text" class="form-control ltr" name="id" value="{% if course_id %}{{update_course.id}}{% endif %}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>عنوان:</label>
+                                <input type="text" class="form-control" name="title" value="{% if course_id  %}{{update_course.title}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>زمان آغاز:</label>
+                                <input type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_start_datetime" value="{% if course_id  %}{{update_course.jalali_start_datetime}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>زمان پایان:</label>
+                                <input type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_end_datetime" value="{% if course_id  %}{{update_course.jalali_end_datetime}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>قیمت (تومان):</label>
+                                <input type="text" class="form-control ltr" name="price" value="{% if course_id  %}{{update_course.price}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>نام موسسه:</label>
+                                <input type="text" class="form-control" name="institute" value="{% if course_id  %}{{update_course.institute}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>آدرس لوگو:</label>
+                                <input type="text" class="form-control ltr" name="logo_path" value="{% if course_id  %}{{update_course.logo_path}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>آدرس عکس دوره:</label>
+                                <input type="text" class="form-control ltr" name="image_path" value="{% if course_id  %}{{update_course.image_path}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>آدرس ویدیو:</label>
+                                <input type="text" class="form-control ltr" name="video_path" value="{% if course_id  %}{{update_course.video_path}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-step">
+                                <label>تعداد آیتم‌های رایگان:</label>
+                                <input type="text" class="form-control ltr" name="free_items_count" value="{% if course_id  %}{{update_course.free_items_count}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-step">
+                                <label>توضیحات:</label>
+                                <textarea class="form-control" name="description" rows="3">
+                                    {%- if course_id  -%}{{update_course.description|trim}}{%- endif -%}
+                                </textarea>
+                            </div>
+                            <div class="form-step">
+                                <label>متن خوش آمد گویی:</label>
+                                <textarea class="form-control" name="welcome_text" rows="3">
+                                    {%- if course_id  -%}{{update_course.welcome_text|trim}}{%- endif -%}
+                                </textarea>
+                            </div>
+                            <div class="form-step">
+                                <label>متن بدنه:</label>
+                                <textarea class="form-control" name="body_html" rows="3">
+                                    {%- if course_id  -%}{{update_course.body_html|trim}}{%- endif -%}
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-success dm-submit" type="submit">ثبت</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$(function(){
+    $(".show-settings").click(function(){
+        var course_data = $(this).data();
+        $("#course_settings .modal-header img").attr("src", course_data.logo_path);
+        $("#course_settings .modal-title").text(course_data.title);
+
+        $("#course_settings .course-image img").attr("src", course_data.image_path)
+        $("#course_settings .course-video source").attr("src", course_data.video_path)
+
+        $("#course_settings .course-details>div:eq(0)>span:last-child").text(course_data.institute)
+        $("#course_settings .course-details>div:eq(1)>span:last-child").text(course_data.jalali_start_datetime)
+        $("#course_settings .course-details>div:eq(2)>span:last-child").text(course_data.jalali_end_datetime)
+        $("#course_settings .course-details>div:eq(3)>span:last-child").text(course_data.price == 0 ? "رایگان" : course_data.price + " تومان")
+
+        $("#course_settings .course-actions a").each(function(){
+            $(this).attr("href",$(this).attr("hf") + course_data.id)
+        });
+
+        $("#course_settings").modal("show");
+    });
+})
+</script>
+{% endblock %}

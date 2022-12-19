@@ -1,0 +1,67 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'news' %}
+{% block inner_content %}
+<style>.table .btn{height: 27px}</style>
+<button class="btn btn-primary btn-sm mb-3" type="button" data-toggle="collapse" data-target="#collapse">ایجاد خبر جدید</button>
+<div class="collapse mb-3 {% if news_id %}d-block{% endif %}" id="collapse">
+    <form action="{% if news_id %}/dm-news/{{news_id}}{% else %}/dm-news{% endif %}" method="POST">
+        <div class="form-row">
+            <div class="form-group col-md-3 d-none">
+                <label>id:</label>
+                <input type="text" class="form-control" name="id" value="{% if news_id %}{{update_news.id}}{% endif %}" disabled>
+            </div>
+            <div class="form-group col-12">
+                <label>عنوان خبر</label>
+                <input type="text" placeholder="عنوان خبر ..." class="form-control" name="title" value="{% if news_id  %}{{update_news.title}}{% endif %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label>نویسنده</label>
+                <input type="text" placeholder="نویسنده خبر ..." class="form-control" name="author" value="{% if news_id  %}{{update_news.author}}{% endif %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label>تاریخ نشر خبر</label>
+                <input type="text" class="form-control" placeholder="تاریخ نشر خبر ..." name="jalali_release_date_time" value="{% if news_id  %}{{update_news.jalali_release_date_time}}{% endif %}">
+            </div>
+            <div class="form-group col-md-6">
+                <label>آدرس عکس</label>
+                <input type="text" placeholder="image path" class="form-control" name="image_path" value="{% if news_id  %}{{update_news.image_path}}{% endif %}">
+            </div>
+            <div class="form-group col-12">
+                <label>متن خبر</label>
+                <textarea name="content" placeholder="متن خبر ..." class="form-control" rows="3">{% if news_id  %}{{update_news.content}}{% endif %}</textarea>
+            </div>
+        </div>
+        <button class="btn btn-success dm-submit" type="submit">ثبت</button>
+    </form>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>عنوان</th>
+                <th>متن</th>
+                <th>نویسنده</th>
+                <th>آدرس عکس</th>
+                <th>تاریخ نشر خبر</th>
+                <th>تاریخ ساخت خبر</th>
+                <th>ویرایش</th>
+                <th>حذف</th>
+            </tr>
+        </thead>
+        {% if all_news %}
+        {% for news in all_news %}
+        <tr>
+            <td>{{news.title}}</td>
+            <td>{{news.content}}</td>
+            <td>{{news.author}}</td>
+            <td>{{news.image_path}}</td>
+            <td>{{news.jalali_release_date_time}}</td>
+            <td>{{news.jalali_news_date_time}}</td>
+            <td><a class="btn btn-success btn-sm" href="/dm-news/{{news.id}}"><i class="far fa-cog"></i></a></td>
+            <td><a class="btn btn-warning btn-sm" href="/dm-delete-news/{{news.id}}"><i class='far fa-trash-alt'></i></a></td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+</div>
+{% endblock %} 

@@ -1,0 +1,53 @@
+{% set input_templates = {
+    'complex_username': { 'icon': 'address-card','type': 'text',     'placeholder': 'موبایل، ایمیل یا نام کاربری', 'length': 40, 'validation': '',           'validation_error': '' },
+    'username':         { 'icon': 'username',    'type': 'text',     'placeholder': 'نام کاربری',                  'length': 40, 'validation': '',           'validation_error': '' },
+    'text':             { 'icon': '',            'type': 'text',     'placeholder': '',                            'length': 100,'validation': '',           'validation_error': '' },
+    'mobile':           { 'icon': 'mobile',      'type': 'text',     'placeholder': 'شماره موبایل',                'length': 11, 'validation': 'mobile',     'validation_error': 'یک شماره معتبر وارد نمایید (09xxxxxxxxx)' },
+    'email':            { 'icon': 'envelope',    'type': 'text',     'placeholder': 'ایمیل',                       'length': 40, 'validation': 'email',      'validation_error': 'ایمیل وارد شده معتبر نمی‌باشد' },
+    'current_password': { 'icon': 'key',         'type': 'password', 'placeholder': 'کلمه عبور فعلی',              'length': 40, 'validation': '',           'validation_error': 'یک عبارت حداقل ۶ حرفی وارد نمایید' },
+    'fullname':         { 'icon': 'user',        'type': 'text',     'placeholder': 'نام کامل',                    'length': 40, 'validation': '',           'validation_error': '' },
+    'password':         { 'icon': 'key',         'type': 'password', 'placeholder': 'کلمه عبور',                   'length': 40, 'validation': 'min_length', 'validation_error': 'یک عبارت حداقل ۶ حرفی وارد نمایید' },
+    'new_password':     { 'icon': 'key',         'type': 'password', 'placeholder': 'کلمه عبور جدید',              'length': 40, 'validation': 'min_length', 'validation_error': 'یک عبارت حداقل ۶ حرفی وارد نمایید' },
+    'new_password_repeat':{ 'icon': 'key',       'type': 'password', 'placeholder': 'تکرار کلمه عبور جدید',        'length': 40, 'validation': 'repeat',     'validation_error': 'تکرار کلمه عبور صحیح نمی‌باشد' },
+    'verification_code':{ 'icon': 'lock',        'type': 'text',     'placeholder': 'پین ۴ رقمی',                  'length': 4,  'validation': 'min_length4','validation_error': 'پین ۴ رقمی را وارد نمایید' }
+} %}
+
+{% macro input(inp_type, value='', section='sg', required=false, label='', name='', size='normal', icon='') %}
+    <div class="form-field" {% if section == 'rs' %}style="margin-bottom: 18px;"{% endif %}>
+        
+        <label class="subtle">
+            {% if section == 'sg' %}
+                {% if label != '' %}
+                    {{ label }}
+                {% else %}
+                    {{ input_templates[inp_type].placeholder }}
+                {% endif %}:
+                {% if required %}*{% endif %}
+            {% endif %}
+        </label>
+        <span class="field-error" data-error="{{input_templates[inp_type].validation_error}}"></span>
+        <span class="field-icon">
+            <i class="fas fa-{% if icon %}{{icon}}{% else %}{{ input_templates[inp_type].icon }}{% endif %}"></i>
+        </span>
+        {% if size == 'normal' %}
+        <input class="form-control {% if inp_type == 'fullname' %}rtl{% endif %}{% if inp_type == 'text' %}rtl text-right{% endif %}"
+               name="{% if name %}{{name}}{% else %}{{section}}_{{inp_type}}{% endif %}"
+               value="{{ value }}"
+               placeholder="{% if section != 'sg' %}{{ input_templates[inp_type].placeholder }}{% endif %}"
+               type="{{ input_templates[inp_type].type }}"
+               data-fftype="{{inp_type}}"
+               {% if input_templates[inp_type].validation %}data-validation="{{input_templates[inp_type].validation}}"{% endif %}
+               {% if required %}data-required="true"{% endif %}
+               maxlength="{{ input_templates[inp_type].length }}"
+        >
+        {% else %}
+        <textarea class="form-control {% if inp_type == 'fullname' %}rtl{% endif %}{% if inp_type == 'text' %}rtl text-right{% endif %}"
+               name="{{section}}_{{inp_type}}"
+               text="{{ value }}"
+               placeholder="{% if section != 'sg' %}{{ input_templates[inp_type].placeholder }}{% endif %}"
+               {% if required %}data-required="true"{% endif %}
+               rows="4"
+        ></textarea>
+        {% endif %}
+    </div>
+{%- endmacro %}

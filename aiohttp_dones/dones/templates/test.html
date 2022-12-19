@@ -1,0 +1,12 @@
+<form method='post' action='https://pep.shaparak.ir/gateway.aspx' id='pg_form' >
+    <input name='invoiceNumber' value='{{pasargad_data.invoice_number}}' />
+    <input name='invoiceDate' value='{{pasargad_data.invoice_date}}' />
+    <input name='amount' value='{{pasargad_data.amount}}' />
+    <input name='terminalCode' value='{{pasargad_data.terminal_code}}' />
+    <input name='merchantCode' value='{{pasargad_data.merchant_code}}' />
+    <input name='redirectAddress' value='{{pasargad_data.redirect_address}}' />
+    <input name='timeStamp' value='{{pasargad_data.time_stamp}}' />
+    <input name='action' value='{{pasargad_data.action}}' />
+    <input name='sign' value='{{pasargad_data.result}}' />
+    <input type="submit" class="btn btn-primary btn-cost" name="submit" value="اقدام به پرداخت">
+</form>

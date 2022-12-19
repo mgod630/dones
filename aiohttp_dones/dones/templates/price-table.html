@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="#" />
+<style>
+.packages-header h1 {
+    text-align: center;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    padding: 28px 0;
+}
+.packages-header {
+    background-color: #4494f4;
+    background: linear-gradient(45deg, #4494f4 0, #5ea7fe 100%);
+    height: 380px;
+    margin-bottom: -280px;
+}
+.packages-wrapper>.container>.white-box {
+    display: flex;
+    text-align: center;
+    flex-wrap: wrap;
+    padding-left: 0;
+    padding-right: 0;
+}
+.package-col {
+    flex: 1;
+    border-left: 1px solid #e1f1ff;
+}
+.package-title {
+    color: #888888;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 40px;
+}
+.package-detail {
+    color: #016ff9;
+    font-size: 16px;
+    padding: 15px 0 13px;
+    border-top: 1px solid #e1f1ff;
+}
+.package-detail:last-child {
+    border-bottom: 1px solid #e1f1ff;
+}
+.package-col {
+    flex: 1;
+    border-left: 1px solid #e1f1ff;
+    padding: 30px 45px;
+    display: flex;
+    flex-direction: column;
+}
+.package-icon {
+    margin-bottom: 20px;
+}
+.package-price {
+    color: #016ff9;
+    padding: 30px 0;
+    margin-top: auto;
+}
+.package-col:last-child {
+    border-left: none;
+}
+.package-col .btn {
+    width: 150px;
+    margin: 0 auto;
+    white-space: normal;
+}
+.package-price {
+    color: #016ff9;
+    padding: 30px 0;
+}
+.package-price>div:first-child {
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 1;
+}
+.package-price>div:last-child {
+    height: 21px;
+}
+</style>
+{% endblock %}
+{% block content %}
+{% set packages = [
+    {title: 'استارتاپ', features: ['اختصاصی', 'مقیاس پذیری افقی و بسیار ساده'], price: 100, image: '/static/template/package1.png' },
+    {title: 'شرکتی', features: ['اختصاصی', 'مقیاس پذیری افقی و بسیار ساده'], price: 300, image: '/static/template/package2.png' },
+    {title: 'سازمانی', features: ['اختصاصی', 'مقیاس پذیری افقی و بسیار ساده'], price: 600, image: '/static/template/package3.png' }
+    ] %}
+<div class="packages-wrapper">
+    <div class="packages-header">
+        <h1>تعرفه‌های سماح</h1>
+    </div>
+    <div class="container">
+      <div class="white-box mb-3">
+          {% for package in price_list_items %}
+          <div class="package-col">
+                <div class="package-icon">
+                    <img src="{{package.image_path}}">
+                </div>
+                <h2 class="package-title">{{package.title}}</h2>
+                <div class="package-details">
+                    {% for feature in package.str_items_list.split('|.|') %}
+                    <div class="package-detail">{{feature}}</div>
+                    {% endfor %}
+                </div>
+                <div class="package-price">
+                    {% if package.price %}
+                    <div>{{package.price|int//1000}}</div>
+                    <div>هزار تومان</div>
+                    {% else %}
+                    <div>رایگان</div>
+                    <div></div>
+                    {% endif %}
+                </div>
+                <a href="{{package.button_link}}" class="btn btn-primary">{{package.button_caption}}</a>
+          </div>
+          {% endfor %}
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  $(function () {
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends "layout.html" %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="/static/css/forms.css?1" />
+<style>
+.dones-map {
+    background-image: url(/static/template/dones_map.jpg);
+    height: 350px;
+    background-position: center;
+    margin-bottom: 19px;
+    border-radius: 5px;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.15);
+    border: 5px solid white;
+}
+.contact-us-p {
+    margin-bottom: 2px;
+    padding-bottom: 3px;
+    padding: 5px 8px 3px;
+    background-color: #fbfbfb;
+}
+.about-us-text p {
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+.about-us-text h5 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #2d2d2d;
+    position: relative;
+    margin: 30px auto 0;
+    z-index: 1;
+}
+.skewed-hr {
+    border-top: 34px solid #dbffe3;
+    width: 100px;
+    margin: 0 auto -10px;
+    transform: translateY(-30px) skewX(-22deg) rotateZ(-20deg) scaleX(1);
+}
+.dones-slogan {
+    text-align: center;
+    padding: 15px 5px 10px;
+    border-radius: 30px 2px 30px 2px;
+    background: rgb(17,134,20);
+    background: linear-gradient(45deg, #29b16c 0%, #01cc81 100%);
+}
+.dones-slogan h6 {
+    font-size: 24px;
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.dones-slogan div {
+    font-size: 18px;
+    color: #ffffff;
+    letter-spacing: 1px;
+    color: #ffffff;
+}
+@media(max-width: 767px){
+
+}
+.field-icon {
+    bottom: auto;
+    top: 34px;
+}
+.btn-success{
+  min-width: 90px;
+}
+.contact-form h4{
+  font-size: 19px;
+  font-weight: bold;
+  background-color: #ffffff;
+  position: relative;
+  display: block;
+  bottom: -5px;
+  width: 111px;
+  margin: auto;
+  text-align: center;
+}
+.contact-form hr {
+  margin-bottom: 25px;
+  margin-top: -5px;
+}
+.form-field .field-error {
+    bottom: auto;
+}
+</style>
+{% endblock %}
+{% block content %}
+{% import 'login-fields-macro.html' as mcr_inputs %}
+<div class="container">
+  <div class="white-box mt-3 mb-3">
+    <div class="wb-header wbh-purple">
+      <div class="wb-icon"><i class="fal fa-building"></i></div>
+      <h2>درباره ما</h2>
+    </div>
+    <div class="about-us">
+      <div class="about-us-title">
+        <h4 class="text-center">امور مشاوره و خانواده معاونت تهذیب و تربیت حوزه های علمیّه</h4>
+        <p class="text-center">ارائه کننده خدمات مشاوره ای و روانشناختی با رویکرد اسلامی</p>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <form id="contact_form" class="contact-form" action="" method="post">
+            <h4 class="">ارسال پیام</h4>
+            <hr>
+            {{ mcr_inputs.input('fullname', value=user.full_name, name='full_name')}}
+            {{ mcr_inputs.input('email', value=user.email, name='email')}}
+            {{ mcr_inputs.input('mobile', value=user.mobile, name='mobile')}}
+            {{ mcr_inputs.input('text', label='بازه مناسب جهت تماس', name='best_time_to_call', icon='clock')}}
+            {{ mcr_inputs.input('text', required=true, label='متن پیام', size='large', name='message_content', icon='envelope')}}
+            <hr>
+            <div class="text-center">
+              <button class="btn btn-success" type="button">ارسال</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="dones-contact">
+            <div class="contact-us-p address">
+              <i class="fas fa-map-marker-alt"></i>
+              شعبه مرکزی: قم، خیابان صفائیه، کوچه ۳۷
+            </div>
+            <div class="contact-us-p">
+              <i class="far fa-phone"></i>
+              تلفن: ۰۲۵۳۷۸۳۸۰۸۰
+            </div>
+            <div class="contact-us-p">
+              <i class="far fa-phone"></i>
+              شعبه پردیسان: ۰۲۵۳۱۲۰۴۵۴۰
+            </div>
+            <div class="contact-us-p">
+              <i class="far fa-phone"></i>
+              شعبه حوزه امام کاظم علیه السلام :۰۲۵۳۷۱۰۸۲۱۸
+            </div>
+            <div class="contact-us-p">
+              <i class="far fa-phone"></i>
+              شعبه قزوین: ۰۲۸۳۳۲۲۹۰۱۱
+            </div>
+            <div class="contact-us-p">
+              <i class="far fa-phone"></i>
+              شعبه اهواز: ۰۹۳۰۴۸۳۲۴۶۴
+            </div>
+            <div class="contact-us-p">
+              <i class="far fa-phone"></i>
+              شعبه کرمان: ۰۳۴۳۲۵۳۵۲۱۴
+            </div>
+            <div class="contact-us-p">
+              <i class="far fa-phone"></i>
+              شعبه یزد: ۰۳۵۳۵۲۸۰۰۴۱
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/form.js"></script>
+<script>
+$(function () {
+  $("#contact_form button").click(function () {
+    validateForm("contact_form");
+  });
+});
+</script>
+{% endblock %}

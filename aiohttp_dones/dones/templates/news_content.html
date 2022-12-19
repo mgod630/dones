@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block styles %}
+<style>
+.news-header {
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 250px;
+}
+.news-header::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-image: linear-gradient(45deg,rgba(47, 24, 132, 0.8) 0,rgba(0, 107, 97, 0.8) 100%);
+}
+.news-header .featured-image {
+    background-size: cover;
+    position: absolute;
+    width: 100%;
+    filter: blur(5px);
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    bottom: 5px;
+}
+.news-header .nc-meta {
+  position: relative;
+  z-index: 2;
+  margin: auto auto 5px auto;
+  color: #fff;
+  text-shadow: 0 1px 2px black;
+}
+.news-header .nc-meta i {
+  vertical-align: baseline;
+  margin-left: 5px;
+}
+.news-header h1 {
+  position: relative;
+  z-index: 2;
+  margin: 0 auto auto auto;
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 1px 2px black;
+  text-align: center;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="news-header mb-3">
+  <div class="nc-meta">
+    <i class="fal fa-calendar"></i>
+    {{news.jalali_release_date_time}}
+  </div>
+  <h1>{{news.title}}</h1>
+  <div class="featured-image" style="background-image: url({{news.image_path}})"></div>
+</div>
+<div class="container">
+  <div class="white-box mb-3">
+    {{news.content|safe}}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

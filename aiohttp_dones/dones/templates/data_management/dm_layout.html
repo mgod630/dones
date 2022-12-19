@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="/static/css/cpanel.css?3" />
+{% endblock %}
+{% block content %}
+<div class="striped-header mb-3">
+    <h1>پنل مدیریت</h1>
+</div>
+<div class="container mb-3">
+  {% include 'data_management/dm_tabs_s.html' %}
+  <div class="white-box cp-main-container">  
+    {% block inner_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'glance' %}
+{% block inner_content %}
+<form action="/dm-courses" method="POST">
+  <label>content_text:</label>
+  <input type="text" name="content_text">
+  <button class="btn btn-success dm-submit">ثبت</button>
+</form>
+{% endblock %}

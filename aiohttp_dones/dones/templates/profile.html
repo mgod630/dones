@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="/static/css/forms.css?1" />
+<link rel="stylesheet" type="text/css" href="/static/css/profile.css?3" />
+{% endblock %}
+{% block content %}
+{% import 'login-fields-macro.html' as mcr_inputs %}
+<div class="container">
+  <div class="white-box mt-3 mb-3">
+    <div class="wb-header wbh-purple">
+      <div class="wb-icon"><i class="fal fa-user"></i></div>
+      <h2>حساب کاربری</h2>
+    </div>
+    <form id="signup_form" action="/update-profile" method="post">
+      <div class="row">
+        <div class="col-12 col-sm-4">
+          <div class="pr-region">
+            <div class="profile-picture">
+              <img src="../static/template/profile.jpg">
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-8">
+          <div class="pr-region">
+            {{ mcr_inputs.input('fullname', value=user.full_name, section='sg', required=true)}}
+            {{ mcr_inputs.input('mobile', value=user.mobile, section='sg', required=true)}}
+            <hr>
+            <label for="age">سن :</label>
+            <input type="text" id="age" name="age" value="{{user.age}}"><br><br>
+            <label> جنسیت :</label>
+            <select name="gender">
+              {%if user.gender == 'male'%}
+              <option value="male" selected>مرد</option>
+              <option value="female" >زن</option>
+              {% else %}
+              <option value="male" >مرد</option>
+              <option value="female" selected>زن</option>
+              {% endif %}
+            </select> <br><br>
+            <label> وضعیت تاهل :</label>
+            <select name="marital_status">
+              {%if user.marital_status == 'single'%}
+              <option value="single" selected>مجرد</option>
+              <option value="married" >متاهل</option>
+              {% else %}
+              <option value="single" >مجرد</option>
+              <option value="married" selected>متاهل</option>
+              {% endif %}
+            </select>
+            <hr>
+            <label for="grade">تحصیلات :</label>
+            <input type="text" id="grade" name="grade" value="{{user.grade}}"><br><br>
+            <label for="job">شغل :</label>
+            <input type="text" id="job" name="job" value="{{user.job}}"><br><br>
+            <hr><hr>
+            <div class="form-field">
+              <div class="custom-checkbox">
+                <div class="cc-check">
+                  <i class="far fa-check"></i>
+                </div>
+                تغییر کلمه عبور
+              </div>
+            </div>
+            <div id="password_panel" style="display: none;">
+              {{ mcr_inputs.input('current_password', value= "None", section='sg', required=true)}}
+              {{ mcr_inputs.input('new_password', value= "", section='sg')}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center">
+        <button class="btn btn-success" type="button">ثبت تغییرات</button>
+      </div>
+  </div>
+  </form>
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/form.js"></script>
+<script>
+  $(function () {
+    $("#signup_form button").click(function () {
+      validateForm("signup_form");
+    });
+    $(".custom-checkbox").click(function () {
+      $(this).toggleClass("checked");
+      if ($(this).hasClass("checked")) {
+        $("[name='sg_current_password']").val("")
+        $("[name='sg_new_password']").val("")
+      } else {
+        $("[name='sg_current_password']").val("None")
+        $("[name='sg_new_password']").val("None")
+      }
+      $("#password_panel").slideToggle();
+    });
+  });
+</script>
+{% endblock %}

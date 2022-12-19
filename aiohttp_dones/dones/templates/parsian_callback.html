@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>تکمیل خرید</title>
+    <link rel="stylesheet" href="/static/uploads/amar_statics/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="/static/uploads/amar_statics/3488amar.ico" type="image/x-icon">
+    <style>
+        @font-face {
+            font-family: 'newfont';
+            src: url('/static/uploads/amar_statics/IRANSansWeb.woff') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body{
+            font-family: 'newfont',Arial, Helvetica, sans-serif;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            direction: rtl;
+            background-color: #f2f2f2;
+            position: relative;
+            font-size: 15px;
+        }
+        .btn-cost {
+            display: block;
+            background: #fddc7f;
+            margin: 0px auto 25px;
+            width: 40%;
+            border-radius: 8px;
+            padding: 10px 0px;
+        }
+        .header {
+            position: relative;
+            padding: 0 0 100px 0;
+            background-color: #f8f9fa;
+            border: 1px solid #f8f9fa;
+            margin-top: 15%;
+        }
+        .background {
+            background-position: top left;
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 100%;
+            height: 200px;
+        }
+        .content-success h3{
+            color: #28a745;
+        }
+        .content-success{
+            margin-top: -40px;
+        }
+        .content-failed h3{
+            color: #dc3545;
+        }
+        .content-failed{
+            margin-top: -100px;
+        }
+        .bold{
+            font-weight: bold;
+            border-bottom: 1px dotted #c6c6c6;
+            padding: 0 5px;
+        }
+        .icon{
+            font-size: 24px;
+            padding-left: 5px;
+            vertical-align: middle;
+        }
+        .icon-success{
+            color: #28a745;
+        }
+        .icon-failed{
+            color: #dc3545;
+        }
+        @media (max-width: 768px){
+            .content-failed{
+                margin-top: 0;
+            }
+            .header {
+                margin-top: 10%;
+            }
+        }
+        .depth-8 {
+            box-shadow: 0 3.2px 7.2px 0 rgba(0,0,0,.132), 0 0.6px 1.8px 0 rgba(0,0,0,.108);
+            box-shadow: 0 3.2px 7.2px 0 var(--callout-shadow-color,rgba(0, 0, 0, .132)),0 .6px 1.8px 0 var(--callout-shadow-secondary-color,rgba(0, 0, 0, .108));
+        }
+    </style>
+</head>
+<body>
+    {% if invoice_result %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="header depth-8">
+                    <div class="background" style="background-image: url('/amar_statics/top-sucses.png');"></div>
+                    <div class="content-success">
+                        <h3><i class="fa fa-check icon icon-success"></i>عملیات پرداخت موفقیت آمیز بود</h3>
+                        <p>با تشکر از شما</p>
+                        <p>شماره پیگیری : <span class="bold">{{ invoiceNumber }}</span></p>
+                        <a href="/"><input type="submit" class="btn btn-primary btn-cost" name="submit" value="بازگشت به برنامه"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="header depth-8">
+                    <div class="background" style="background-image: url(../static/template/top-failed.png);"></div>
+                    <div class="content-failed">
+                        <h3><i class="fa fa-close icon icon-failed"></i>عملیات پرداخت با شکست مواجه شد</h3>
+                        <p>در صورت برداشت از حساب شما مبلغ برداشتی طی ۲۴ ساعت آینده به حساب شما برگشت داده می شود.</p>
+                        <p>با تشکر از شما</p>
+                        <p>شماره پیگیری : <span class="bold">{{ invoiceNumber }}</span></p>
+                        <a href="/"><input type="submit" class="btn btn-primary btn-cost" name="submit" value="بازگشت به برنامه"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script>
+        $(function () {
+            $(".redirect").click(function () {
+                $(window).attr('location','http://deeplink.flutter.dev');
+                setTimeout(function () {
+                    $(window).attr('location','poc://');
+                }, 250);
+            });
+        })
+    </script>
+</body>
+</html>

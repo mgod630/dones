@@ -1,0 +1,66 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'consultation' %}
+{% block inner_content %}
+<button class="btn btn-primary btn-sm mb-3" type="button" data-toggle="collapse" data-target="#collapse">ایجاد مشاوره جدید</button>
+<div class="collapse mb-3 {% if consultation_id  %}d-block{% endif %}" id="collapse">
+    <form action="{% if consultation_id %}/dm-consultation/{{consultation_id}}{% else %}/dm-consultation{% endif %}" method="POST">
+        <div class="form-row">
+            <div class="form-group col-md-3 d-none">
+                <label>id:</label>
+                <input type="text" class="form-control" name="id" value="{% if consultation_id %}{{update_consultation.id}}{% endif %}" disabled>
+            </div>
+            <div class="form-group col-md-3">
+                <label>نام و نام خانوادگی</label>
+                <input type="text" class="form-control" name="full_name" value="{% if consultation_id %}{{update_consultation.full_name}}{% endif %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label>شماره موبایل</label>
+                <input type="text" class="form-control" clas name="mobile" value="{% if consultation_id %}{{update_consultation.mobile}}{% endif %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label>ایمیل</label>
+                <input type="text" class="form-control" name="email" value="{% if consultation_id %}{{update_consultation.email}}{% endif %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label>بهترین زمان تماس</label>
+                <input type="text" class="form-control" name="best_time_to_call" value="{% if consultation_id %}{{update_consultation.best_time_to_call}}{% endif %}">
+            </div>
+            <div class="form-group col-12">
+                <label>متن پیام</label>
+                <textarea class="form-control" name="message_content" rows="3">{% if consultation_id %}{{update_consultation.message_content}}{% endif %}</textarea>
+            </div>
+        </div>
+        <button class="btn btn-success dm-submit" type="submit">ثبت</button>
+    </form>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>نام و نام خانوادگی</th>
+                <th>شماره موبایل</th>
+                <th>ایمیل</th>
+                <th>متن پیام</th>
+                <th>بهترین زمان تماس</th>
+                <th>زمان مشاوره</th>
+                <th>ویرایش</th>
+                <th>حذف</th>
+            </tr>
+        </thead>
+        {% if all_consultations %}
+        {% for consultation in all_consultations %}
+        <tr>
+            <td>{{consultation.full_name}}</td>
+            <td>{{consultation.mobile}}</td>
+            <td>{{consultation.email}}</td>
+            <td>{{consultation.message_content}}</td>
+            <td>{{consultation.best_time_to_call}}</td>
+            <td>{{consultation.jalali_consultation_date_time}}</td>
+            <td><a class="btn btn-success btn-sm" href="/dm-consultation/{{consultation.id}}"><i class="far fa-cog"></i></a></td>
+            <td><a class="btn btn-warning btn-sm" href="/dm-delete-consultation/{{consultation.id}}"><i class='far fa-trash-alt'></i></a></td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+</div>
+{% endblock %}
