@@ -79,6 +79,7 @@ def make_routes(goldis_blueprint):
     def profile_post():
         user = common.get_user_from_token()
         user_full_name = user['full_name']
+        flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(session['g_token'])
         if request.form.get('sg_current_password') != 'None' and request.form.get('sg_new_password', 'None') != 'None':
             current_password = request.form.get('sg_current_password', 'None') 
             if common.check_password(current_password, user['password']) :
@@ -91,9 +92,10 @@ def make_routes(goldis_blueprint):
                 marital_status = request.form.get('marital_status', 'None')
                 job = request.form.get('job', 'None')
                 update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name, password=new_password, grade=grade, age=age, gender=gender, marital_status=marital_status, job=job)
+                flash_messages_orm.Flash_messages.insert_new_flash_message(session['g_token'], f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success') 
             else:
                 flash_messages_orm.Flash_messages.insert_new_flash_message(session['g_token'], f'{user_full_name} گرامی، رمز عبور فعلی، صحیح نمی باشد.', 'danger') 
-                flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(session['g_token'])
+            flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(session['g_token'])
             return render_template('profile.html', user=user, flash_messages=flash_messages)
         else:
             mobile = request.form.get('sg_mobile', 'None')
@@ -104,6 +106,7 @@ def make_routes(goldis_blueprint):
             marital_status = request.form.get('marital_status', 'None')
             job = request.form.get('job', 'None')
             update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name, grade=grade, age=age, gender=gender, marital_status=marital_status, job=job)
-            
-            return redirect(url_for('goldis_blueprint.profile'))
+            flash_messages_orm.Flash_messages.insert_new_flash_message(session['g_token'], f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success') 
+            flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(session['g_token'])
+            return render_template('profile.html', user=user, flash_messages=flash_messages)
 
