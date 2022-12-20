@@ -309,15 +309,14 @@ def make_routes(goldis_blueprint):
       quiz_id = int(quiz_id)
       questions_orm.Questions.delete_question_by_id(question_id)
       return redirect(url_for('goldis_blueprint.dm_question', quiz_id=quiz_id))
-
     
     # dm notifications
     @goldis_blueprint.route("/dm-notifications")
     def dm_notifications():
         user = common.get_user_from_token()
-        
+        all_courses = courses_orm.Courses.get_all_courses()
         all_notifications = notifications_orm.Notifications.get_all_notifications()
-        return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications)   
+        return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications, all_courses=all_courses)   
 
     @goldis_blueprint.route("/dm-notifications", methods=['POST'])
     def dm_notifications_post():
