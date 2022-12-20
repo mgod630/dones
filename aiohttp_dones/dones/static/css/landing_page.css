@@ -67,20 +67,20 @@ p {
 .counter {
   position: absolute;
   top: 100px;
-  right: 73%;
+  right: 66%;
   display: flex;
   text-align: center;
   padding: 10px;
 }
 .counter .countdown p {
-  margin: 20px;
+  margin: 15px;
   text-align: center;
   font-size: 2em;
   font-weight: 600;
   color: #000;
 }
 .counter .countdown span {
-  margin: 15px;
+  margin: 10px;
   font-size: 1em;
   font-weight: 700;
   color: #000;
@@ -288,7 +288,14 @@ p {
   font-size: 14px;
   padding-right: 30px;
 }
-
+.underCounter {
+  position: absolute;
+  top: 215px;
+  right: 70%;
+  font-size: 1.5em;
+  color: #000;
+  word-spacing: 3px;
+}
 /* .carosCard p {
   position: absolute;
   bottom: 10px;
@@ -313,10 +320,6 @@ p {
   font-size: 50px;
 } */
 @media screen and (max-width: 1100px) {
-  .counter {
-    top: 4px;
-    right: 30%;
-  }
   .pheader2 {
     right: 28%;
   }
@@ -334,17 +337,33 @@ p {
 }
 @media screen and (max-width: 768px) {
   .secondeDiv {
-    padding: 100px 50px;
+    padding: 150px 50px;
   }
   .vHaji {
     margin-top: 50px;
   }
-}
-@media screen and (max-width: 650px) {
   .header img {
     width: 600px;
   }
+  .counter {
+    top: 380px;
+    right: 48%;
+  }
+  .counter .countdown p,
+  .counter .countdown span {
+    color: #f2f2f2;
+  }
+  .underCounter {
+    top: 410px;
+    right: 15%;
+    color: #f2f2f2;
+  }
+}
+@media screen and (max-width: 650px) {
   .pheader2 {
     right: 10%;
+  }
+  .underCounter {
+    right: 15px;
   }
 }

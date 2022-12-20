@@ -61,6 +61,7 @@ body {
 }
 .btn {
   font-size: 14px;
+  border-radius: 15px;
 }
 .cs-nav {
   padding: 4px;
@@ -454,7 +455,7 @@ p {
 }
 .footer-links {
   padding: 18px 5px 18px 0;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+  /* border-bottom: 2px solid rgba(255, 255, 255, 0.05); */
 }
 .footer-second-row {
   padding: 10px 0;
@@ -611,11 +612,18 @@ a.footer-link-first {
   font-weight: 600;
   font-size: 22px;
   text-decoration: none;
+  letter-spacing: 2px;
+}
+.fStack:hover {
+  text-decoration: none;
 }
 .fStack span {
   color: #ff7000;
   font-weight: 700;
 }
-.nav-logo:hover {
+/* .nav-logo:hover {
   text-decoration: none;
 }
+nav a {
+  text-decoration: none;
+} */
