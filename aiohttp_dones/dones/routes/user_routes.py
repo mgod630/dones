@@ -68,3 +68,8 @@ def make_routes(goldis_blueprint):
     def logout():
         session.pop('g_token')
         return redirect(url_for('goldis_blueprint.home'))
+
+    @goldis_blueprint.route('/profile')
+    def profile():
+        
+        return render_template('profile.html')

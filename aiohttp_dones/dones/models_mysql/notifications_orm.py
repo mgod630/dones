@@ -19,42 +19,32 @@ class Notifications:
         return data
 
     @staticmethod
-    def get_notification_by_id(notification_id):
+    def get_notifications_by_section_id(section_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        notification_id_int = int(notification_id)
-        query = "SELECT * FROM tbl_notifications WHERE id='%(id)s'"
-        cursor.execute(query, {'id': notification_id_int})
-        row = cursor.fetchone()
+        query = "SELECT * FROM tbl_notifications WHERE section_id=%(section_id)s"
+        cursor.execute(query, {'section_id': section_id})
+        row = cursor.fetchall()
         cnx.close()
         return row
 
     @staticmethod
-    def insert_new_notification(welcome_text, body_html, free_items_count, notification_result, title, institute, jalali_start_datetime, jalali_end_datetime, price, logo_path, image_path, description, video_path):
+    def insert_new_notification(section_id, jalali_date, notification_type, notification_text):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_notification = ("INSERT INTO `tbl_notifications` (`welcome_text`, `body_html`, `free_items_count`, `notification_result`, `title`, `institute`, `jalali_start_datetime`, `jalali_end_datetime`, `price`, `logo_path`, `image_path`, `description`, `video_path`) VALUES" +
-                      "( %(welcome_text)s, %(body_html)s, %(free_items_count)s, %(notification_result)s, %(title)s, %(institute)s, %(jalali_start_datetime)s, %(jalali_end_datetime)s, %(price)s, %(logo_path)s, %(image_path)s, %(description)s, %(video_path)s)")
+        add_notification = ("INSERT INTO `tbl_notifications` (`section_id`, `jalali_date`, `notification_type`, `notification_text`) VALUES" +
+                      "( %(section_id)s, %(jalali_date)s, %(notification_type)s, %(notification_text)s)")
         data_notification = {
-            'welcome_text': welcome_text,
-            'body_html': body_html,
-            'free_items_count': free_items_count,
-            'notification_result': notification_result,
-            'title': title,
-            'institute': institute,
-            'jalali_start_datetime': jalali_start_datetime,
-            'jalali_end_datetime': jalali_end_datetime,
-            'price': price,
-            'logo_path': logo_path,
-            'image_path': image_path,
-            'description': description,
-            'video_path': video_path,
+            'section_id': section_id,
+            'jalali_date': jalali_date,
+            'notification_type': notification_type,
+            'notification_text': notification_text,
         }
         cursor.execute(add_notification, data_notification)
         inserted_record_id = cursor.lastrowid
@@ -137,7 +127,7 @@ class Notifications:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        query = "DELETE FROM tbl_notifications WHERE id='%(id)s'"
+        query = "DELETE FROM tbl_notifications WHERE id=%(id)s"
         cursor.execute(query, {'id': id})
         cnx.commit()
         cnx.close()

@@ -1,11 +1,9 @@
 import time
 from flask import redirect, render_template
 from routes import common
-from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm
+from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, notifications_orm
 
-all_notifications = []
 flash_messages = []
-
 
 def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/course-info/<course_id>")
@@ -13,6 +11,7 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         all_courses = courses_orm.Courses.get_all_courses()
         course = None
+        section_id = course_id
         for crs in all_courses:
             if str(crs['id']) == str(course_id):
                 course = crs
@@ -20,8 +19,7 @@ def make_routes(goldis_blueprint):
         # comments_orm.Comments.insert_new_comment('سلام چطوری  مطوری پطوری', user_name , user_id , f'course_content_{item_id}', None)
         all_comments = comments_orm.Comments.get_comments_by_section_id(
             f'course_content_{course_id}')
-        # last_comments = all_comments[0:19]
-        # print(last_comments)
+        all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
         return render_template("course-info.html", course=course, all_notifications=all_notifications, user=user, all_comments=all_comments, flash_messages=flash_messages)
 
     @goldis_blueprint.route('/course-overview/<course_id>')
@@ -38,7 +36,7 @@ def make_routes(goldis_blueprint):
                 print('ok course:', course_id)
                 break
         all_comments = []
-        return render_template("course-overview.html", course=course, course_items=course_items, all_notifications=all_notifications, user=user, all_comments=all_comments, flash_messages=flash_messages)
+        return render_template("course-overview.html", course=course, course_items=course_items,user=user, all_comments=all_comments, flash_messages=flash_messages)
 
     @goldis_blueprint.route('/course-content/<course_id>/<item_id>')
     def course_content(course_id, item_id):
