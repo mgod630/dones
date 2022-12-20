@@ -1,9 +1,8 @@
 from models_mysql import  comments_orm
 from flask import redirect, render_template, request
-from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm
+from models_mysql import courses_orm, items_orm, notifications_orm, questions_orm, comments_orm
 from routes import common 
 
-all_notifications = []
 flash_messages = []
 def make_routes(goldis_blueprint):
 
@@ -15,12 +14,15 @@ def make_routes(goldis_blueprint):
         # page_number = int(page_number) if str.isdigit(str(page_number)) else 1
         page_number = None
         comments_count_per_page = 20
+        section_id = course_id
         course_id = f'course_info_{course_id}'
         a_page_section_comments = comments_orm.Comments.get_comments_by_section_id(course_id, page_number= None, comments_count_per_page= comments_count_per_page, reversed_ordering= True)
         if page_number == None:
             a_page_section_comments = a_page_section_comments[0:19]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
         pages_count = (comments_count[0] // comments_count_per_page)
+        
+        all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
         return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_notifications':all_notifications}
 
 
@@ -34,7 +36,7 @@ def make_routes(goldis_blueprint):
             a_page_section_comments = a_page_section_comments[0:19]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
         pages_count = (comments_count[0] // comments_count_per_page)
-        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_notifications':all_notifications}
+        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id}
 
     @goldis_blueprint.route('/json-get-comments-and-notifications-by-section-id/course_content_<item_id>')
     def json_get_comments_and_notifications_by_section_id3(item_id):
@@ -46,7 +48,7 @@ def make_routes(goldis_blueprint):
             a_page_section_comments = a_page_section_comments[0:19]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(item_id)
         pages_count = (comments_count[0] // comments_count_per_page)
-        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': item_id, 'all_notifications':all_notifications}
+        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': item_id}
 
     # comments page
     @goldis_blueprint.route('/comments/course_info_<course_id>')

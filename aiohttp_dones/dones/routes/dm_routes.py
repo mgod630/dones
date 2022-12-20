@@ -314,19 +314,19 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-notifications")
     def dm_notifications():
         user = common.get_user_from_token()
-        title = None
+        course_title = None
         all_courses = courses_orm.Courses.get_all_courses()
         all_notifications = notifications_orm.Notifications.get_all_notifications()
         # for notif in all_notifications:
         #     if notif['section_id'] != '0':
         #         for course in all_courses:
         #             if str(course['id']) == notif['section_id']:
-        #                 title = course['title']
+        #                 course_title = course['title']
         #     else :
-        #         title = 'صفحه اصلی'
+        #         course_title = None
 
         # notifications_orm.Notifications.delete_all_notifications()
-        return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications, all_courses=all_courses, title=title)   
+        return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications, all_courses=all_courses)   
 
     @goldis_blueprint.route("/dm-notifications", methods=['POST'])
     def dm_notifications_post():
@@ -347,3 +347,8 @@ def make_routes(goldis_blueprint):
         new_notification = notifications_orm.Notifications.insert_new_notification(section_id=section_id, jalali_date=jalali_date, notification_type=notification_type, notification_text=notification_text)
         all_notifications = notifications_orm.Notifications.get_all_notifications()
         return redirect(url_for("goldis_blueprint.dm_notifications"))
+
+    @goldis_blueprint.route("/dm-delete-notification/<section_id>/<notification_id>")
+    def dm_delete_notification(section_id, notification_id):
+      notifications_orm.Notifications.delete_notification_by_id(notification_id)
+      return redirect(url_for('goldis_blueprint.dm_notifications', section_id=section_id))

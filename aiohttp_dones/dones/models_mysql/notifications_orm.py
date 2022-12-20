@@ -127,7 +127,7 @@ class Notifications:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        query = "DELETE FROM tbl_notifications WHERE id='%(id)s'"
+        query = "DELETE FROM tbl_notifications WHERE id=%(id)s"
         cursor.execute(query, {'id': id})
         cnx.commit()
         cnx.close()
