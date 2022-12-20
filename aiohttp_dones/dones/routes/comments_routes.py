@@ -1,5 +1,5 @@
 from models_mysql import  comments_orm
-from flask import redirect, render_template
+from flask import redirect, render_template, request
 from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm
 from routes import common 
 
@@ -63,7 +63,7 @@ def make_routes(goldis_blueprint):
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
         return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
 
-    @goldis_blueprint.route('/comments/course_overview_<course_id>')
+    @goldis_blueprint.route('/comments/course_overview_<course_id>', methods=['GET','POST'])
     def comments_course_overview(course_id):
         user = common.get_user_from_token()
         page_number = None
@@ -75,9 +75,21 @@ def make_routes(goldis_blueprint):
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
         pages_count = (comments_count[0] // comments_count_per_page)
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
-        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
+        if request.method == 'POST':
+            if user == None:
+                result = 'not_logged_in'
+            else:
+                comment_text = request.form.get('comment_text', None)
+                section_id = request.form.get('section_id', None)
+                reply_to = request.form.get('reply_to', None)
+                new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != '-1' else None)
+                all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
+                result = 'succeed'
+            return {'result':result}
+        else :
+            return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
 
-    @goldis_blueprint.route('/comments/course_content_<course_id>')
+    @goldis_blueprint.route('/comments/course_content_<course_id>', methods=['GET','POST'])
     def comments_course_content(course_id):
         user = common.get_user_from_token()
         page_number = None
@@ -89,4 +101,31 @@ def make_routes(goldis_blueprint):
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
         pages_count = (comments_count[0] // comments_count_per_page)
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
-        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
+        if request.method == 'POST':
+            if user == None:
+                result = 'not_logged_in'
+            else:
+                comment_text = request.form.get('comment_text', None)
+                section_id = request.form.get('section_id', None)
+                reply_to = request.form.get('reply_to', None)
+                new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != '-1' else None)
+                all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
+                result = 'succeed'
+            return {'result':result}
+        else :
+            return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
+
+    # post comment
+    @goldis_blueprint.route('/post-comment',methods=['POST'])
+    def post_comment():
+        user = common.get_user_from_token()
+        print('post comment')
+        if user == None:
+            result = 'not_logged_in'
+        else:
+            comment_text = request.form.get('comment_text', None)
+            section_id = request.form.get('section_id', None)
+            reply_to = request.form.get('reply_to', None)
+            new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != '-1' else None)
+            result = 'succeed'
+        return {'result':result}
