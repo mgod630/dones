@@ -314,19 +314,36 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-notifications")
     def dm_notifications():
         user = common.get_user_from_token()
+        title = None
         all_courses = courses_orm.Courses.get_all_courses()
         all_notifications = notifications_orm.Notifications.get_all_notifications()
-        return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications, all_courses=all_courses)   
+        # for notif in all_notifications:
+        #     if notif['section_id'] != '0':
+        #         for course in all_courses:
+        #             if str(course['id']) == notif['section_id']:
+        #                 title = course['title']
+        #     else :
+        #         title = 'صفحه اصلی'
+
+        # notifications_orm.Notifications.delete_all_notifications()
+        return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications, all_courses=all_courses, title=title)   
 
     @goldis_blueprint.route("/dm-notifications", methods=['POST'])
     def dm_notifications_post():
         user = common.get_user_from_token()
+        all_courses = courses_orm.Courses.get_all_courses()
 
-        section_id =None
+        section_id = request.form.get('section_options',None)
+        if section_id != 'home_page':
+            for course in all_courses:
+                if str(course['id']) == section_id:
+                    section_id = str(course['id'])
+        else :
+            section_id = '0'
         jalali_date = jdatetime.datetime.now().strftime("%Y/%m/%d")
         notification_type = request.form.get('notification_type', None)
         notification_text = request.form.get('notification_text', None)
 
         new_notification = notifications_orm.Notifications.insert_new_notification(section_id=section_id, jalali_date=jalali_date, notification_type=notification_type, notification_text=notification_text)
         all_notifications = notifications_orm.Notifications.get_all_notifications()
-        return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications)
+        return redirect(url_for("goldis_blueprint.dm_notifications"))

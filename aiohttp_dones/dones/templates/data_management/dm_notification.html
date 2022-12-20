@@ -3,20 +3,20 @@
 {% block inner_content %}
 <style>.table .btn{height: 27px}</style>
 
-    <form action="{% if notification  %}/dm-notification/{{section_id}}/{{notif_id}}{% else %}/dm-notification/{{section_id}}{% endif %}" method="POST">
+    <form action="{% if notification  %}/dm-notification/{{section_id}}/{{notif_id}}{% else %}/dm-notifications{% endif %}" method="POST">
         <div class="form-row">
+            <div class="form-group col-12">
+                <label>صفحه اطلاعیه</label>
+                <select id="secion_options" name="section_options">
+                    <option value="home_page">صفحه اصلی</option>
+                    {% for course in all_courses %}
+                    <option value="{{course.id}}">{{course.title}}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="form-group col-12">
                 <label>نوع اطلاعیه</label>
                 <input class="form-control" type="text" name="notification_type" value="{% if notification  %}{{notification.notification_type}}{% endif %}">
-            </div>
-            <div class="form-group col-12">
-                <label>اطلاعیه برای چه قسمت است؟</label>
-                <select id="cars" name="cars">
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="fiat">Fiat</option>
-                    <option value="audi">Audi</option>
-                </select>
             </div>
             <div class="form-group col-12">
                 <label>متن اطلاعیه</label>
@@ -32,6 +32,7 @@
             <tr>
                 <th>متن اطلاعیه</th>
                 <th>نوع اطلاعیه</th>
+                <th>صفحه اطلاعیه</th>
                 <th>تاریخ اطلاعیه</th>
                 <th>ویرایش</th>
                 <th>حذف</th>
@@ -42,6 +43,7 @@
         <tr>
             <td>{{notif.notification_text}}</td>
             <td>{{notif.notification_type}}</td>
+            <td>{{title}}</td>
             <td>{{notif.jalali_date}}</td>
             <td><a class="btn btn-success btn-sm" href="/dm-notification/{{notif.section_id}}/{{notif.id}}"><i class="far fa-cog"></i></a></td>
             <td><a class="btn btn-warning" href="/dm-delete-notification/{{notif.section_id}}/{{notif.id}}"><i class='far fa-trash-alt'></i></a></td>
