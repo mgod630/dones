@@ -19,33 +19,34 @@ class Flash_messages:
         return data
 
     @staticmethod
-    def get_flash_messages_by_section_id(section_id):
+    def get_flash_messages_by_user_token(user_token):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_flash_messages WHERE section_id=%(section_id)s"
-        cursor.execute(query, {'section_id': section_id})
+        query = "SELECT * FROM tbl_flash_messages WHERE user_token=%(user_token)s"
+        cursor.execute(query, {'user_token': user_token})
         row = cursor.fetchall()
         cnx.close()
         return row
 
-    class Message_types(enum.Enum):
-      info = enum.auto()
-      success = enum.auto()
-      danger = enum.auto()
+    # class Message_types(enum.Enum):
+    #   info = enum.auto()
+    #   success = enum.auto()
+    #   danger = enum.auto()
 
     @staticmethod
-    def insert_new_flash_message(user_token, message, message_type: Message_types):
+    def insert_new_flash_message(user_token, message, message_type):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_flash_message = ("INSERT INTO `tbl_flash_messages` (`message`, `message_type`) VALUES" +
-                      "( %(message)s, %(message_type)s)")
+        add_flash_message = ("INSERT INTO `tbl_flash_messages` (`user_token`, `message`, `message_type`) VALUES" +
+                      "( %(user_token)s, %(message)s, %(message_type)s)")
         data_flash_message = {
+            'user_token': user_token,
             'message': message,
             'message_type': message_type,
         }
@@ -68,14 +69,14 @@ class Flash_messages:
         return True
 
     @staticmethod
-    def delete_flash_message_by_id(id):
+    def delete_flash_message_by_user_token(user_token):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        query = "DELETE FROM tbl_flash_messages WHERE id=%(id)s"
-        cursor.execute(query, {'id': id})
+        query = "DELETE FROM tbl_flash_messages WHERE user_token=%(user_token)s"
+        cursor.execute(query, {'user_token': user_token})
         cnx.commit()
         cnx.close()
         print('deleted')

@@ -72,6 +72,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route('/profile')
     def profile():
         user = common.get_user_from_token()
+        flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(session['g_token'])
         return render_template('profile.html', user=user)
 
     @goldis_blueprint.route('/profile', methods=['POST'])
@@ -91,7 +92,9 @@ def make_routes(goldis_blueprint):
                 job = request.form.get('job', 'None')
                 update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name, password=new_password, grade=grade, age=age, gender=gender, marital_status=marital_status, job=job)
             else:
-                flash_messages_orm.Flash_messages.insert_new_flash_message(session['g_token'], f'{user_full_name} گرامی، رمز عبور فعلی، صحیح نمی باشد.', ) 
+                flash_messages_orm.Flash_messages.insert_new_flash_message(session['g_token'], f'{user_full_name} گرامی، رمز عبور فعلی، صحیح نمی باشد.', 'danger') 
+                flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(session['g_token'])
+            return render_template('profile.html', user=user, flash_messages=flash_messages)
         else:
             mobile = request.form.get('sg_mobile', 'None')
             full_name = request.form.get('sg_fullname', 'None')
@@ -101,6 +104,6 @@ def make_routes(goldis_blueprint):
             marital_status = request.form.get('marital_status', 'None')
             job = request.form.get('job', 'None')
             update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name, grade=grade, age=age, gender=gender, marital_status=marital_status, job=job)
-
-        return redirect(url_for('goldis_blueprint.profile'))
+            
+            return redirect(url_for('goldis_blueprint.profile'))
 
