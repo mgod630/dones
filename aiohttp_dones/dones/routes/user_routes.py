@@ -1,7 +1,7 @@
 import secrets, time
 from flask import render_template, request, redirect, session, url_for, jsonify, g, current_app as app
 from routes import common
-from models_mysql import users_orm, accounts_orm
+from models_mysql import users_orm, accounts_orm, flash_messages_orm
 status= ''
 user= None 
 flash_messages= None
@@ -71,5 +71,36 @@ def make_routes(goldis_blueprint):
 
     @goldis_blueprint.route('/profile')
     def profile():
-        
-        return render_template('profile.html')
+        user = common.get_user_from_token()
+        return render_template('profile.html', user=user)
+
+    @goldis_blueprint.route('/profile', methods=['POST'])
+    def profile_post():
+        user = common.get_user_from_token()
+        user_full_name = user['full_name']
+        if request.form.get('sg_current_password') != 'None' and request.form.get('sg_new_password', 'None') != 'None':
+            current_password = request.form.get('sg_current_password', 'None') 
+            if common.check_password(current_password, user['password']) :
+                new_password = request.form.get('sg_new_password', 'None')
+                mobile = request.form.get('sg_mobile', 'None')
+                full_name = request.form.get('sg_fullname', 'None')
+                grade = request.form.get('grade', 'None')
+                age = request.form.get('age', 'None')
+                gender = request.form.get('gender', 'None')
+                marital_status = request.form.get('marital_status', 'None')
+                job = request.form.get('job', 'None')
+                update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name, password=new_password, grade=grade, age=age, gender=gender, marital_status=marital_status, job=job)
+            else:
+                flash_messages_orm.Flash_messages.insert_new_flash_message(session['g_token'], f'{user_full_name} گرامی، رمز عبور فعلی، صحیح نمی باشد.', ) 
+        else:
+            mobile = request.form.get('sg_mobile', 'None')
+            full_name = request.form.get('sg_fullname', 'None')
+            grade = request.form.get('grade', 'None')
+            age = request.form.get('age', 'None')
+            gender = request.form.get('gender', 'None')
+            marital_status = request.form.get('marital_status', 'None')
+            job = request.form.get('job', 'None')
+            update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name, grade=grade, age=age, gender=gender, marital_status=marital_status, job=job)
+
+        return redirect(url_for('goldis_blueprint.profile'))
+

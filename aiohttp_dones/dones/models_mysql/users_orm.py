@@ -95,7 +95,7 @@ class Users:
         return inserted_record_id
 
     @staticmethod
-    def update_user(id, full_name=None, mobile=None, sheba_number=None, credit_score=None, user_type=None, invited_friend_mobile=None, last_login_datetime=None, national_id=None):
+    def update_user(id, full_name=None, mobile=None, password=None, grade=None, age=None, gender=None, marital_status=None, job=None, sheba_number=None, credit_score=None, user_type=None, invited_friend_mobile=None, last_login_datetime=None, national_id=None):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -118,6 +118,16 @@ class Users:
             update_string += f'last_login_datetime=%(last_login_datetime)s,'
         if national_id:
             update_string += f'national_id=%(national_id)s,'
+        if grade:
+            update_string += f'grade=%(grade)s,'
+        if age:
+            update_string += f'age=%(age)s,'
+        if gender:
+            update_string += f'gender=%(gender)s,'
+        if marital_status:
+            update_string += f'marital_status=%(marital_status)s,'
+        if job:
+            update_string += f'job=%(job)s,'
         update_string = update_string.rstrip(',')
         add_user = f"UPDATE tbl_users SET {update_string} WHERE id='{id}'"
         update_query_string = {
@@ -129,6 +139,11 @@ class Users:
             'invited_friend_mobile': invited_friend_mobile,
             'last_login_datetime': last_login_datetime,
             'national_id': national_id,
+            'grade': grade,
+            'age': age,
+            'gender': gender,
+            'marital_status': marital_status,
+            'job': job,
         }
         cursor.execute(add_user, update_query_string)
         cnx.commit()

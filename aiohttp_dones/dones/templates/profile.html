@@ -11,7 +11,7 @@
       <div class="wb-icon"><i class="fal fa-user"></i></div>
       <h2>حساب کاربری</h2>
     </div>
-    <form id="signup_form" action="/update-profile" method="post">
+    <form id="signup_form" action="/profile" method="post">
       <div class="row">
         <div class="col-12 col-sm-4">
           <div class="pr-region">
@@ -26,7 +26,7 @@
             {{ mcr_inputs.input('mobile', value=user.mobile, section='sg', required=true)}}
             <hr>
             <label for="age">سن :</label>
-            <input type="text" id="age" name="age" value="{{user.age}}"><br><br>
+            <input type="text" id="age" name="age" value="{% if user.age %}{{user.age}}{% else %}{% endif %}"><br><br>
             <label> جنسیت :</label>
             <select name="gender">
               {%if user.gender == 'male'%}
@@ -49,9 +49,9 @@
             </select>
             <hr>
             <label for="grade">تحصیلات :</label>
-            <input type="text" id="grade" name="grade" value="{{user.grade}}"><br><br>
+            <input type="text" id="grade" name="grade" value="{% if user.grade %}{{user.grade}}{% else %}{% endif %}"><br><br>
             <label for="job">شغل :</label>
-            <input type="text" id="job" name="job" value="{{user.job}}"><br><br>
+            <input type="text" id="job" name="job" value="{% if user.job %}{{user.job}}{% else %}{% endif %}"><br><br>
             <hr><hr>
             <div class="form-field">
               <div class="custom-checkbox">
