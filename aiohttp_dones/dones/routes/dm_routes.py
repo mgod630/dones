@@ -322,8 +322,8 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-notifications", methods=['POST'])
     def dm_notifications_post():
         user = common.get_user_from_token()
-        
-        section_id
+
+        section_id =None
         jalali_date = jdatetime.datetime.now().strftime("%Y/%m/%d")
         notification_type = request.form.get('notification_type', None)
         notification_text = request.form.get('notification_text', None)
