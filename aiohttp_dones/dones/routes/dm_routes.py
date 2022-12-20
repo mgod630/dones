@@ -271,9 +271,9 @@ def make_routes(goldis_blueprint):
         return render_template("data_management/dm_quiz.html", user=user, quizs=quizs, course_item_id= course_item_id, update_quiz=update_quiz , quiz_id=quiz_id )
 
     @goldis_blueprint.route("/dm-delete-quiz/<course_item_id>/<quiz_id>")
-    def dm_delete_quiz(quiz_id):
+    def dm_delete_quiz(course_item_id, quiz_id):
       quizzes_orm.Quizzes.delete_quiz_by_id(quiz_id)
-      return redirect(url_for('goldis_blueprint.dm_quiz', quiz_id=quiz_id))    
+      return redirect(url_for('goldis_blueprint.dm_quiz', course_item_id=course_item_id))    
     
     # dm questions
     @goldis_blueprint.route("/dm-question/<quiz_id>")
