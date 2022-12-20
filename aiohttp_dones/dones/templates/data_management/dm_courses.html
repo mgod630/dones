@@ -207,13 +207,13 @@
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>عنوان:</label>
-                                <input type="text" class="form-control" name="title" value="{% if course_id  %}{{update_course.title}}{% endif %}">
+                                <input id="esse1" onkeyup="success()" type="text" class="form-control" name="title" value="{% if course_id  %}{{update_course.title}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>زمان آغاز:</label>
-                                <input type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_start_datetime" value="{% if course_id  %}{{update_course.jalali_start_datetime}}{% endif %}">
+                                <input id="esse2" onkeyup="success()" type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_start_datetime" value="{% if course_id  %}{{update_course.jalali_start_datetime}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -225,13 +225,13 @@
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>قیمت (تومان):</label>
-                                <input type="text" class="form-control ltr" name="price" value="{% if course_id  %}{{update_course.price}}{% endif %}">
+                                <input id="esse3" onkeyup="success()" type="text" class="form-control ltr" name="price" value="{% if course_id  %}{{update_course.price}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>نام موسسه:</label>
-                                <input type="text" class="form-control" name="institute" value="{% if course_id  %}{{update_course.institute}}{% endif %}">
+                                <input id="esse4" onkeyup="success()" type="text" class="form-control" name="institute" value="{% if course_id  %}{{update_course.institute}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -279,7 +279,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-success dm-submit" type="submit">ثبت</button>
+                    <button id="submitbtn" disabled class="btn btn-success dm-submit" type="submit">ثبت</button>
                 </form>
             </div>
         </div>
@@ -309,5 +309,12 @@ $(function(){
         $("#course_settings").modal("show");
     });
 })
+function success() {
+	 if(document.getElementById("esse1").value==="" || document.getElementById("esse2").value==="" || document.getElementById("esse3").value==="" || document.getElementById('esse4').value==='') { 
+            document.getElementById('submitbtn').disabled = true; 
+        } else { 
+            document.getElementById('submitbtn').disabled = false;
+        }
+    }
 </script>
 {% endblock %}
