@@ -158,7 +158,7 @@ function farsiFix(input) {
     } else if (charCode < 58 && charCode > 47) {
       result += input[i];
     } else {
-      return -1;
+      return result;
     }
   }
   return result;
