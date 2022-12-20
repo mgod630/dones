@@ -25,7 +25,7 @@ class Items:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_items WHERE id='%(id)s'"
+        query = "SELECT * FROM tbl_items WHERE id=%(id)s"
         cursor.execute(query, {'id': item_id})
         row = cursor.fetchone()
         cnx.close()
@@ -38,7 +38,7 @@ class Items:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = ("SELECT * FROM tbl_items WHERE course_id='%(course_id)s'")
+        query = ("SELECT * FROM tbl_items WHERE course_id=%(course_id)s")
         cursor.execute(query, {'course_id': course_id})
         data = cursor.fetchall()
         cnx.close()
@@ -102,7 +102,7 @@ class Items:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        query = "DELETE FROM tbl_items WHERE id='%(id)s'"
+        query = "DELETE FROM tbl_items WHERE id=%(id)s"
         cursor.execute(query, {'id': id})
         cnx.commit()
         cnx.close()

@@ -14,12 +14,14 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-home")
     def dm_home():
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         return render_template("data_management/dm_home.html", user=user)
 
     # dm users
     @goldis_blueprint.route("/dm-users")
     def dm_users():
         users = users_orm.Users.get_all_users()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         user = common.get_user_from_token()
         start_index = 2
         page_number = 0
@@ -30,8 +32,8 @@ def make_routes(goldis_blueprint):
     
     @goldis_blueprint.route("/dm-users", methods=['POST'])
     def dm_users_post():
-        # (full_name, mobile, g_token, password, sheba_number, credit_score, user_type, invited_friend_mobile, register_datetime):
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         start_index = 2
         page_number = 0
         page_count = 0
@@ -64,6 +66,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-users/<user_id>", methods=['GET','POST'])
     def dm_users_edit(user_id):
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         user_id = int(user_id)
         start_index = 2
         page_number = 0
@@ -97,6 +100,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-courses")
     def dm_courses():
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         all_courses = courses_orm.Courses.get_all_courses()
         course_id = None
         update_course = None
@@ -105,6 +109,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-courses", methods=['POST'])
     def dm_courses_post():
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         course_result = None
         course_id = None
         update_course = None
@@ -129,6 +134,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-courses/<course_id>", methods=['GET','POST'])
     def dm_courses_edit(course_id):
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         course_id = int(course_id)
         course_result = None
         update_course = courses_orm.Courses.get_course_by_id(course_id)
@@ -157,6 +163,8 @@ def make_routes(goldis_blueprint):
     # delete course
     @goldis_blueprint.route("/dm-delete-course/<course_id>")
     def dm_delete_course(course_id):
+      user = common.get_user_from_token()
+      if is_admin_user(user) == False: return redirect('/404-not-found')
       course_id = int(course_id)
       courses_orm.Courses.delete_course_by_id(course_id)
       return redirect('/dm-courses')
@@ -166,6 +174,7 @@ def make_routes(goldis_blueprint):
     def dm_course_items(course_id):
         course_id = int(course_id)
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         len_course_items = len(course_items) if course_items else None
         course_item_id_edit = None 
@@ -181,6 +190,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-course-items/<course_id>", methods=['POST'])
     def dm_course_items_post(course_id):
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         course_id = int(course_id)
         course_item_id_edit = None 
         update_course_item = None
@@ -207,6 +217,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-course-items/<course_id>/<course_item_id>", methods=['GET','POST'])
     def dm_course_items_edit(course_id, course_item_id):
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         course_id = int(course_id)
         course_item_id = int(course_item_id)
         update_course_item = items_orm.Items.get_item_by_id(course_item_id)
@@ -235,6 +246,8 @@ def make_routes(goldis_blueprint):
     # delete item
     @goldis_blueprint.route("/dm-delete-course-item/<course_id>/<course_item_id>")
     def dm_delete_item(course_id, course_item_id):
+      user = common.get_user_from_token()
+      if is_admin_user(user) == False: return redirect('/404-not-found')
       course_item_id = int(course_item_id)
       items_orm.Items.delete_item_by_id(course_item_id)
       return redirect(url_for('goldis_blueprint.dm_course_items', course_id=course_id))
@@ -244,6 +257,7 @@ def make_routes(goldis_blueprint):
     def dm_quiz(course_item_id):
         course_item_id = int(course_item_id)
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         quizs = quizzes_orm.Quizzes.get_all_quizzes_by_ids(course_item_id)
         quiz_id = None
         update_quiz = None
@@ -252,6 +266,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-quiz/<course_item_id>", methods=['POST'])
     def dm_quiz_post(course_item_id):
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         course_item_id = int(course_item_id)
         quiz_id = None
         update_quiz = None
@@ -272,6 +287,8 @@ def make_routes(goldis_blueprint):
 
     @goldis_blueprint.route("/dm-delete-quiz/<course_item_id>/<quiz_id>")
     def dm_delete_quiz(course_item_id, quiz_id):
+      user = common.get_user_from_token()
+      if is_admin_user(user) == False: return redirect('/404-not-found')
       quizzes_orm.Quizzes.delete_quiz_by_id(quiz_id)
       return redirect(url_for('goldis_blueprint.dm_quiz', course_item_id=course_item_id))    
     
@@ -280,6 +297,7 @@ def make_routes(goldis_blueprint):
     def dm_question(quiz_id):
         quiz_id = int(quiz_id)
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         questions = questions_orm.Questions.get_all_questions_by_ids(quiz_id)
         question_id = None
         question_update = None
@@ -288,6 +306,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-question/<quiz_id>", methods=['POST'])
     def dm_question_post(quiz_id):
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         quiz_id = int(quiz_id)
         question_id = None
         question_update = None
@@ -304,6 +323,8 @@ def make_routes(goldis_blueprint):
 
     @goldis_blueprint.route("/dm-delete-question/<quiz_id>/<question_id>")
     def dm_delete_question(quiz_id, question_id):
+      user = common.get_user_from_token()
+      if is_admin_user(user) == False: return redirect('/404-not-found')
       question_id = int(question_id)
       quiz_id = int(quiz_id)
       questions_orm.Questions.delete_question_by_id(question_id)
@@ -313,6 +334,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-notifications")
     def dm_notifications():
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         course_title = None
         all_courses = courses_orm.Courses.get_all_courses()
         all_notifications = notifications_orm.Notifications.get_all_notifications()
@@ -330,6 +352,7 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-notifications", methods=['POST'])
     def dm_notifications_post():
         user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
         all_courses = courses_orm.Courses.get_all_courses()
 
         section_id = request.form.get('section_options',None)
@@ -349,5 +372,7 @@ def make_routes(goldis_blueprint):
 
     @goldis_blueprint.route("/dm-delete-notification/<section_id>/<notification_id>")
     def dm_delete_notification(section_id, notification_id):
+      user = common.get_user_from_token()
+      if is_admin_user(user) == False: return redirect('/404-not-found')
       notifications_orm.Notifications.delete_notification_by_id(notification_id)
       return redirect(url_for('goldis_blueprint.dm_notifications', section_id=section_id))

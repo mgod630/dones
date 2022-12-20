@@ -26,7 +26,7 @@ class Questions:
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
         # query = "SELECT i.course_id, i.id, qz.id, qz.item_id, qt.* FROM tbl_items i INNER JOIN tbl_quizzes qz ON i.id = qz.item_id INNER JOIN tbl_questions qt ON qt.quiz_id = qz.id WHERE (qt.quiz_id='%(quiz_id)s' AND qz.item_id='%(item_id)s' AND i.course_id='%(course_id)s')"
-        query = ("SELECT * FROM tbl_questions WHERE quiz_id='%(quiz_id)s'")
+        query = ("SELECT * FROM tbl_questions WHERE quiz_id=%(quiz_id)s")
         cursor.execute(query, {'quiz_id': quiz_id})
         row = cursor.fetchall()
         cnx.close()
@@ -39,7 +39,7 @@ class Questions:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_questions WHERE id='%(id)s'"
+        query = "SELECT * FROM tbl_questions WHERE id=%(id)s"
         cursor.execute(query, {'id': question_id})
         row = cursor.fetchone()
         cnx.close()
@@ -130,7 +130,7 @@ class Questions:
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
         # query = "DELETE q.* FROM tbl_quizzes q INNER JOIN tbl_items i ON q.item_id = i.id WHERE (q.id='%(quiz_id)s' AND q.item_id='%(item_id)s' AND i.course_id = '%(course_id)s')"
-        query = "DELETE FROM tbl_questions WHERE id = '%(question_id)s'"
+        query = "DELETE FROM tbl_questions WHERE id = %(question_id)s"
         cursor.execute(query, {'question_id': question_id})
         cnx.commit()
         cnx.close()

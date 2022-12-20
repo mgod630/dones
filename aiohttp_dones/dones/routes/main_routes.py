@@ -37,3 +37,8 @@ def make_routes(goldis_blueprint):
     def landing_page():
         user = common.get_user_from_token()
         return render_template('landing_page.html', user=user)
+
+    @goldis_blueprint.route("/404-not-found")
+    def not_found():
+        user = common.get_user_from_token()
+        return render_template('404_not_found.html', user=user)

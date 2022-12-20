@@ -28,7 +28,7 @@ class Users:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_users WHERE id='%(id)s'"
+        query = "SELECT * FROM tbl_users WHERE id=%(id)s"
         cursor.execute(query, {'id': user_id})
         row = cursor.fetchone()
         cnx.close()
@@ -170,7 +170,7 @@ class Users:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        query = 'DELETE FROM tbl_users WHERE id = "%(id)s"'
+        query = 'DELETE FROM tbl_users WHERE id = %(id)s'
         cursor.execute(query, {'id': user_id})
         cnx.commit()
         cnx.close()
