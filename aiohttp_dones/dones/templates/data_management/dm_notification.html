@@ -10,6 +10,15 @@
                 <input class="form-control" type="text" name="notification_type" value="{% if notification  %}{{notification.notification_type}}{% endif %}">
             </div>
             <div class="form-group col-12">
+                <label>اطلاعیه برای چه قسمت است؟</label>
+                <select id="cars" name="cars">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="fiat">Fiat</option>
+                    <option value="audi">Audi</option>
+                </select>
+            </div>
+            <div class="form-group col-12">
                 <label>متن اطلاعیه</label>
                 <textarea class="form-control" name="notification_text" rows="3" >{% if notification  %}{{notification.notification_text}}{% endif %}</textarea>
             </div>

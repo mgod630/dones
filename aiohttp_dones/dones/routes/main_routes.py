@@ -30,6 +30,7 @@ def make_routes(goldis_blueprint):
         # users_orm.Users.delete_user_by_id(24)
 
         all_courses = courses_orm.Courses.get_all_courses()
+        
         return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_notifications=all_notifications, flash_messages=flash_messages, db_number=db_number)
 
     @goldis_blueprint.route("/landing_page")

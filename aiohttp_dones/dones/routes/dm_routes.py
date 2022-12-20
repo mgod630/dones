@@ -1,7 +1,8 @@
 from flask import redirect, render_template, request, url_for, session
 from routes import common
 import time, secrets
-from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm
+import jdatetime
+from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, notifications_orm
 
 def make_routes(goldis_blueprint):
     def is_admin_user(user):
@@ -308,3 +309,25 @@ def make_routes(goldis_blueprint):
       quiz_id = int(quiz_id)
       questions_orm.Questions.delete_question_by_id(question_id)
       return redirect(url_for('goldis_blueprint.dm_question', quiz_id=quiz_id))
+
+    
+    # dm notifications
+    @goldis_blueprint.route("/dm-notifications")
+    def dm_notifications():
+        user = common.get_user_from_token()
+        
+        all_notifications = notifications_orm.Notifications.get_all_notifications()
+        return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications)   
+
+    @goldis_blueprint.route("/dm-notifications", methods=['POST'])
+    def dm_notifications_post():
+        user = common.get_user_from_token()
+        
+        section_id
+        jalali_date = jdatetime.datetime.now().strftime("%Y/%m/%d")
+        notification_type = request.form.get('notification_type', None)
+        notification_text = request.form.get('notification_text', None)
+
+        new_notification = notifications_orm.Notifications.insert_new_notification(section_id=section_id, jalali_date=jalali_date, notification_type=notification_type, notification_text=notification_text)
+        all_notifications = notifications_orm.Notifications.get_all_notifications()
+        return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications)
