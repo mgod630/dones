@@ -40,6 +40,8 @@
       <div class="form-group col-md-3">
         <label>نام و نام خانوادگی</label>
         <input
+          id="f1"
+          onkeyup="success()"
           class="form-control"
           type="text"
           placeholder="نام و نام خانوادگی"
@@ -50,6 +52,8 @@
       <div class="form-group col-md-3">
         <label>شماره موبایل</label>
         <input
+          id="f2"
+          onkeyup="success()"
           class="form-control"
           type="text"
           placeholder="شماره موبایل"
@@ -60,6 +64,8 @@
       <div class="form-group col-md-3">
         <label>کد ملی</label>
         <input
+          id="f3"
+          onkeyup="success()"
           class="form-control"
           type="text"
           placeholder="کد ملی"
@@ -70,6 +76,8 @@
       <div class="form-group col-md-3 {% if user_id %}d-none{% endif %}">
         <label>رمزعبور</label>
         <input
+          id="f4"
+          onkeyup="success()"
           class="form-control"
           type="text"
           placeholder="رمزعبور"
@@ -80,6 +88,8 @@
       <div class="form-group col-md-3">
         <label>نوع کاربر</label>
         <input
+          id="f5"
+          onkeyup="success()"
           class="form-control"
           type="text"
           placeholder="نوع کاربر"
@@ -99,7 +109,14 @@
         {% endif %}
       </div>
     </div>
-    <button class="btn btn-success dm-submit" type="submit">ثبت</button>
+    <button
+      disabled
+      id="submitbtn"
+      class="btn btn-success dm-submit"
+      type="submit"
+    >
+      ثبت
+    </button>
   </form>
 </div>
 <div class="table-responsive">
@@ -194,4 +211,21 @@
   </nav>
   {% endif %}
 </div>
+{% endblock %} {% block scripts %}
+<script>
+  function success() {
+    if (
+      document.getElementById("f1").value === "" ||
+      document.getElementById("f2").value === "" ||
+      document.getElementById("f3").value === "" ||
+      document.getElementById("f4").value === "" ||
+      document.getElementById("f4").value === "" ||
+      document.getElementById("f5").value === ""
+    ) {
+      document.getElementById("submitbtn").disabled = true;
+    } else {
+      document.getElementById("submitbtn").disabled = false;
+    }
+  }
+</script>
 {% endblock %}
