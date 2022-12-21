@@ -1,221 +1,323 @@
-{% extends "data_management/dm_layout.html" %}
-{% set current_tab = 'question_pack' %}
-{% block inner_content %}
+{% extends "data_management/dm_layout.html" %} {% set current_tab =
+'question_pack' %} {% block inner_content %}
 <style>
-    .options-list .box{
-        border: 1px solid #f1f1f1;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        background-color: #f1f1f1;
-        display: -ms-flexbox;
-        display: flex;
-    }
-    .question-list{
-        display: flex;
-        justify-content: space-between;
-        border: 1px solid #f1f1f1;
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #f1f1f1;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
-    }
-    .question-list .list{
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        display: none;
-    }
-    .question-list ul .info{
-        margin-top: 5px;
-    }
-    .question-list ul .info::before {
-        content: "\2022";
-        color: #c1c1c1;
-        font-weight: bold;
-        display: inline-block;
-        width: 1em;
-    }
-    .question-list ul h5{
-        color: #c1c1c1;
-        font-weight: 800;
-        width: fit-content;
-        padding: 5px;
-        border-bottom: 2px solid #c1c1c1;
-        line-height: 14px;
-    }
-    .question-list .menu h5{
-        font-weight: 600;
-        padding: 5px;
-        font-size: 13px;
-        margin: 10px 0 0 0;
-        line-height: normal;
-    }
-    .question-list ul .title{
-        font-weight: 600;
-    }
-    .question-list ul i{
-        padding-left: 5px;
-        color:#ffc107;
-        font-size: 16px;
-    }
+  .options-list .box {
+    border: 1px solid #f1f1f1;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    background-color: #f1f1f1;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .question-list {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+  .question-list .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: none;
+  }
+  .question-list ul .info {
+    margin-top: 5px;
+  }
+  .question-list ul .info::before {
+    content: "\2022";
+    color: #c1c1c1;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+  }
+  .question-list ul h5 {
+    color: #c1c1c1;
+    font-weight: 800;
+    width: fit-content;
+    padding: 5px;
+    border-bottom: 2px solid #c1c1c1;
+    line-height: 14px;
+  }
+  .question-list .menu h5 {
+    font-weight: 600;
+    padding: 5px;
+    font-size: 13px;
+    margin: 10px 0 0 0;
+    line-height: normal;
+  }
+  .question-list ul .title {
+    font-weight: 600;
+  }
+  .question-list ul i {
+    padding-left: 5px;
+    color: #ffc107;
+    font-size: 16px;
+  }
 </style>
-<form id="form" action="{% if question_id  %}/dm-question/{{quiz_id}}/{{question_id}}{% else %}/dm-question/{{quiz_id}}{% endif %}" method="POST" autocomplete="off">
-    <input type="hidden" id="options" name="options">
-    <!------------------------------------------------------------------------------------------------------------>
-    <div class="form-group">
-        <label for="question_text">متن سوال</label>
-        <textarea name="question_text" class="form-control" id="question_text" rows="3" required>
+<form
+  id="form"
+  action="{% if question_id  %}/dm-question/{{quiz_id}}/{{question_id}}{% else %}/dm-question/{{quiz_id}}{% endif %}"
+  method="POST"
+  autocomplete="off"
+>
+  <input type="hidden" id="options" name="options" />
+  <!------------------------------------------------------------------------------------------------------------>
+  <div class="form-group">
+    <label for="question_text">متن سوال</label>
+    <textarea
+      id="f2"
+      onkeyup="success()"
+      name="question_text"
+      class="form-control"
+      id="question_text"
+      rows="3"
+      required
+    >
             {%- if question_update -%}{{question_update.question_text}}{%- endif -%}
-        </textarea>
+        </textarea
+    >
+  </div>
+  <!------------------------------------------------------------------------------------------------------------>
+  <h6>گزینه های سوال</h6>
+  <div class="options-list">
+    {% if question_update %} {% set answer = question_update.options | string()
+    %} {% set options = answer.split('|&|') %} {% for option in options %}
+    <div class="box">
+      <button class="btn btn-warning btn-sm delete" tabindex="-1" type="button">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="p-3 w-100">
+        <label>گزینه <span class="ques-num">{{loop.index}}</span></label>
+        <textarea placeholder="متن جواب" class="form-control" rows="2" required>
+{{option}}</textarea
+        >
+      </div>
     </div>
-    <!------------------------------------------------------------------------------------------------------------>
-    <h6>گزینه های سوال</h6>
-    <div class="options-list">
-        {% if question_update %}
-        {% set answer = question_update.options | string() %}
-        {% set options = answer.split('|&|') %}
-        {% for option in options %}
-            <div class="box">
-                <button class="btn btn-warning btn-sm delete" tabindex="-1" type="button"><i class='fas fa-times'></i></button>
-                <div class="p-3 w-100">
-                    <label>گزینه <span class="ques-num">{{loop.index}}</span></label>
-                    <textarea placeholder="متن جواب" class="form-control" rows="2" required>{{option}}</textarea>
-                </div>
-            </div>
-        {% endfor %}
-        {% else %}
-            <div class="box">
-                <button class="btn btn-warning btn-sm delete" tabindex="-1" type="button"><i class='fas fa-times'></i></button>
-                <div class="p-3 w-100">
-                    <label>گزینه <span class="ques-num">1</span></label>
-                    <textarea placeholder="متن جواب" class="form-control" rows="2" required></textarea>
-                </div>
-            </div>
-            <div class="box">
-                <button class="btn btn-warning btn-sm delete" tabindex="-1" type="button"><i class='fas fa-times'></i></button>
-                <div class="p-3 w-100">
-                    <label>گزینه <span class="ques-num">2</span></label>
-                    <textarea placeholder="متن جواب" class="form-control" rows="2" required></textarea>
-                </div>
-            </div>
-        {% endif %}
+    {% endfor %} {% else %}
+    <div class="box">
+      <button class="btn btn-warning btn-sm delete" tabindex="-1" type="button">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="p-3 w-100">
+        <label>گزینه <span class="ques-num">1</span></label>
+        <textarea
+          id="f1"
+          onkeyup="success()"
+          placeholder="متن جواب"
+          class="form-control"
+          rows="2"
+          required
+        ></textarea>
+      </div>
     </div>
-    <button class="btn btn-success d-block mx-auto add mb-3" type="button"><i class='fas fa-plus ml-2'></i>اضافه کردن گزینه جدید</button>
-    <!------------------------------------------------------------------------------------------------------------>
-    <div class="form-group">
-        <label for="answer_number">گزینه صحیح</label>
-        <input type="number" min="1" class="form-control" id="answer_number" name="answer_number" 
-            value="{% if question_update %}{{question_update.answer_number}}{% endif %}" required>
+    <div class="box">
+      <button class="btn btn-warning btn-sm delete" tabindex="-1" type="button">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="p-3 w-100">
+        <label>گزینه <span class="ques-num">2</span></label>
+        <textarea
+          id="f3"
+          onkeyup="success()"
+          placeholder="متن جواب"
+          class="form-control"
+          rows="2"
+          required
+        ></textarea>
+      </div>
     </div>
-    <!------------------------------------------------------------------------------------------------------------>
-    <div class="form-group">
-        <label for="answer_description">توضیحات جواب</label>
-        <textarea name="answer_description" class="form-control" id="answer_description" rows="3" required>
+    {% endif %}
+  </div>
+  <button class="btn btn-success d-block mx-auto add mb-3" type="button">
+    <i class="fas fa-plus ml-2"></i>اضافه کردن گزینه جدید
+  </button>
+  <!------------------------------------------------------------------------------------------------------------>
+  <div class="form-group">
+    <label for="answer_number">گزینه صحیح</label>
+    <input
+      id="f4"
+      oninput="success()"
+      type="number"
+      min="1"
+      class="form-control"
+      id="answer_number"
+      name="answer_number"
+      value="{% if question_update %}{{question_update.answer_number}}{% endif %}"
+      required
+    />
+  </div>
+  <!------------------------------------------------------------------------------------------------------------>
+  <div class="form-group">
+    <label for="answer_description">توضیحات جواب</label>
+    <textarea
+      name="answer_description"
+      class="form-control"
+      id="answer_description"
+      rows="3"
+      required
+    >
             {%- if question_update -%}{{question_update.answer_description}}{%- endif -%}
-        </textarea>
-    </div>
-    <!------------------------------------------------------------------------------------------------------------>
+        </textarea
+    >
+  </div>
+  <!------------------------------------------------------------------------------------------------------------>
 </form>
-<button type="button" id="form-submit" class="btn btn-primary d-block w-25 m-auto">ثبت سوال</button>
-<hr>
+<button
+  disabled
+  id="submitbtn"
+  type="button"
+  id="form-submit"
+  class="btn btn-primary d-block w-25 m-auto"
+>
+  ثبت سوال
+</button>
+<hr />
 <!------------------------------------------------------------------------------------------------------------>
-{% if question_pack %}
-{% for question in question_pack %}
-    <div id="console-{{loop.index}}" class="question-list">
-        <div class="menu">
-            <h5>{{loop.index}}- {{question.question_text}}</h5>
-        </div>
-        <ul class="list">
-            <li><h5>{{loop.index}}</h5></li>
-            <li class="title"><i class='fas fa-caret-left'></i>عنوان سوال :</li>
-            <li class="info pr-2 mb-3" data-name="question_text">{{question.question_text}}</li>
-            <li class="title"><i class='fas fa-caret-left'></i>جواب صحیح :</li>
-            <li class="info pr-2 mb-3" data-name="answer_number">{{question.answer_number}}</li>
-            {% if question.answer_description %}
-                <li class="title"><i class='fas fa-caret-left'></i>توضیحات جواب :</li>
-                <li class="info pr-2 mb-3" data-name="answer_description">{{question.answer_description}}</li>
-            {% endif %}
-            <li class="title"><i class='fas fa-caret-left'></i>گزینه ها :</li>
-            {% set answer = question.options | string() %}
-            {% set options = answer.split('|&|') %}
-            {% for option in options %}
-                <li class="info pr-2">{{ option }}</li>
-            {% endfor %}
-        </ul>
-        <div class="mx-auto mx-md-0 my-3 my-md-1">
-            <button class="btn btn-info colapse"><i class='fas fa-angle-down'></i></button>
-            <button class="btn btn-primary copy"><i class='far fa-copy'></i></button>
-            <a class="btn btn-success" href="/dm-question/{{quiz_id}}/{{question.id}}"><i class="far fa-cog"></i></a>
-            <a class="btn btn-warning" href="/dm-delete-question/{{quiz_id}}/{{question.id}}"><i class='far fa-trash-alt'></i></a>
-        </div>
-    </div>
-{% endfor %}
-{% endif %}
+{% if question_pack %} {% for question in question_pack %}
+<div id="console-{{loop.index}}" class="question-list">
+  <div class="menu">
+    <h5>{{loop.index}}- {{question.question_text}}</h5>
+  </div>
+  <ul class="list">
+    <li><h5>{{loop.index}}</h5></li>
+    <li class="title"><i class="fas fa-caret-left"></i>عنوان سوال :</li>
+    <li class="info pr-2 mb-3" data-name="question_text">
+      {{question.question_text}}
+    </li>
+    <li class="title"><i class="fas fa-caret-left"></i>جواب صحیح :</li>
+    <li class="info pr-2 mb-3" data-name="answer_number">
+      {{question.answer_number}}
+    </li>
+    {% if question.answer_description %}
+    <li class="title"><i class="fas fa-caret-left"></i>توضیحات جواب :</li>
+    <li class="info pr-2 mb-3" data-name="answer_description">
+      {{question.answer_description}}
+    </li>
+    {% endif %}
+    <li class="title"><i class="fas fa-caret-left"></i>گزینه ها :</li>
+    {% set answer = question.options | string() %} {% set options =
+    answer.split('|&|') %} {% for option in options %}
+    <li class="info pr-2">{{ option }}</li>
+    {% endfor %}
+  </ul>
+  <div class="mx-auto mx-md-0 my-3 my-md-1">
+    <button class="btn btn-info colapse">
+      <i class="fas fa-angle-down"></i>
+    </button>
+    <button class="btn btn-primary copy"><i class="far fa-copy"></i></button>
+    <a class="btn btn-success" href="/dm-question/{{quiz_id}}/{{question.id}}"
+      ><i class="far fa-cog"></i
+    ></a>
+    <a
+      class="btn btn-warning"
+      href="/dm-delete-question/{{quiz_id}}/{{question.id}}"
+      ><i class="far fa-trash-alt"></i
+    ></a>
+  </div>
+</div>
+{% endfor %} {% endif %}
 <!------------------------------------------------------------------------------------------------------------>
 <div class="box d-none" id="sample">
-    <button class="btn btn-warning btn-sm delete" type="button"><i class='fas fa-times'></i></button>
-    <div class="p-3 w-100">
-        <label>گزینه <span class="ques-num">0</span></label>
-        <textarea placeholder="متن جواب" class="form-control" rows="2" required></textarea>
-    </div>
+  <button class="btn btn-warning btn-sm delete" type="button">
+    <i class="fas fa-times"></i>
+  </button>
+  <div class="p-3 w-100">
+    <label>گزینه <span class="ques-num">0</span></label>
+    <textarea
+      placeholder="متن جواب"
+      class="form-control"
+      rows="2"
+      required
+    ></textarea>
+  </div>
 </div>
 <!------------------------------------------------------------------------------------------------------------>
-{% endblock %}
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-$(document).ready(function(){
-    $(".colapse").click(function(){
-        let parentId = $(this).parents()[1].id
-        console.log($(this).parents()[1].id)
-        $("#" + parentId).find(".menu").slideToggle(0,function(){
-            $("#" + parentId).find(".list").slideToggle(250)
-        })
+  $(document).ready(function () {
+    $(".colapse").click(function () {
+      let parentId = $(this).parents()[1].id;
+      console.log($(this).parents()[1].id);
+      $("#" + parentId)
+        .find(".menu")
+        .slideToggle(0, function () {
+          $("#" + parentId)
+            .find(".list")
+            .slideToggle(250);
+        });
     });
-    $(".copy").click(function(){
-        let course_data = $(this).parent().prev().children().filter(".info");
-        $(".options-list").empty().removeClass('empty')
-        course_data.each(function(){
-            if($(this).attr('data-name') == "question_text" || $(this).attr('data-name') == "answer_number" || $(this).attr('data-name') == "answer_description"){
-                $("#form .form-control#" + $(this).attr('data-name')).val($(this).text())
-            }else{
-                if(!$(".options-list").hasClass('empty')) $(".options-list").addClass('empty')
-                let boxCounter = $(".options-list .box").length
-                let sample = $("#sample").clone()
-                sample.find(".ques-num").text(boxCounter +1)
-                sample.find("textarea").val($(this).text())
-                sample.removeAttr("id")
-                sample.removeClass("d-none")
-                $(".options-list").append(sample)
-                sample.hide().show(250);
-            }
-        }) 
+    $(".copy").click(function () {
+      let course_data = $(this).parent().prev().children().filter(".info");
+      $(".options-list").empty().removeClass("empty");
+      course_data.each(function () {
+        if (
+          $(this).attr("data-name") == "question_text" ||
+          $(this).attr("data-name") == "answer_number" ||
+          $(this).attr("data-name") == "answer_description"
+        ) {
+          $("#form .form-control#" + $(this).attr("data-name")).val(
+            $(this).text()
+          );
+        } else {
+          if (!$(".options-list").hasClass("empty"))
+            $(".options-list").addClass("empty");
+          let boxCounter = $(".options-list .box").length;
+          let sample = $("#sample").clone();
+          sample.find(".ques-num").text(boxCounter + 1);
+          sample.find("textarea").val($(this).text());
+          sample.removeAttr("id");
+          sample.removeClass("d-none");
+          $(".options-list").append(sample);
+          sample.hide().show(250);
+        }
+      });
     });
-    $(".add").click(function(){
-        let boxCounter = $(".options-list .box").length
-        let sample = $("#sample").clone()
-        sample.find(".ques-num").text(boxCounter +1)
-        sample.removeAttr("id")
-        sample.removeClass("d-none")
-        $(".options-list").append(sample)
-        sample.hide().show(250);
-    })
-    $("body").on("click",".delete", function(){
-        let el = $(this).parent()
-        el.hide(250,function(){
-            el.remove()
-            $(".options-list .box .ques-num").each((index,element) => element.textContent = (index + 1))
-        })
+    $(".add").click(function () {
+      let boxCounter = $(".options-list .box").length;
+      let sample = $("#sample").clone();
+      sample.find(".ques-num").text(boxCounter + 1);
+      sample.removeAttr("id");
+      sample.removeClass("d-none");
+      $(".options-list").append(sample);
+      sample.hide().show(250);
     });
-    $("#form-submit").click(function(){
-        let inputsValue = ''
-        let textareaCount = ($(".options-list .box textarea").length)-1
-        $(".options-list .box textarea").each(function(index){
-            index < textareaCount ? inputsValue += (($(this).val().trim()) + '|&|') : inputsValue += (($(this).val().trim()))
-        })
-        $("#options").val(inputsValue)
-        $("form").submit()
-    })
-})
+    $("body").on("click", ".delete", function () {
+      let el = $(this).parent();
+      el.hide(250, function () {
+        el.remove();
+        $(".options-list .box .ques-num").each(
+          (index, element) => (element.textContent = index + 1)
+        );
+      });
+    });
+    $("#form-submit").click(function () {
+      let inputsValue = "";
+      let textareaCount = $(".options-list .box textarea").length - 1;
+      $(".options-list .box textarea").each(function (index) {
+        index < textareaCount
+          ? (inputsValue += $(this).val().trim() + "|&|")
+          : (inputsValue += $(this).val().trim());
+      });
+      $("#options").val(inputsValue);
+      $("form").submit();
+    });
+  });
+  function success() {
+    if (
+      document.getElementById("f1").value === "" ||
+      document.getElementById("f2").value === "" ||
+      document.getElementById("f3").value === "" ||
+      document.getElementById("f4").value === ""
+    ) {
+      document.getElementById("submitbtn").disabled = true;
+    } else {
+      document.getElementById("submitbtn").disabled = false;
+    }
+  }
 </script>
 {% endblock %}
