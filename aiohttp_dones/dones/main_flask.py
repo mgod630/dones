@@ -4,7 +4,6 @@ from flask import Flask, request, redirect
 import mysql.connector.pooling
 from routes import make_routes, common
 
-
 def init(config_file="settings.py"):
     app = Flask(__name__)
     app.config.from_pyfile(config_file)

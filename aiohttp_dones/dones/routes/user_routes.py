@@ -1,7 +1,7 @@
 import secrets, time
 from flask import render_template, request, redirect, session, url_for, jsonify, g, current_app as app
 from routes import common
-from models_mysql import users_orm, accounts_orm, flash_messages_orm
+from models_mysql import users_orm, accounts_orm, flash_messages_orm, user_courses_orm
 status= ''
 user= None 
 flash_messages= None
@@ -109,4 +109,15 @@ def make_routes(goldis_blueprint):
             flash_messages_orm.Flash_messages.insert_new_flash_message(session['g_token'], f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success') 
             flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(session['g_token'])
             return render_template('profile.html', user=user, flash_messages=flash_messages)
+
+        #  return {'courses':user_courses, 'user':user, 'flash_messages':flash_messages}
+
+    @goldis_blueprint.route('/my-courses')
+    def my_courses():
+        user = common.get_user_from_token()
+        flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(session['g_token'])
+        # user_courses = user_courses_orm.User_courses.get_user_course_by_user_id(user['id'])
+        user_courses= None
+        return render_template('my-courses.html', user=user, courses = user_courses, flash_messages = flash_messages)
+
 

@@ -1,7 +1,7 @@
 import time
 from flask import redirect, render_template
 from routes import common
-from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, notifications_orm
+from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, notifications_orm, user_courses_orm
 
 flash_messages = []
 
@@ -41,16 +41,13 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route('/course-content/<course_id>/<item_id>')
     def course_content(course_id, item_id):
         user = common.get_user_from_token()
-        user_id = None
-        if user != None:
-            user_id = user['id']
+        # user_course = user_courses_orm.User_courses.insert_new_user_course(item_id=item_id)
         all_courses = courses_orm.Courses.get_all_courses()
         course = None
         for crs in all_courses:
             if str(crs['id']) == str(course_id):
                 course = crs
                 break
-
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         course_item = None
         for crs_item in course_items:
