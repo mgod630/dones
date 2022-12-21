@@ -72,8 +72,9 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route('/profile')
     def profile():
         user = common.get_user_from_token()
+        flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(session['g_token'])
         flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(session['g_token'])
-        return render_template('profile.html', user=user)
+        return render_template('profile.html', user=user, flash_messages= flash_messages)
 
     @goldis_blueprint.route('/profile', methods=['POST'])
     def profile_post():
@@ -97,7 +98,7 @@ def make_routes(goldis_blueprint):
                 flash_messages_orm.Flash_messages.insert_new_flash_message(session['g_token'], f'{user_full_name} گرامی، رمز عبور فعلی، صحیح نمی باشد.', 'danger') 
             user = common.get_user_from_token()
             flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(session['g_token'])
-            return render_template('profile.html', user=user, flash_messages=flash_messages)
+            return redirect('/profile')
         else:
             mobile = request.form.get('sg_mobile', 'None')
             full_name = request.form.get('sg_fullname', 'None')
@@ -110,7 +111,7 @@ def make_routes(goldis_blueprint):
             flash_messages_orm.Flash_messages.insert_new_flash_message(session['g_token'], f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success') 
             flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(session['g_token'])
             user = common.get_user_from_token()
-            return render_template('profile.html', user=user, flash_messages=flash_messages)
+            return redirect('/profile')
 
         #  return {'courses':user_courses, 'user':user, 'flash_messages':flash_messages}
 

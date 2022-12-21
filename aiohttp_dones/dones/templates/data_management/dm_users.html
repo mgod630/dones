@@ -116,7 +116,7 @@
           type="text"
           placeholder="کد ملی"
           name="national_id"
-          value="{% if user_id  %}{{update_user.national_id}}{% endif %}"
+          value="{% if user_id and update_user.national_id %}{{update_user.national_id}}{% endif %}"
         />
       </div>
       <div class="form-group col-md-3 {% if user_id %}d-none{% endif %}">
