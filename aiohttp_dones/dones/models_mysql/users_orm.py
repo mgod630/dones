@@ -101,7 +101,8 @@ class Users:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        password = common.get_hashed_password(password)
+        if password:
+            password = common.get_hashed_password(password)
         update_string = ''
         if full_name:
             update_string += f'full_name = %(full_name)s,'
