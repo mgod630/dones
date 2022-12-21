@@ -26,22 +26,8 @@ class Courses:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        course_id_int = int(course_id)
         query = "SELECT * FROM tbl_courses WHERE id=%(id)s"
-        cursor.execute(query, {'id': course_id_int})
-        row = cursor.fetchone()
-        cnx.close()
-        return row
-
-    @staticmethod
-    def get_course_by_code(code):
-        global connection_pool
-        if connection_pool == None:
-            connection_pool = app.config['mysql_connection_pool']
-        cnx = connection_pool.get_connection()
-        cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_courses WHERE code=%(code)s"
-        cursor.execute(query, {'code': code})
+        cursor.execute(query, {'id': course_id})
         row = cursor.fetchone()
         cnx.close()
         return row
@@ -158,23 +144,7 @@ class Courses:
         print('deleted')
         return True
 
-
-def courses_orm_functions_test():
-    import random
-    i = random.randint(1, 1000)
-    last_id = Courses.insert_new_course(
-        f'title{i}', f'code{i}', f'unit_fa{i}', f'image_path{i}', f'description{i}', i, 0, f'{i*11}', i, i)
-    update = Courses.update_course(last_id, title=f'Updated_title{i}')
-    last_course = Courses.get_course_by_id(last_id)
-    print(last_course)
-    print('-' * 80)
-    all_courses = Courses.get_all_courses()
-    print(all_courses)
-    return True
-
-
 if __name__ == '__main__':
     connection_pool = mysql.connector.pooling.MySQLConnectionPool(
         user="root", password="", database='goldis', use_pure=False, pool_name="my_pool", pool_size=32, buffered=True)
-    courses_orm_functions_test()
-    print('Everything is alright!')
+

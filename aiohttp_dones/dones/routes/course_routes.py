@@ -24,12 +24,10 @@ def make_routes(goldis_blueprint):
 
     @goldis_blueprint.route('/course-overview/<course_id>')
     def course_overview(course_id):
-        
         user = common.get_user_from_token()
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         all_courses = courses_orm.Courses.get_all_courses()
         course = None
-
         for crs in all_courses:
             if str(crs['id']) == str(course_id):
                 course = crs
@@ -41,7 +39,14 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route('/course-content/<course_id>/<item_id>')
     def course_content(course_id, item_id):
         user = common.get_user_from_token()
-        # user_course = user_courses_orm.User_courses.insert_new_user_course(item_id=item_id)
+        user_course = user_courses_orm.User_courses.get_user_courses_by_item_id(item_id)
+        if user_course:
+            if user_course['item_id'] != int(item_id):
+                new_user_course_id = user_courses_orm.User_courses.insert_new_user_course(user['id'])
+                update_user_course = user_courses_orm.User_courses.update_user_course(row_id=new_user_course_id, item_id=item_id )
+        else:
+            new_user_course_id = user_courses_orm.User_courses.insert_new_user_course(user['id'])
+            update_user_course = user_courses_orm.User_courses.update_user_course(row_id=new_user_course_id, item_id=item_id )
         all_courses = courses_orm.Courses.get_all_courses()
         course = None
         for crs in all_courses:

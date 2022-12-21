@@ -2,7 +2,7 @@ import enum
 from flask import current_app as app
 import mysql.connector.pooling
 from routes import common
-from models_mysql import items_orm, quizzes_orm
+from models_mysql import items_orm, quizzes_orm, courses_orm
 
 connection_pool = None
 
@@ -21,7 +21,7 @@ class User_courses:
         return data
 
     @staticmethod
-    def get_user_course_by_user_id(user_id):
+    def get_user_courses_by_user_id(user_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -29,6 +29,19 @@ class User_courses:
         cursor = cnx.cursor(dictionary=True)
         query = "SELECT * FROM tbl_user_courses WHERE user_id=%(user_id)s"
         cursor.execute(query, {'user_id': user_id})
+        row = cursor.fetchall()
+        cnx.close()
+        return row
+    
+    @staticmethod
+    def get_user_courses_by_item_id(item_id):
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = "SELECT * FROM tbl_user_courses WHERE item_id=%(item_id)s"
+        cursor.execute(query, {'item_id': item_id})
         row = cursor.fetchone()
         cnx.close()
         return row
@@ -47,26 +60,16 @@ class User_courses:
         return row
 
     @staticmethod
-    def insert_new_user_course(item_id, quiz_id=None):
+    def insert_new_user_course(user_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        item_title = None
-        if item_id : 
-          item = items_orm.Items.get_item_by_id(item_id)
-          item_title = item['title']
-        elif quiz_id:
-          quiz = quizzes_orm.Quizzes.get_quiz_by_id(quiz_id)
-          quiz_title = quiz['title']
-  
-        add_user = ("INSERT INTO `tbl_user_courses` (`item_id`, `quiz_id`, `user_course_item`) VALUES" +
-                    "( %(item_id)s, %(quiz_id)s, %(user_course_item)s)")
+        add_user = ("INSERT INTO `tbl_user_courses` (`user_id`) VALUES" +
+                    "( %(user_id)s)")
         data_user = {
-            'item_id': item_id,
-            'quiz_id': quiz_id,
-            'user_course_item': item_title
+            'user_id': user_id,
         }
         cursor.execute(add_user, data_user)
         inserted_record_id = cursor.lastrowid
@@ -75,59 +78,35 @@ class User_courses:
         return inserted_record_id
 
     @staticmethod
-    def update_user(id, full_name=None, mobile=None, password=None, grade=None, age=None, gender=None, marital_status=None, job=None, sheba_number=None, credit_score=None, user_type=None, invited_friend_mobile=None, last_login_datetime=None, national_id=None):
+    def update_user_course(row_id, quiz_id=None, item_id=None):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        password = common.get_hashed_password(password)
         update_string = ''
-        if full_name:
-            update_string += f'full_name = %(full_name)s,'
-        if mobile:
-            update_string += f'mobile=%(mobile)s,'
-        if password:
-            update_string += f'password=%(password)s,'
-        if sheba_number:
-            update_string += f'sheba_number=%(sheba_number)s,'
-        if credit_score:
-            update_string += f'credit_score=%(credit_score)s,'
-        if user_type:
-            update_string += f'user_type=%(user_type)s,'
-        if invited_friend_mobile:
-            update_string += f'invited_friend_mobile=%(invited_friend_mobile)s,'
-        if last_login_datetime:
-            update_string += f'last_login_datetime=%(last_login_datetime)s,'
-        if national_id:
-            update_string += f'national_id=%(national_id)s,'
-        if grade:
-            update_string += f'grade=%(grade)s,'
-        if age:
-            update_string += f'age=%(age)s,'
-        if gender:
-            update_string += f'gender=%(gender)s,'
-        if marital_status:
-            update_string += f'marital_status=%(marital_status)s,'
-        if job:
-            update_string += f'job=%(job)s,'
+        
+        print('sql'+item_id)
+        if item_id : 
+          item = items_orm.Items.get_item_by_id(item_id)
+          course = courses_orm.Courses.get_course_by_id(item['course_id'])
+          course_id = item['course_id']
+          item_title = f"{item['title']} درس {course['title']}"
+          update_string += f'item_id = %(item_id)s,'
+          update_string += f'course_id = %(course_id)s,'
+          update_string += f'user_course_item = %(user_course_item)s,'
+        if quiz_id:
+          quiz = quizzes_orm.Quizzes.get_quiz_by_id(quiz_id)
+          update_string += f'quiz_id=%(quiz_id)s,'
+          quiz_title = quiz['title']
+
         update_string = update_string.rstrip(',')
-        add_user = f"UPDATE tbl_user_courses SET {update_string} WHERE id='{id}'"
+        add_user = f"UPDATE tbl_user_courses SET {update_string} WHERE id='{row_id}'"
         update_query_string = {
-            'full_name': full_name,
-            'mobile': mobile,
-            'password': password,
-            'sheba_number': sheba_number,
-            'credit_score': credit_score,
-            'user_type': user_type,
-            'invited_friend_mobile': invited_friend_mobile,
-            'last_login_datetime': last_login_datetime,
-            'national_id': national_id,
-            'grade': grade,
-            'age': age,
-            'gender': gender,
-            'marital_status': marital_status,
-            'job': job,
+            'item_id':item_id,
+            'course_id':course_id,
+            'quiz_id': quiz_id,
+            'user_course_item': item_title
         }
         cursor.execute(add_user, update_query_string)
         cnx.commit()
