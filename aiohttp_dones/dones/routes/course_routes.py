@@ -6,7 +6,7 @@ from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, com
 flash_messages = []
 
 def make_routes(goldis_blueprint):
-    @goldis_blueprint.route("/course-info/<course_id>")
+    @goldis_blueprint.route("/course-info/course_<course_id>")
     def course_info(course_id):
         user = common.get_user_from_token()
         all_courses = courses_orm.Courses.get_all_courses()
@@ -22,7 +22,7 @@ def make_routes(goldis_blueprint):
         all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
         return render_template("course-info.html", course=course, all_notifications=all_notifications, user=user, all_comments=all_comments, flash_messages=flash_messages)
 
-    @goldis_blueprint.route('/course-overview/<course_id>')
+    @goldis_blueprint.route('/course-overview/course_<course_id>')
     def course_overview(course_id):
         user = common.get_user_from_token()
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
@@ -36,7 +36,7 @@ def make_routes(goldis_blueprint):
         all_comments = []
         return render_template("course-overview.html", course=course, course_items=course_items,user=user, all_comments=all_comments, flash_messages=flash_messages)
 
-    @goldis_blueprint.route('/course-content/<course_id>/<item_id>')
+    @goldis_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
     def course_content(course_id, item_id):
         user = common.get_user_from_token()
         user_course = user_courses_orm.User_courses.get_user_courses_by_item_id(item_id)
@@ -66,7 +66,7 @@ def make_routes(goldis_blueprint):
         last_comments = all_comments[0:19]
         return render_template("course-content.html", course=course, course_item=course_item, user=user, all_comments=last_comments, flash_messages=flash_messages, quizzes=quizzes)
 
-    @goldis_blueprint.route("/quiz/<quiz_id>")
+    @goldis_blueprint.route("/quiz/quiz_<quiz_id>")
     def quiz_content(quiz_id):
         user = common.get_user_from_token()
         last_user_answers = []

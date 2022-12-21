@@ -57,7 +57,7 @@
             <td>{{quiz.attendance_max}}</td>
             <td>{{quiz.last_score}}</td>
             <td>{{quiz.best_score}}</td>
-            <td><a class="btn btn-warning" href="/quiz/{{quiz.id}}">ورود به آزمون</a></td>
+            <td><a class="btn btn-warning" href="/quiz/quiz_{{quiz.id}}">ورود به آزمون</a></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -96,7 +96,7 @@
           </div>
         </div>
         <div class="cc-quiz-row">
-          <a class="btn btn-warning" href="/quiz/{{quiz.id}}">ورود به آزمون</a>
+          <a class="btn btn-warning" href="/quiz/quiz_{{quiz.id}}">ورود به آزمون</a>
         </div>
       </div>
       {% endfor %}
