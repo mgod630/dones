@@ -49,14 +49,7 @@ def make_routes(goldis_blueprint):
         mobile = request.form.get('mobile', None)
         national_id = request.form.get('national_id', None)
         password = request.form.get('password', None)
-        user_type_string = request.form.get('user_type', None)
-
-        if user_type_string == 'ادمین':
-            user_type = -2
-        elif user_type_string == 'سازمان/گروه':
-            user_type = -1
-        else:
-            user_type = 0
+        user_type = request.form.get('user_type', None)
 
         new_user = users_orm.Users.insert_new_user(full_name=full_name, mobile=mobile, national_id=national_id,password=password,user_type=user_type, g_token=g_token, sheba_number=sheba_number, credit_score=credit_score, invited_friend_mobile=invited_friend_mobile, register_datetime=register_datetime)
         users = users_orm.Users.get_all_users()
@@ -80,14 +73,7 @@ def make_routes(goldis_blueprint):
             full_name = request.form.get('full_name', None)
             mobile = request.form.get('mobile', None)
             national_id = request.form.get('national_id', None)
-            user_type_string = request.form.get('user_type', None)
-
-            if user_type_string == 'ادمین':
-                user_type = -2
-            elif user_type_string == 'سازمان/گروه':
-                user_type = -1
-            else:
-                user_type = 0
+            user_type= request.form.get('user_type', None)
         
             edit_user = users_orm.Users.update_user(id=user_id, full_name=full_name, mobile=mobile, national_id=national_id,user_type=user_type, sheba_number=sheba_number, credit_score=credit_score, invited_friend_mobile=invited_friend_mobile, last_login_datetime=last_login_datetime)
             users = users_orm.Users.get_all_users()
