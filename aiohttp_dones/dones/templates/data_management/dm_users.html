@@ -132,7 +132,7 @@
           value="{% if user_id  %}{{update_user.password}}{% endif %}"
         />
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-3 mt-4">
         <label>نوع کاربر</label>
 
         <select id="f5" onselect="success()" name="user_type">
@@ -140,8 +140,8 @@
           <option value="-2">ادمین</option>
           <option value="-1">سازمان/گروه</option>
         </select>
-
-        <!-- <input
+      </div>
+      <!-- <input
           id="f5"
           onkeyup="success()"
           class="form-control"
@@ -151,7 +151,7 @@
           value="{% if user_id  %}{{update_user.user_type}}{% endif %}"
         /> -->
 
-        <!-- <div  onclick="dropd()" class="dropdown">
+      <!-- <div  onclick="dropd()" class="dropdown">
           <input class="dropbtn">Dropdown</input>
           <div  id="ddContent" class="dropdown-content">
             <a href="#">Link 1</a>
@@ -160,7 +160,7 @@
           </div>
         </div> -->
 
-        <!-- <div class="dropdown">
+      <!-- <div class="dropdown">
           <button
             type="button"
             class="btn dropdown-toggle"
@@ -174,7 +174,7 @@
             <li><a class="dropdown-item" href="#">عادی</a></li>
           </ul>
         </div> -->
-      </div>
+
       <div class="form-group col-md-4">
         {% if user_id %}
         <input
@@ -312,9 +312,6 @@
     } else {
       x.style.display = "inline-block";
     }
-  }
-  function selection() {
-    let y = document.getElementById("f5").value;
   }
 </script>
 {% endblock %}

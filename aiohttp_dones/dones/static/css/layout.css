@@ -66,7 +66,9 @@ body {
 .cs-nav {
   padding: 4px;
   border-bottom: 1px solid #f5f5f5;
-  background-color: rgb(243, 233, 88);
+  background-color: #fff;
+  /* background-color: #2d56a4; */
+  /* background: linear-gradient(45deg, #222161 0, #37368e 40%, #3433a2 100%); */
   box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
   z-index: 2;
 }
@@ -429,10 +431,10 @@ p {
 /* End Comments */
 /* Footer */
 .footer {
-  background-color: #2d56a4;
   color: #fff;
   padding: 0 15px;
   margin-top: auto;
+  background-color: #2d56a4;
   background: linear-gradient(45deg, #222161 0, #37368e 40%, #3433a2 100%);
 }
 .footer-links a {
