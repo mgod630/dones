@@ -1,71 +1,132 @@
-{% extends "data_management/dm_layout.html" %}
-{% set current_tab = 'courses' %}
+{% extends "data_management/dm_layout.html" %} {% set current_tab = 'courses' %}
 {% block inner_content %}
-<form action="{% if course_item_id  %}/dm-course-items/{{course_id}}/{{course_item_id}}{% else %}/dm-course-items/{{course_id}}{% endif %}" method="POST">
-    <div class="row">
-        <div class="col-12">
-            <div class="form-step">
-                <label>عنوان آیتم:</label>
-                <input class="form-control" type="text" name="title" value="{% if course_item_id  %}{{update_course_item.title}}{% endif %}">
-            </div>
-        </div>
-        <div class="col-12 col-md-4">
-            <div class="form-step">
-                <label>آیدی</label>
-                <input class="form-control" type="text" name="id" value="{% if course_item_id  %}{{update_course_item.id}}{% endif %}" disabled>
-            </div>
-        </div>
-        <div class="col-12 col-md-4">
-            <div class="form-step">
-                <label>تاریخ شروع:</label>
-                <input class="form-control ltr" type="text" name="unix_start_datetime" value="{% if course_item_id  %}{{update_course_item.jalali_start_datetime}}{% endif %}">
-            </div>
-        </div>
-        <div class="col-12 col-md-4">
-            <div class="form-step">
-                <label>تاریخ پایان:</label>
-                <input class="form-control ltr" type="text" name="unix_end_datetime" value="{% if course_item_id  %}{{update_course_item.jalali_end_datetime}}{% endif %}">
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="form-step">
-                <label>توضیحات</label>
-                <textarea name="description" class="form-control" rows="3">{% if course_item_id  %}{{update_course_item.description}}{% endif %}</textarea>
-            </div>
-        </div>    
+<form
+  action="{% if course_item_id  %}/dm-course-items/{{course_id}}/{{course_item_id}}{% else %}/dm-course-items/{{course_id}}{% endif %}"
+  method="POST"
+>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-step">
+        <label>عنوان آیتم:</label>
+        <input
+          id="esse1"
+          onkeyup="success()"
+          class="form-control"
+          type="text"
+          name="title"
+          value="{% if course_item_id  %}{{update_course_item.title}}{% endif %}"
+        />
+      </div>
     </div>
-    <button class="btn btn-success dm-submit">ثبت</button>
+    <div class="col-12 col-md-4">
+      <div class="form-step">
+        <label>آیدی</label>
+        <input
+          class="form-control"
+          type="text"
+          name="id"
+          value="{% if course_item_id  %}{{update_course_item.id}}{% endif %}"
+          disabled
+        />
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="form-step">
+        <label>تاریخ شروع:</label>
+        <input
+          id="esse2"
+          onkeyup="success()"
+          class="form-control ltr"
+          type="date"
+          name="unix_start_datetime"
+          value="{% if course_item_id  %}{{update_course_item.jalali_start_datetime}}{% endif %}"
+        />
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="form-step">
+        <label>تاریخ پایان:</label>
+        <input
+          id="esse3"
+          onkeyup="success()"
+          class="form-control ltr"
+          type="date"
+          name="unix_end_datetime"
+          value="{% if course_item_id  %}{{update_course_item.jalali_end_datetime}}{% endif %}"
+        />
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="form-step">
+        <label>توضیحات</label>
+        <textarea name="description" class="form-control" rows="3">
+{% if course_item_id  %}{{update_course_item.description}}{% endif %}</textarea
+        >
+      </div>
+    </div>
+  </div>
+  <button disabled id="submitbtn" class="btn btn-success dm-submit">ثبت</button>
 </form>
-<hr>
+<hr />
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>عنوان</th>
-            <th>تاریخ شروع</th>
-            <th>تاریخ پایان</th>
-            <th>توضیحات</th>
-            <th>مشاهده</th>
-            <th>ویرایش</th>
-            <th>حذف</th>
-        </tr>
-    </thead>
-    {%if len %}
-    {% for i in range(0,len) %}
+  <thead>
     <tr>
-        <td>{{course_items[i].title}}</td>
-        <td>{{course_items[i].jalali_start_datetime}}</td>
-        <td>{{course_items[i].jalali_end_datetime}}</td>
-        {% if course_items[i].description %}
-        <td>{% if course_items[i].description[0:40] %}{{course_items[i].description[0:40]}}{% else %}{{course_items[i].description}}{% endif %}</td>
-        {% else %}
-        <td>-------</td>
-        {% endif %}
-        <td><a class="btn btn-primary btn-sm" href="/dm-quiz/{{course_items[i].id}}"><i class='far fa-eye'></i></a></td>
-        <td><a class="btn btn-success btn-sm" href="/dm-course-items/{{course_id}}/{{course_items[i].id}}"><i class="far fa-cog"></i></a></td>
-        <td><a class="btn btn-warning btn-sm" href="{{all_course_item_id_link[i]}}"><i class='far fa-trash-alt'></i></a></td>
+      <th>عنوان</th>
+      <th>تاریخ شروع</th>
+      <th>تاریخ پایان</th>
+      <th>توضیحات</th>
+      <th>مشاهده</th>
+      <th>ویرایش</th>
+      <th>حذف</th>
     </tr>
-    {% endfor %}
+  </thead>
+  {%if len %} {% for i in range(0,len) %}
+  <tr>
+    <td>{{course_items[i].title}}</td>
+    <td>{{course_items[i].jalali_start_datetime}}</td>
+    <td>{{course_items[i].jalali_end_datetime}}</td>
+    {% if course_items[i].description %}
+    <td>
+      {% if course_items[i].description[0:40]
+      %}{{course_items[i].description[0:40]}}{% else
+      %}{{course_items[i].description}}{% endif %}
+    </td>
+    {% else %}
+    <td>-------</td>
     {% endif %}
+    <td>
+      <a class="btn btn-primary btn-sm" href="/dm-quiz/{{course_items[i].id}}"
+        ><i class="far fa-eye"></i
+      ></a>
+    </td>
+    <td>
+      <a
+        class="btn btn-success btn-sm"
+        href="/dm-course-items/{{course_id}}/{{course_items[i].id}}"
+        ><i class="far fa-cog"></i
+      ></a>
+    </td>
+    <td>
+      <a class="btn btn-warning btn-sm" href="{{all_course_item_id_link[i]}}"
+        ><i class="far fa-trash-alt"></i
+      ></a>
+    </td>
+  </tr>
+  {% endfor %} {% endif %}
 </table>
 
+{% endblock %} {% block scripts %}
+<script>
+  function success() {
+    if (
+      document.getElementById("esse1").value === "" ||
+      document.getElementById("esse2").value === "" ||
+      document.getElementById("esse3").value === ""
+    ) {
+      document.getElementById("submitbtn").disabled = true;
+    } else {
+      document.getElementById("submitbtn").disabled = false;
+    }
+  }
+</script>
 {% endblock %}

@@ -23,6 +23,8 @@
     <div class="form-group col-12">
       <label>نوع اطلاعیه</label>
       <input
+        id="esse1"
+        onkeyup="success()"
         class="form-control"
         type="text"
         name="notification_type"
@@ -31,15 +33,28 @@
     </div>
     <div class="form-group col-12">
       <label>متن اطلاعیه</label>
-      <textarea class="form-control" name="notification_text" rows="3">
+      <textarea
+        id="esse2"
+        onkeyup="success()"
+        class="form-control"
+        name="notification_text"
+        rows="3"
+      >
 {% if notification  %}{{notification.notification_text}}{% endif %}</textarea
       >
     </div>
   </div>
-  <button class="btn btn-success dm-submit" type="submit">ثبت</button>
+  <button
+    disabled
+    id="submitbtn"
+    class="btn btn-success dm-submit"
+    type="submit"
+  >
+    ثبت
+  </button>
 </form>
 
-<div class="table-responsive">
+<div class="table-responsive mt-3">
   <table class="table table-striped">
     <thead>
       <tr>
@@ -66,13 +81,57 @@
       </td>
       <td>
         <a
+          data-toggle="modal"
+          data-target="#delete_course"
           class="btn btn-warning"
           href="/dm-delete-notification/{{notif.section_id}}/{{notif.id}}"
-          ><i class="far fa-trash-alt"></i
-        ></a>
+        >
+          <i class="far fa-trash-alt"></i>
+        </a>
       </td>
     </tr>
     {% endfor %} {% endif %}
   </table>
 </div>
-{% endblock %}
+{% for notif in notifications %}
+<div class="modal" tabindex="-1" role="dialog" id="delete_course">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">حذف اطلاعیه</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="course-details-wrapper">
+          <a
+            class="btn btn-warning"
+            href="/dm-delete-notification/{{notif.section_id}}/{{notif.id}}"
+            >حذف</a
+          >
+          <button class="btn mx-3" data-dismiss="modal">لغو</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} {% endblock %} {% block scripts %}
+<script>
+  function success() {
+    if (
+      document.getElementById("esse1").value === "" ||
+      document.getElementById("esse2").value === ""
+    ) {
+      document.getElementById("submitbtn").disabled = true;
+    } else {
+      document.getElementById("submitbtn").disabled = false;
+    }
+  }
+</script>
+{% endblock%}
