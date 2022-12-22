@@ -81,16 +81,47 @@
       </td>
       <td>
         <a
+          data-toggle="modal"
+          data-target="#delete_course"
           class="btn btn-warning"
           href="/dm-delete-notification/{{notif.section_id}}/{{notif.id}}"
-          ><i class="far fa-trash-alt"></i
-        ></a>
+        >
+          <i class="far fa-trash-alt"></i>
+        </a>
       </td>
     </tr>
     {% endfor %} {% endif %}
   </table>
 </div>
-{% endblock %} {% block scripts %}
+{% for notif in notifications %}
+<div class="modal" tabindex="-1" role="dialog" id="delete_course">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">حذف اطلاعیه</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="course-details-wrapper">
+          <a
+            class="btn btn-warning"
+            href="/dm-delete-notification/{{notif.section_id}}/{{notif.id}}"
+            >حذف</a
+          >
+          <button class="btn mx-3" data-dismiss="modal">لغو</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} {% endblock %} {% block scripts %}
 <script>
   function success() {
     if (
