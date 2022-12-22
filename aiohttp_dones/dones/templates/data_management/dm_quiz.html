@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col-12">
             <div class="form-step">
-                <label>عنوان آزمون:</label>
-                <input class="form-control" type="text" name="title" value="{% if quiz_id %}{{update_quiz.title}}{% endif %}">
+                <label><span style="color: red;"> * </span>عنوان آزمون:</label>
+                <input id="esse1" onkeyup="success()" class="form-control" type="text" name="title" value="{% if quiz_id %}{{update_quiz.title}}{% endif %}">
             </div>
         </div>
         <div class="col-12 col-md-4">
@@ -17,14 +17,14 @@
         </div>
         <div class="col-12 col-md-4">
             <div class="form-step">
-                <label>تاریخ شروع:</label>
-                <input class="form-control ltr" type="text" name="unix_start_datetime" value="{% if quiz_id %}{{update_quiz.jalali_start_datetime}}{% endif %}">
+                <label><span style="color: red;"> * </span>تاریخ شروع:</label>
+                <input id="esse2" onkeyup="success()" class="form-control ltr" type="date" name="unix_start_datetime" value="{% if quiz_id %}{{update_quiz.jalali_start_datetime}}{% endif %}">
             </div>
         </div>
         <div class="col-12 col-md-4">
             <div class="form-step">
-                <label>تاریخ پایان:</label>
-                <input class="form-control ltr" type="text" name="unix_end_datetime" value="{% if quiz_id %}{{update_quiz.jalali_end_datetime}}{% endif %}">
+                <label><span style="color: red;"> * </span>تاریخ پایان:</label>
+                <input id="esse3" onkeyup="success()" class="form-control ltr" type="date" name="unix_end_datetime" value="{% if quiz_id %}{{update_quiz.jalali_end_datetime}}{% endif %}">
             </div>
         </div>
         <div class="col-12 col-md-4">
@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-success dm-submit">ثبت</button>
+    <button disabled id="submitbtn"  class="btn btn-success dm-submit">ثبت</button>
 </form>
 <hr>
 <table class="table table-striped">
@@ -100,4 +100,19 @@
     {% endfor %}
 {% endif %}
 </table>
+{% endblock %}
+{% block scripts %}
+<script>
+  function success() {
+    if (
+      document.getElementById("esse1").value === "" ||
+      document.getElementById("esse2").value === "" ||
+      document.getElementById("esse3").value === ""
+    ) {
+      document.getElementById("submitbtn").disabled = true;
+    } else {
+      document.getElementById("submitbtn").disabled = false;
+    }
+  }
+</script>
 {% endblock %}
