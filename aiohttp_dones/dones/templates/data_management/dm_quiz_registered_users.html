@@ -22,6 +22,7 @@
                     <th>شغل</th>
                     <th>وضعیت تاهل</th>
                     <th> تاریخ شرکت در آزمون</th>
+                    <th> زمان شرکت در آزمون</th>
                 </tr>
             </thead>
             {% if registered_users %}
@@ -29,14 +30,16 @@
             <tr>
                 <td><input type="radio" name="mobile_chk" value="{{user.mobile}}"></td>
                 <td>{{loop.index}}</td>
-                <td><a href="/date-time-quiz-participates/{{quiz_id}}/{{user.id}}">{{user.full_name}}</a></td>
+                <!-- <td><a href="/date-time-quiz-participates/{{quiz_id}}/{{user.id}}">{{user.full_name}}</a></td> -->
+                <td>{{user.full_name}}</td>
                 <td>{{user.mobile}}</td>
                 <td>{% if user.gender %}{% if user.gender == 'male'%}مرد{% elif user.gender == 'female' %}زن{% endif %}{% endif %}</td>
                 <td>{% if user.age %}{{user.age}}{% endif %}</td>
                 <td>{% if user.grade %}{{user.grade}}{% endif %}</td>
                 <td>{% if user.job %}{{user.job}}{% endif %}</td>
                 <td>{% if user.marital_status %}{% if user.marital_status == 'single'%}مجرد{% elif user.marital_status == 'married' %}متاهل{% endif %}{% endif %}</td>
-                <td>{% if user.datatime %}{{user.datatime}}{% endif %}</td>
+                <td>{% if user.jalali_date %}{{user.jalali_date}}{% endif %}</td>
+                <td>{% if user.jalali_time %}{{user.jalali_time}}{% endif %}</td>
             </tr>
             {% endfor %}
             {% endif %}

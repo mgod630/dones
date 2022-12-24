@@ -162,7 +162,7 @@
                     <th>مدرک تحصیلی</th>
                     <th>شغل</th>
                     <th>وضعیت تاهل</th>
-                    <th>تاریخ</th>
+                    <!-- <th>تاریخ</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -174,7 +174,7 @@
                     <td>{% if attender.grade %}{{attender.grade}}{% else %}-{% endif %}</td>
                     <td>{% if attender.job %}{{attender.job}}{% else %}-{% endif %}</td>
                     <td>{% if attender.marital_status %}{% if attender.marital_status == 'single'%}مجرد{% elif attender.marital_status == 'married' %}متاهل{% endif %}{% else %}-{% endif %}</td>
-                    <td>{% if attender.datatime %}{{attender.datatime}}{% else %}-{% endif %}</td>
+                    <!-- <td>{% if attender.datatime %}{{attender.datatime}}{% else %}-{% endif %}</td> -->
                 </tr>
             </tbody>
         </table>
@@ -182,15 +182,18 @@
 </div>
 {% endif %}
 
+{% if user_quizzes %} {% for quiz in user_quizzes %}
 <div class="titled-frame">
     <div class="tf-title">اطلاعات آزمون</div>
     <div class="quiz-stats">
-        <div><span>تاریخ شرکت در آزمون:</span> {{jalali_date_time}}</div>
-        <div><span>زمان شرکت در آزمون:</span> {% if time != '-1' %}{{time}}{% else %}-{% endif %}</div>
+        <div><span>نام آزمون:</span> {{quiz.title}}</div>
+        <div><span>تاریخ شرکت در آزمون:</span> {{quiz.jalali_date}}</div>
+        <div><span>زمان شرکت در آزمون:</span> {% if quiz.time != '-1' %}{{quiz.jalali_time}}{% else %}-{% endif %}</div>
     </div>
 </div>
+{% endfor %} {% endif %}
 
-{% if quiz_name == 'katel' %}
+<!-- {% if quiz_name == 'katel' %}
 <div class="titled-frame katel">
     <div class="tf-title">نیم رخ روانی</div>
 
@@ -380,7 +383,7 @@
     {% endif %}
 </table>
 
-{% endif %}
+{% endif %} -->
 
 {% if quiz_name == 'no_name_quiz' %}
 <div class="titled-frame">

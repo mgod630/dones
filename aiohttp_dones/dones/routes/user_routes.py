@@ -109,11 +109,4 @@ def make_routes(goldis_blueprint):
             user = common.get_user_from_token()
             return redirect('/profile')
 
-    @goldis_blueprint.route('/my-courses')
-    def my_courses():
-        user = common.get_user_from_token()
-        flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(session['g_token'])
-        user_courses = user_courses_orm.User_courses.get_user_courses_by_user_id(user['id'])
-        return render_template('my-courses.html', user=user, courses = user_courses, flash_messages = flash_messages)
-
 
