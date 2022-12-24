@@ -15,13 +15,13 @@
       <label>صفحه اطلاعیه</label>
       <select id="secion_options" name="section_options">
         <option value="home_page">صفحه اصلی</option>
-      {% if all_courses %} {% for course in all_courses %}
+        {% if all_courses %} {% for course in all_courses %}
         <option value="{{course.id}}">{{course.title}}</option>
-         {% endfor %} {% endif %}
+        {% endfor %} {% endif %}
       </select>
     </div>
     <div class="form-group col-12">
-      <label>نوع اطلاعیه</label>
+      <label><span style="color: red"> * </span>نوع اطلاعیه</label>
       <input
         id="esse1"
         onkeyup="success()"
@@ -32,7 +32,7 @@
       />
     </div>
     <div class="form-group col-12">
-      <label>متن اطلاعیه</label>
+      <label><span style="color: red"> * </span>متن اطلاعیه</label>
       <textarea
         id="esse2"
         onkeyup="success()"
@@ -54,13 +54,9 @@
   </button>
 </form>
 {% if status %}
-<div>
-  اطلاعیه های صفحه مورد نظر
-</div>
+<h4 class="mt-5">اطلاعیه های درس مورد نظر</h4>
 {% else %}
-<div>
- اطلاعیه تمام صفحات
-</div>
+<h4 class="mt-5">اطلاعیه تمام صفحات</h4>
 {% endif %}
 <div class="table-responsive mt-3">
   <table class="table table-striped">
@@ -100,7 +96,6 @@
       </td>
     </tr>
     {% endfor %} {% endif %}
-
   </table>
 </div>
 {% for notif in notifications %}
@@ -132,13 +127,9 @@
     </div>
   </div>
 </div>
-{% endfor %} 
-{% if status and status == 'there_is_no_notification' %} 
-  <div>
-    هیچ موردی برای نمایش وجود ندارد.
-  </div>
-{% endif %}
-{% endblock %} {% block scripts %}
+{% endfor %} {% if status and status == 'there_is_no_notification' %}
+<div>هیچ موردی برای نمایش وجود ندارد.</div>
+{% endif %} {% endblock %} {% block scripts %}
 <script>
   function success() {
     if (

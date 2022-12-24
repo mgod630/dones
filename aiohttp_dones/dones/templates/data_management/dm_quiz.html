@@ -18,13 +18,13 @@
         <div class="col-12 col-md-4">
             <div class="form-step">
                 <label><span style="color: red;"> * </span>تاریخ شروع:</label>
-                <input id="esse2" onkeyup="success()" class="form-control ltr" type="date" name="unix_start_datetime" value="{% if quiz_id %}{{update_quiz.jalali_start_datetime}}{% endif %}">
+                <input id="esse2" onkeyup="success()" class="form-control ltr" type="text" name="unix_start_datetime" value="{% if quiz_id %}{{update_quiz.jalali_start_datetime}}{% endif %}">
             </div>
         </div>
         <div class="col-12 col-md-4">
             <div class="form-step">
                 <label><span style="color: red;"> * </span>تاریخ پایان:</label>
-                <input id="esse3" onkeyup="success()" class="form-control ltr" type="date" name="unix_end_datetime" value="{% if quiz_id %}{{update_quiz.jalali_end_datetime}}{% endif %}">
+                <input id="esse3" onkeyup="success()" class="form-control ltr" type="text" name="unix_end_datetime" value="{% if quiz_id %}{{update_quiz.jalali_end_datetime}}{% endif %}">
             </div>
         </div>
         <div class="col-12 col-md-4">
