@@ -72,11 +72,10 @@
     <textarea
       id="f2"
       onkeyup="success()"
+      type="text"
       name="question_text"
       class="form-control"
-      id="question_text"
       rows="3"
-      required
     >
             {%- if question_update -%}{{question_update.question_text}}{%- endif -%}
         </textarea
@@ -108,10 +107,10 @@
         <textarea
           id="f1"
           onkeyup="success()"
+          type="text"
           placeholder="متن جواب"
           class="form-control"
           rows="2"
-          required
         ></textarea>
       </div>
     </div>
@@ -124,10 +123,10 @@
         <textarea
           id="f3"
           onkeyup="success()"
+          type="text"
           placeholder="متن جواب"
           class="form-control"
           rows="2"
-          required
         ></textarea>
       </div>
     </div>
@@ -141,14 +140,12 @@
     <label for="answer_number">گزینه صحیح</label>
     <input
       id="f4"
-      oninput="success()"
+      onkeyup="success()"
       type="number"
       min="1"
       class="form-control"
-      id="answer_number"
       name="answer_number"
       value="{% if question_update %}{{question_update.answer_number}}{% endif %}"
-      required
     />
   </div>
   <!------------------------------------------------------------------------------------------------------------>
@@ -166,13 +163,13 @@
     >
   </div>
   <button
-  disabled
-  type="button"
-  id="form-submit"
-  class="btn btn-primary d-block w-25 m-auto"
->
-  ثبت سوال
-</button>
+    disabled
+    type="button"
+    id="submitbtn"
+    class="btn btn-primary d-block w-25 m-auto"
+  >
+    ثبت سوال
+  </button>
   <!------------------------------------------------------------------------------------------------------------>
 </form>
 
@@ -314,9 +311,9 @@
       document.getElementById("f3").value === "" ||
       document.getElementById("f4").value === ""
     ) {
-      document.getElementById("form-submit").disabled = true;
+      document.getElementById("submitbtn").disabled = true;
     } else {
-      document.getElementById("form-submit").disabled = false;
+      document.getElementById("submitbtn").disabled = false;
     }
   }
 </script>

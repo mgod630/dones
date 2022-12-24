@@ -78,21 +78,14 @@
       <!-- <td>{{title}}</td> -->
       <td>{{notif.jalali_date}}</td>
       <td>
-        <a
-          class="btn btn-success btn-sm"
-          href="/dm-notifications/{{notif.section_id}}/{{notif.id}}"
-          ><i class="far fa-cog"></i
-        ></a>
+        <button class="btn btn-success btn-sm">
+          <i class="far fa-cog"></i>
+        </button>
       </td>
       <td>
-        <a
-          data-toggle="modal"
-          data-target="#delete_course"
-          class="btn btn-warning"
-          href="/dm-delete-notification/{{notif.section_id}}/{{notif.id}}"
-        >
+        <button class="delNotif btn btn-warning" {% for attr in notif if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{notif[attr]}}" {% endfor %} >
           <i class="far fa-trash-alt"></i>
-        </a>
+        </button>
       </td>
     </tr>
     {% endfor %} {% endif %}
@@ -115,10 +108,11 @@
       </div>
       <div class="modal-body">
         <div class="course-details-wrapper">
-          <p>{{notif.notification_text}}</p>
+          <p class="titleNotif"></p>
           <a
             class="btn btn-warning"
-            href="/dm-delete-notification/{{notif.section_id}}/{{notif.id}}"
+            hf="/dm-delete-notification/"
+            href="#"
             >حذف</a
           >
           <button class="btn mx-3" data-dismiss="modal">لغو</button>
@@ -141,5 +135,15 @@
       document.getElementById("submitbtn").disabled = false;
     }
   }
+  $(function () {
+    $(".delNotif").click(function () {
+      var notif = $(this).data();
+      $("#delete_course .titleNotif").text(notif.notification_text);
+      $("#delete_course a").each(function () {
+        $(this).attr("href", $(this).attr("hf") + notif.section_id + "/" + notif.id);
+      });
+      $("#delete_course").modal("show");
+    });
+  });
 </script>
 {% endblock%}

@@ -80,7 +80,7 @@
   >
     <div class="form-row">
       <div class="form-group col-md-3">
-        <label>نام و نام خانوادگی</label>
+        <label><span style="color: red"> * </span>نام و نام خانوادگی</label>
         <input
           id="f1"
           onkeyup="success()"
@@ -92,7 +92,7 @@
         />
       </div>
       <div class="form-group col-md-3">
-        <label>شماره موبایل</label>
+        <label><span style="color: red"> * </span>شماره موبایل</label>
         <input
           id="f2"
           onkeyup="success()"
@@ -106,7 +106,7 @@
         />
       </div>
       <div class="form-group col-md-3">
-        <label>کد ملی</label>
+        <label><span style="color: red"> * </span>کد ملی</label>
         <input
           id="f3"
           onkeyup="success()"
@@ -120,7 +120,7 @@
         />
       </div>
       <div class="form-group col-md-3 {% if user_id %}d-none{% endif %}">
-        <label>رمزعبور</label>
+        <label><span style="color: red"> * </span>رمزعبور</label>
         <input
           id="f4"
           onkeyup="success()"
@@ -133,7 +133,7 @@
         />
       </div>
       <div class="form-group col-md-3 mt-4">
-        <label>نوع کاربر</label>
+        <label><span style="color: red"> * </span>نوع کاربر</label>
 
         <select id="f5" onselect="success()" name="user_type">
           <option value="0">عادی</option>
