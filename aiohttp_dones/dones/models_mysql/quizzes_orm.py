@@ -93,9 +93,9 @@ class Quizzes:
         if duration:
             update_string += f'duration=%(duration)s,'
         if attendance_max:
-            update_string += f'attendance_max=%(attendance_max)s'
+            update_string += f'attendance_max=%(attendance_max)s,'
         if quiz_type:
-            update_string += f'quiz_type=%(quiz_type)s'
+            update_string += f"quiz_type=%(quiz_type)s"
         update_string = update_string.rstrip(',')
         add_quiz = f"UPDATE tbl_quizzes SET {update_string} WHERE id='{id}'"
         data_quiz = {
