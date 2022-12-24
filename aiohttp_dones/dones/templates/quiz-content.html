@@ -13,7 +13,7 @@
     <div class="alert alert-danger quiz-notices">{{quiz.description|safe}}</div>
     {% endif %}
   </div>
-  <form action="/set-user-answers" method="POST">
+  <form action="/set-user-answers?course_id={{course_id}}&item_id={{item_id}}&quiz_id={{quiz_id}}" method="POST">
     {% if questions %} {% for qst in questions %}
     <div class="question-block" data-id="{{qst.id}}">
       {% if 'http' in qst.question_text %}
