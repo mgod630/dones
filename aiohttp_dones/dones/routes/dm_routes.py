@@ -410,11 +410,12 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False: return redirect('/404-not-found')
         quiz = user_courses_orm.User_courses.get_user_quiz_by_quiz_id(quiz_id)
-        item_id = quiz['item_id']
-        all_quizzes = user_courses_orm.User_courses.get_user_quizzes_by_item_id(item_id)
+        all_quizzes = None
+        if quiz:
+            item_id = quiz['item_id']
+            all_quizzes = user_courses_orm.User_courses.get_user_quizzes_by_item_id(item_id)
+            user_quizzes =  user_courses_orm.User_courses.get_all_user_quizzes_by_user_id(user['id'])
         registered_users = user_courses_orm.User_courses.get_all_registered_users_by_quiz_id(quiz_id)
-        user_quizzes =  user_courses_orm.User_courses.get_all_user_quizzes_by_user_id(user['id'])
         all_answers =  user_courses_orm.User_courses.get_all_user_results_by_ids(user_id=user['id'], quiz_id=quiz_id)
         all_answers = json.dumps(all_answers) 
-        print(all_answers)
         return render_template('data_management/dm_quiz_registered_users.html',user=user, quiz_id=quiz_id, all_quizzes=all_quizzes, all_answers=all_answers, registered_users=registered_users)
