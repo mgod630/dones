@@ -241,10 +241,6 @@ def make_routes(goldis_blueprint):
     def dm_quiz_post(course_item_id):
         user = common.get_user_from_token()
         if is_admin_user(user) == False: return redirect('/404-not-found')
-        course_item_id = int(course_item_id)
-        quiz_id = None
-        update_quiz = None
-
         title = request.form.get('title', None)
         jalali_start_datetime = request.form.get('unix_start_datetime', None)
         jalali_end_datetime = request.form.get('unix_end_datetime', None)
@@ -257,7 +253,30 @@ def make_routes(goldis_blueprint):
         new_quiz = quizzes_orm.Quizzes.insert_new_quiz(item_id=course_item_id, title=title, jalali_start_datetime=jalali_start_datetime, jalali_end_datetime=jalali_end_datetime, description=description, duration=duration, attendance_max=attendance_max, quiz_type=quiz_type, question_count=question_count)
         quizs = quizzes_orm.Quizzes.get_all_quizzes_by_ids(course_item_id)
 
-        return render_template("data_management/dm_quiz.html", user=user, quizs=quizs, course_item_id= course_item_id, update_quiz=update_quiz , quiz_id=quiz_id )
+        return render_template("data_management/dm_quiz.html", user=user, quizs=quizs, course_item_id= course_item_id)
+
+    @goldis_blueprint.route("/dm-quiz/<course_item_id>/<quiz_id>", methods=['GET','POST'])
+    def edit_quiz(course_item_id, quiz_id):
+        user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
+
+        if request.method == 'POST':
+            title = request.form.get('title', None)
+            jalali_start_datetime = request.form.get('unix_start_datetime', None)
+            jalali_end_datetime = request.form.get('unix_end_datetime', None)
+            description = request.form.get('description', None)
+            duration = request.form.get('duration', None)
+            attendance_max = request.form.get('attendance_max', None)
+            quiz_type = request.form.get('quiz_type', None)
+            question_count = request.form.get('question_count', None)
+            edit_quiz = quizzes_orm.Quizzes.update_quiz(id=quiz_id, title=title, jalali_start_datetime=jalali_start_datetime, jalali_end_datetime=jalali_end_datetime, description=description, duration=duration, attendance_max=attendance_max, quiz_type=quiz_type, question_count=question_count)
+            quizs = quizzes_orm.Quizzes.get_all_quizzes_by_ids(course_item_id)
+            return redirect(url_for('goldis_blueprint.dm_quiz', course_item_id=course_item_id))
+        else:
+            update_quiz = quizzes_orm.Quizzes.get_quiz_by_id(quiz_id)
+            quizs = quizzes_orm.Quizzes.get_all_quizzes_by_ids(course_item_id)
+            return render_template("data_management/dm_quiz.html", user=user, quizs=quizs, course_item_id= course_item_id, update_quiz=update_quiz , quiz_id=quiz_id)
+    
 
     @goldis_blueprint.route("/dm-delete-quiz/<course_item_id>/<quiz_id>")
     def dm_delete_quiz(course_item_id, quiz_id):
@@ -281,19 +300,30 @@ def make_routes(goldis_blueprint):
     def dm_question_post(quiz_id):
         user = common.get_user_from_token()
         if is_admin_user(user) == False: return redirect('/404-not-found')
-        quiz_id = int(quiz_id)
-        question_id = None
-        question_update = None
-
         question_text = request.form.get('question_text', None)
         answer_number = request.form.get('answer_number', None)
         answer_description = request.form.get('answer_description', None)
         options = request.form.get('options', None)
-
         new_question = questions_orm.Questions.insert_new_question(quiz_id=quiz_id, question_text=question_text, answer_number=answer_number, answer_description=answer_description, options=options)
         questions = questions_orm.Questions.get_all_questions_by_ids(quiz_id)
+        return render_template("data_management/dm_question_pack.html", user=user, question_pack=questions, quiz_id=quiz_id)
 
-        return render_template("data_management/dm_question_pack.html", user=user, question_pack=questions, question_id=question_id, question_update= question_update, quiz_id=quiz_id)
+    @goldis_blueprint.route("/dm-question/<quiz_id>/<question_id>", methods=['GET','POST'])
+    def edit_question(quiz_id, question_id):
+        user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
+        if request.method == 'POST':
+            question_text = request.form.get('question_text', None)
+            answer_number = request.form.get('answer_number', None)
+            answer_description = request.form.get('answer_description', None)
+            options = request.form.get('options', None)
+            edit_question = questions_orm.Questions.update_question(question_id=question_id, question_text=question_text, answer_number=answer_number, answer_description=answer_description, options=options)
+            questions = questions_orm.Questions.get_all_questions_by_ids(quiz_id)
+            return redirect(url_for('goldis_blueprint.dm_question', quiz_id=quiz_id))
+        else:
+            question_update = questions_orm.Questions.get_question_by_id(question_id)
+            questions = questions_orm.Questions.get_all_questions_by_ids(quiz_id)
+            return render_template("data_management/dm_question_pack.html", user=user, question_pack=questions, question_id=question_id, question_update= question_update, quiz_id=quiz_id)
 
     @goldis_blueprint.route("/dm-delete-question/<quiz_id>/<question_id>")
     def dm_delete_question(quiz_id, question_id):

@@ -165,17 +165,17 @@
         </textarea
     >
   </div>
-  <!------------------------------------------------------------------------------------------------------------>
-</form>
-<button
+  <button
   disabled
-  id="submitbtn"
   type="button"
   id="form-submit"
   class="btn btn-primary d-block w-25 m-auto"
 >
   ثبت سوال
 </button>
+  <!------------------------------------------------------------------------------------------------------------>
+</form>
+
 <hr />
 <!------------------------------------------------------------------------------------------------------------>
 {% if question_pack %} {% for question in question_pack %}
@@ -314,9 +314,9 @@
       document.getElementById("f3").value === "" ||
       document.getElementById("f4").value === ""
     ) {
-      document.getElementById("submitbtn").disabled = true;
+      document.getElementById("form-submit").disabled = true;
     } else {
-      document.getElementById("submitbtn").disabled = false;
+      document.getElementById("form-submit").disabled = false;
     }
   }
 </script>

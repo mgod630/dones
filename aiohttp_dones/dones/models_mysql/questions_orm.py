@@ -46,19 +46,6 @@ class Questions:
         return row
 
     @staticmethod
-    def get_question_by_code(code):
-        global connection_pool
-        if connection_pool == None:
-            connection_pool = app.config['mysql_connection_pool']
-        cnx = connection_pool.get_connection()
-        cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_questions WHERE code=%(code)s"
-        cursor.execute(query, {'code': code})
-        row = cursor.fetchone()
-        cnx.close()
-        return row
-
-    @staticmethod
     def insert_new_question(quiz_id, question_text, options, answer_number, answer_description):
         global connection_pool
         if connection_pool == None:
