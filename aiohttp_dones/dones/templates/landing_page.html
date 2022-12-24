@@ -82,6 +82,7 @@
       crossorigin="anonymous"
     ></script>
     <div class="d-flex bg-dark text-light"></div>
+    <div class="collapse" id="result_email_message"></div>
     <div style="margin-bottom: 0" class="header">
       <img
         style="position: relative"
@@ -361,7 +362,7 @@
         >
         <p>برای عضویت در خبرنامه، ایمیل خود را وارد کنید</p>
 
-        <form id="landing-page-form" action="/landing-page-post" method="post">
+        <form id="landing-page-form" action="/landing-page-post" method="POST">
           <div
             class="d-flex flex-column justify-content-around align-items-center flex-md-row"
           >
@@ -371,7 +372,11 @@
               class="myInput"
               placeholder="ایمیل خود را وارد کنید"
             />
-            <button style="width: 100px" class="mybtn rounded-5 m-3">
+            <button
+              id="participate"
+              style="width: 100px"
+              class="mybtn rounded-5 m-3"
+            >
               عضویت
             </button>
           </div>
@@ -401,6 +406,40 @@
     }
     countdown();
     setInterval(countdown, 1000);
+
+    $(function () {
+      $("#participate").click(function () {
+        $.ajax({
+          method: "POST",
+          url: "/landing-page-post",
+          data: { email },
+        })
+          .done(function (resp) {
+            if (resp.result == "email_already_exists") {
+              $("#result_email_message")
+                .addClass("text-success")
+                .text("این ایمیل قبلا ثبت نام کرده است.")
+                .slideDown();
+            } else if (resp.result == "email_successfully_stored") {
+              $("#result_email_message")
+                .addClass("text-success")
+                .text("ایمیل شما با موفقیت ثبت شد.")
+                .slideDown();
+            } else {
+              $("#result_email_message")
+                .addClass("text-danger")
+                .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
+                .slideDown();
+            }
+          })
+          .fail(function (err) {
+            $("#result_email_message")
+              .addClass("text-danger")
+              .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
+              .slideDown();
+          });
+      });
+    });
 
     // $("#recipeCarousel").carousel({
     //   interval: 3000,

@@ -1,67 +1,80 @@
-{% extends "data_management/dm_layout.html" %}
-{% set current_tab = 'users' %}
+{% extends "data_management/dm_layout.html" %} {% set current_tab = 'users' %}
 {% block inner_content %}
 <form method="POST">
-    <div class="text-left mb-3">
-        <button id="submit_button" class="btn btn-success" disabled type="submit">دریافت فایل اکسل</button>
-    </div>
-    {% if user_id  %}
-    <input rows="5" type="hidden" class="form-control"  name="auth_key" value="{% if user_id  %}{{update_user.auth_key}}{% endif %}" >
-    {% endif %}
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>#</th>
-                    <th>نام کاربر</th>
-                    <th>موبایل</th>
-                    <th>جنسیت</th>
-                    <th>سن</th>
-                    <th>تحصیلات</th>
-                    <th>شغل</th>
-                    <th>وضعیت تاهل</th>
-                    <th> تاریخ شرکت در آزمون</th>
-                    <th> زمان شرکت در آزمون</th>
-                </tr>
-            </thead>
-            {% if registered_users %}
-            {% for user in registered_users %}
-            <tr>
-                <td><input type="radio" name="mobile_chk" value="{{user.mobile}}"></td>
-                <td>{{loop.index}}</td>
-                <!-- <td><a href="/date-time-quiz-participates/{{quiz_id}}/{{user.id}}">{{user.full_name}}</a></td> -->
-                <td>{{user.full_name}}</td>
-                <td>{{user.mobile}}</td>
-                <td>{% if user.gender %}{% if user.gender == 'male'%}مرد{% elif user.gender == 'female' %}زن{% endif %}{% endif %}</td>
-                <td>{% if user.age %}{{user.age}}{% endif %}</td>
-                <td>{% if user.grade %}{{user.grade}}{% endif %}</td>
-                <td>{% if user.job %}{{user.job}}{% endif %}</td>
-                <td>{% if user.marital_status %}{% if user.marital_status == 'single'%}مجرد{% elif user.marital_status == 'married' %}متاهل{% endif %}{% endif %}</td>
-                <td>{% if user.jalali_date %}{{user.jalali_date}}{% endif %}</td>
-                <td>{% if user.jalali_time %}{{user.jalali_time}}{% endif %}</td>
-            </tr>
-            {% endfor %}
-            {% endif %}
-        </table>
-    </div>
-    <input type="hidden" name="mobile" value="" >
+  <div class="text-left mb-3">
+    <button id="submit_button" class="btn btn-success" disabled type="submit">
+      دریافت فایل اکسل
+    </button>
+  </div>
+  {% if user_id %}
+  <input
+    rows="5"
+    type="hidden"
+    class="form-control"
+    name="auth_key"
+    value="{% if user_id  %}{{update_user.auth_key}}{% endif %}"
+  />
+  {% endif %}
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>#</th>
+          <th>نام کاربر</th>
+          <th>موبایل</th>
+          <th>جنسیت</th>
+          <th>سن</th>
+          <th>تحصیلات</th>
+          <th>شغل</th>
+          <th>وضعیت تاهل</th>
+          <th>تاریخ شرکت در آزمون</th>
+          <th>زمان شرکت در آزمون</th>
+        </tr>
+      </thead>
+      {% if registered_users %} {% for user in registered_users %}
+      <tr>
+        <td>
+          <input type="radio" name="mobile_chk" value="{{user.mobile}}" />
+        </td>
+        <td>{{loop.index}}</td>
+        <!-- <td><a href="/date-time-quiz-participates/{{quiz_id}}/{{user.id}}">{{user.full_name}}</a></td> -->
+        <td>{{user.full_name}}</td>
+        <td>{{user.mobile}}</td>
+        <td>
+          {% if user.gender %}{% if user.gender == 'male'%}مرد{% elif
+          user.gender == 'female' %}زن{% endif %}{% endif %}
+        </td>
+        <td>{% if user.age %}{{user.age}}{% endif %}</td>
+        <td>{% if user.grade %}{{user.grade}}{% endif %}</td>
+        <td>{% if user.job %}{{user.job}}{% endif %}</td>
+        <td>
+          {% if user.marital_status %}{% if user.marital_status ==
+          'single'%}مجرد{% elif user.marital_status == 'married' %}متاهل{% endif
+          %}{% endif %}
+        </td>
+        <td>{% if user.jalali_date %}{{user.jalali_date}}{% endif %}</td>
+        <td>{% if user.jalali_time %}{{user.jalali_time}}{% endif %}</td>
+      </tr>
+      {% endfor %} {% endif %}
+    </table>
+  </div>
+  <input type="hidden" name="mobile" value="" />
 </form>
-{% endblock %}
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-    $("input[type=radio]").on("click", function(e){
-        checkedItems = []
-        $("input[type=radio]").each(function(){
-            if ($(this).is(':checked')) checkedItems.push($(this).val())
-        })
-        if (checkedItems.length > 0) {
-            $("[name='mobile']").val(checkedItems[0])
-            $("#submit_button").attr("disabled",false)
-        } else {
-            $("[name='mobile']").val('')
-            $("#submit_button").attr("disabled",true)
-        }
-    })
+  $("input[type=radio]").on("click", function (e) {
+    checkedItems = [];
+    $("input[type=radio]").each(function () {
+      if ($(this).is(":checked")) checkedItems.push($(this).val());
+    });
+    if (checkedItems.length > 0) {
+      $("[name='mobile']").val(checkedItems[0]);
+      $("#submit_button").attr("disabled", false);
+    } else {
+      $("[name='mobile']").val("");
+      $("#submit_button").attr("disabled", true);
+    }
+  });
 </script>
 {% endblock %}
