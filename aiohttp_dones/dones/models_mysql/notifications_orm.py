@@ -32,6 +32,19 @@ class Notifications:
         return row
 
     @staticmethod
+    def get_notification_by_id(id):
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = "SELECT * FROM tbl_notifications WHERE id=%(id)s"
+        cursor.execute(query, {'id': id})
+        row = cursor.fetchone()
+        cnx.close()
+        return row
+
+    @staticmethod
     def insert_new_notification(section_id, jalali_date, notification_type, notification_text):
         global connection_pool
         if connection_pool == None:
@@ -53,55 +66,28 @@ class Notifications:
         return inserted_record_id
 
     @staticmethod
-    def update_notification(id, welcome_text=None, body_html=None, free_items_count=None, notification_result=None, title=None, institute=None, jalali_start_datetime=None, jalali_end_datetime=None, price=None, logo_path=None, image_path=None, description=None, video_path=None):
+    def update_notification(id, section_id, jalali_date, notification_type, notification_text):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
         update_string = ''
-        if welcome_text:
-            update_string += f'welcome_text=%(welcome_text)s,'
-        if body_html:
-            update_string += f'body_html=%(body_html)s,'
-        if free_items_count:
-            update_string += f'free_items_count=%(free_items_count)s,'
-        if notification_result:
-            update_string += f'notification_result=%(notification_result)s,'
-        if title:
-            update_string += f'title = %(title)s,'
-        if institute:
-            update_string += f'institute=%(institute)s,'
-        if jalali_start_datetime:
-            update_string += f'jalali_start_datetime=%(jalali_start_datetime)s,'
-        if jalali_end_datetime:
-            update_string += f'jalali_end_datetime=%(jalali_end_datetime)s,'
-        if price:
-            update_string += f'price=%(price)s,'
-        if logo_path:
-            update_string += f'logo_path=%(logo_path)s,'
-        if image_path:
-            update_string += f'image_path=%(image_path)s,'
-        if description:
-            update_string += f'description=%(description)s,'
-        if video_path:
-            update_string += f'video_path=%(video_path)s,'
+        if section_id:
+            update_string += f'section_id=%(section_id)s,'
+        if jalali_date:
+            update_string += f'jalali_date=%(jalali_date)s,'
+        if notification_type:
+            update_string += f'notification_type=%(notification_type)s,'
+        if notification_text:
+            update_string += f'notification_text=%(notification_text)s,'
         update_string = update_string.rstrip(',')
         add_notification = f"UPDATE tbl_notifications SET {update_string} WHERE id='{id}'"
         data_notification = {
-            'welcome_text': welcome_text,
-            'body_html': body_html,
-            'free_items_count': free_items_count,
-            'notification_result': notification_result,
-            'title': title,
-            'institute': institute,
-            'jalali_start_datetime': jalali_start_datetime,
-            'jalali_end_datetime': jalali_end_datetime,
-            'price': price,
-            'logo_path': logo_path,
-            'image_path': image_path,
-            'description': description,
-            'video_path': video_path,
+            'section_id': section_id,
+            'jalali_date': jalali_date,
+            'notification_type': notification_type,
+            'notification_text': notification_text,
         }
         cursor.execute(add_notification, data_notification)
         cnx.commit()

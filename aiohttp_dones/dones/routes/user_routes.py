@@ -26,10 +26,9 @@ def make_routes(goldis_blueprint):
                 session['g_token'] = user['g_token']
                 return redirect(url_for('goldis_blueprint.home'))
             else :
-                status = 'user_not_found'
+                status = 'incorrect_password'
                 return render_template('login.html',status=status, user=None, flash_messages=flash_messages)
         except TypeError:
-            print('TypeError')
             status = 'user_not_found'
             return render_template('login.html',status=status, user=None, flash_messages=flash_messages)
       
@@ -57,10 +56,7 @@ def make_routes(goldis_blueprint):
             session['g_token'] = g_token
         except :
             status = 'mobile_already_exist'
-            print('mobile_already_exist')
             return render_template('login.html',status=status, user=None, flash_messages=flash_messages)
-        # test
-        # users_orm.Users.delete_all_users()
         print(users_orm.Users.get_all_users())
         return redirect(url_for('goldis_blueprint.home'))
 
@@ -112,8 +108,6 @@ def make_routes(goldis_blueprint):
             flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(session['g_token'])
             user = common.get_user_from_token()
             return redirect('/profile')
-
-        #  return {'courses':user_courses, 'user':user, 'flash_messages':flash_messages}
 
     @goldis_blueprint.route('/my-courses')
     def my_courses():

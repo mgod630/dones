@@ -34,6 +34,8 @@
           <div class="flash-message fm-danger">
             کاربری با این مشخصات وجود ندارد.
           </div>
+          {% elif status == 'incorrect_password'%}
+          <div class="flash-message fm-danger">رمز عبور صحیح نمی باشد.</div>
           {% elif status == 'email_already_exist' %}
           <div class="flash-message fm-danger">
             با این ایمیل قبلاً ثبت نام نموده اید.

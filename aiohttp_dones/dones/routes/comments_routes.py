@@ -112,6 +112,8 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         if user == None:
             result = 'not_logged_in'
+        elif user['user_type'] != -2 :
+            result = 'only_admins_are_allowed'
         else:
             comment_text = request.form.get('comment_text', None)
             section_id = request.form.get('section_id', None)

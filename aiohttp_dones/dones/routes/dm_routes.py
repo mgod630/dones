@@ -43,7 +43,6 @@ def make_routes(goldis_blueprint):
         credit_score = 0
         invited_friend_mobile = ''
         g_token = secrets.token_hex()
-        # session['g_token'] = g_token
         register_datetime = time.time()
         full_name = request.form.get('full_name', None)
         mobile = request.form.get('mobile', None)
@@ -177,17 +176,11 @@ def make_routes(goldis_blueprint):
     def dm_course_items_post(course_id):
         user = common.get_user_from_token()
         if is_admin_user(user) == False: return redirect('/404-not-found')
-        course_id = int(course_id)
-        course_item_id_edit = None 
-        update_course_item = None
-
         title = request.form.get('title', None)
         jalali_start_datetime = request.form.get('unix_start_datetime', None)
         jalali_end_datetime = request.form.get('unix_end_datetime', None)
         description = request.form.get('description', None)
-
         new_course_item = items_orm.Items.insert_new_item(course_id=course_id, title=title, jalali_start_datetime=jalali_start_datetime, jalali_end_datetime=jalali_end_datetime, description=description)
-
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         len_course_items = len(course_items) if course_items else None
         all_course_item_id_link = []
@@ -197,29 +190,24 @@ def make_routes(goldis_blueprint):
                 course_item_id_link = f'/dm-delete-course-item/{course_id}/{course_item_id}'
                 all_course_item_id_link.append(course_item_id_link)
 
-        return render_template("data_management/dm_course_items.html", user=user, course_items=course_items, update_course_item= update_course_item, course_id=course_id, len=len_course_items, course_item_id=course_item_id_edit, all_course_item_id_link=all_course_item_id_link)
+        return render_template("data_management/dm_course_items.html", user=user, course_items=course_items, course_id=course_id, len=len_course_items, all_course_item_id_link=all_course_item_id_link)
   
     # update item
     @goldis_blueprint.route("/dm-course-items/<course_id>/<course_item_id>", methods=['GET','POST'])
     def dm_course_items_edit(course_id, course_item_id):
         user = common.get_user_from_token()
         if is_admin_user(user) == False: return redirect('/404-not-found')
-        course_id = int(course_id)
-        course_item_id = int(course_item_id)
-        update_course_item = items_orm.Items.get_item_by_id(course_item_id)
-
         if request.method == 'POST':
             title = request.form.get('title', None)
             jalali_start_datetime = request.form.get('unix_start_datetime', None)
             jalali_end_datetime = request.form.get('unix_end_datetime', None)
             description = request.form.get('description', None)
-
             edit_course_item = items_orm.Items.update_item(id=course_item_id, title=title, jalali_start_datetime=jalali_start_datetime, jalali_end_datetime=jalali_end_datetime, description=description)
-
             course_items = items_orm.Items.get_all_items_by_course_id(course_id)
             return redirect(url_for('goldis_blueprint.dm_course_items', course_id=course_id ))
         else:
             course_items = items_orm.Items.get_all_items_by_course_id(course_id)
+            update_course_item = items_orm.Items.get_item_by_id(course_item_id)
             len_course_items = len(course_items) if course_items else None
             all_course_item_id_link = []
             if course_items:
@@ -315,8 +303,7 @@ def make_routes(goldis_blueprint):
       quiz_id = int(quiz_id)
       questions_orm.Questions.delete_question_by_id(question_id)
       return redirect(url_for('goldis_blueprint.dm_question', quiz_id=quiz_id))
-    
-    # dm notifications
+
     @goldis_blueprint.route("/dm-notifications")
     def dm_notifications():
         user = common.get_user_from_token()
@@ -332,7 +319,6 @@ def make_routes(goldis_blueprint):
         #     else :
         #         course_title = None
 
-        # notifications_orm.Notifications.delete_all_notifications()
         return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications, all_courses=all_courses)   
 
     @goldis_blueprint.route("/dm-notifications", methods=['POST'])
@@ -345,7 +331,7 @@ def make_routes(goldis_blueprint):
         if section_id != 'home_page':
             for course in all_courses:
                 if str(course['id']) == section_id:
-                    section_id = str(course['id'])
+                    section_id = str(course["id"])
         else :
             section_id = '0'
         jalali_date = jdatetime.datetime.now().strftime("%Y/%m/%d")
@@ -356,9 +342,49 @@ def make_routes(goldis_blueprint):
         all_notifications = notifications_orm.Notifications.get_all_notifications()
         return redirect(url_for("goldis_blueprint.dm_notifications"))
 
+    @goldis_blueprint.route("/dm-notifications/<section_id>/<notif_id>", methods=['GET','POST'])
+    def edit_notification(section_id, notif_id):
+        user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
+        all_courses = courses_orm.Courses.get_all_courses()
+        if request.method == 'POST':
+                section_id = request.form.get('section_options',None)
+                if section_id != 'home_page':
+                    for course in all_courses:
+                        if str(course['id']) == section_id:
+                            section_id = str(course["id"])
+                else :
+                    section_id = '0'
+                jalali_date = jdatetime.datetime.now().strftime("%Y/%m/%d")
+                notification_type = request.form.get('notification_type', None)
+                notification_text = request.form.get('notification_text', None)
+                new_notification = notifications_orm.Notifications.update_notification(id=notif_id, section_id=section_id, jalali_date=jalali_date, notification_type=notification_type, notification_text=notification_text)
+                all_notifications = notifications_orm.Notifications.get_all_notifications()
+                return redirect(url_for("goldis_blueprint.dm_notifications"))
+        else:
+            notification =  notifications_orm.Notifications.get_notification_by_id(notif_id)
+            all_notifications = notifications_orm.Notifications.get_all_notifications()
+            return render_template("data_management/dm_notification.html", user=user, notifications=all_notifications, all_courses=all_courses, notification=notification, section_id=section_id, notif_id=notif_id)
+
+        
     @goldis_blueprint.route("/dm-delete-notification/<section_id>/<notification_id>")
     def dm_delete_notification(section_id, notification_id):
       user = common.get_user_from_token()
       if is_admin_user(user) == False: return redirect('/404-not-found')
       notifications_orm.Notifications.delete_notification_by_id(notification_id)
       return redirect(url_for('goldis_blueprint.dm_notifications', section_id=section_id))
+
+    @goldis_blueprint.route("/dm-notifications/<section_id>")
+    def dm_notification(section_id):
+        user = common.get_user_from_token()
+        status = None
+        if is_admin_user(user) == False: return redirect('/404-not-found')
+        all_courses = courses_orm.Courses.get_all_courses()
+        course_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
+        print(course_notifications)
+        if course_notifications == []:
+            status = 'there_is_no_notification'
+        else:
+            status = 'course_norifications_loaded'
+        return render_template("data_management/dm_notification.html", user=user, notifications=course_notifications, all_courses=all_courses, status=status) 
+    

@@ -16,6 +16,11 @@ $(function () {
             .addClass("text-danger")
             .text("لطفا ابتدا وارد حساب کاربری خود شوید.")
             .slideDown();
+        } else if (resp.result == "only_admins_are_allowed") {
+          $("#result_message")
+            .addClass("text-danger")
+            .text("دسترسی به این قسمت برای شما مقدور نمی باشد.")
+            .slideDown();
         } else if (resp.result == "succeed") {
           $("#result_message")
             .addClass("text-success")
