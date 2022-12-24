@@ -20,12 +20,6 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         return render_template('landing_page.html', user=user)
 
-    @goldis_blueprint.route("/landing-page?result=<result>")
-    def landing_page_post_result():
-        user = common.get_user_from_token()
-        result = request.args.get('result', None)
-        return render_template('landing_page.html', user=user, result=result)
-
     @goldis_blueprint.route("/landing-page-post", methods=['POST'])
     def landing_page_post():
         user = common.get_user_from_token()
