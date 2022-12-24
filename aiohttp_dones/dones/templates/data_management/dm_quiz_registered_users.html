@@ -1,5 +1,4 @@
-{% extends "data_management/dm_layout.html" %}
-{% set current_tab = 'users' %}
+{% extends "data_management/dm_layout.html" %} {% set current_tab = 'users' %}
 {% block inner_content %}
 <form method="POST">
     <!-- <div class="text-left mb-3">
@@ -49,21 +48,20 @@
     </div>
     <input type="hidden" name="mobile" value="" >
 </form>
-{% endblock %}
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-    $("input[type=radio]").on("click", function(e){
-        checkedItems = []
-        $("input[type=radio]").each(function(){
-            if ($(this).is(':checked')) checkedItems.push($(this).val())
-        })
-        if (checkedItems.length > 0) {
-            $("[name='mobile']").val(checkedItems[0])
-            $("#submit_button").attr("disabled",false)
-        } else {
-            $("[name='mobile']").val('')
-            $("#submit_button").attr("disabled",true)
-        }
-    })
+  $("input[type=radio]").on("click", function (e) {
+    checkedItems = [];
+    $("input[type=radio]").each(function () {
+      if ($(this).is(":checked")) checkedItems.push($(this).val());
+    });
+    if (checkedItems.length > 0) {
+      $("[name='mobile']").val(checkedItems[0]);
+      $("#submit_button").attr("disabled", false);
+    } else {
+      $("[name='mobile']").val("");
+      $("#submit_button").attr("disabled", true);
+    }
+  });
 </script>
 {% endblock %}

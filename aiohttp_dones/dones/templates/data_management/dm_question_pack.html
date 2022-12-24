@@ -92,7 +92,7 @@
       </button>
       <div class="p-3 w-100">
         <label>گزینه <span class="ques-num">{{loop.index}}</span></label>
-        <textarea placeholder="متن جواب" class="form-control" rows="2" required>
+        <textarea placeholder="متن جواب" class="form-control" rows="2">
 {{option}}</textarea
         >
       </div>
@@ -156,7 +156,6 @@
       class="form-control"
       id="answer_description"
       rows="3"
-      required
     >
             {%- if question_update -%}{{question_update.answer_description}}{%- endif -%}
         </textarea
@@ -164,8 +163,8 @@
   </div>
   <button
     disabled
-    type="button"
-    id="submitbtn"
+    type="submit"
+    id="form-submit"
     class="btn btn-primary d-block w-25 m-auto"
   >
     ثبت سوال
@@ -225,12 +224,7 @@
   </button>
   <div class="p-3 w-100">
     <label>گزینه <span class="ques-num">0</span></label>
-    <textarea
-      placeholder="متن جواب"
-      class="form-control"
-      rows="2"
-      required
-    ></textarea>
+    <textarea placeholder="متن جواب" class="form-control" rows="2"></textarea>
   </div>
 </div>
 <!------------------------------------------------------------------------------------------------------------>
@@ -311,9 +305,9 @@
       document.getElementById("f3").value === "" ||
       document.getElementById("f4").value === ""
     ) {
-      document.getElementById("submitbtn").disabled = true;
+      document.getElementById("form-submit").disabled = true;
     } else {
-      document.getElementById("submitbtn").disabled = false;
+      document.getElementById("form-submit").disabled = false;
     }
   }
 </script>
