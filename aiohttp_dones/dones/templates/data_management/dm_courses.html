@@ -175,7 +175,7 @@
                                 ویرایش
                             </a>
                             <a class="btn btn-outline-danger" hf="/dm-delete-course/" href="#">
-                                <i class="far fa-trash-alt"></i>
+                                <i style="display: inline-block;" class="far fa-trash-alt"></i>
                                 حذف
                             </a>
                         </div>
@@ -206,32 +206,32 @@
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
-                                <label>عنوان:</label>
+                                <label><span style="color: red"> * </span>عنوان:</label>
                                 <input id="esse1" onkeyup="success()" type="text" class="form-control" name="title" value="{% if course_id  %}{{update_course.title}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
-                                <label>زمان آغاز:</label>
+                                <label><span style="color: red"> * </span>زمان آغاز:</label>
                                 <input id="esse2" onkeyup="success()" type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_start_datetime" value="{% if course_id  %}{{update_course.jalali_start_datetime}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
-                                <label>زمان پایان:</label>
-                                <input type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_end_datetime" value="{% if course_id  %}{{update_course.jalali_end_datetime}}{% endif %}">
+                                <label><span style="color: red"> * </span>زمان پایان:</label>
+                                <input id="esse4" onkeyup="success()" type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_end_datetime" value="{% if course_id  %}{{update_course.jalali_end_datetime}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
-                                <label>قیمت (تومان):</label>
+                                <label><span style="color: red"> * </span>قیمت (تومان):</label>
                                 <input id="esse3" onkeyup="success()" type="text" class="form-control ltr" name="price" value="{% if course_id  %}{{update_course.price}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>نام موسسه:</label>
-                                <input id="esse4" onkeyup="success()" type="text" class="form-control" name="institute" value="{% if course_id  %}{{update_course.institute}}{% endif %}">
+                                <input  type="text" class="form-control" name="institute" value="{% if course_id  %}{{update_course.institute}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
