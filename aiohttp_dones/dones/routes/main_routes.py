@@ -39,7 +39,7 @@ def make_routes(goldis_blueprint):
             new_user_email = emails_orm.Emails.insert_new_email(email)
             result = 'email_successfully_stored'
         except: 
-            result = 'something_is_wrong'
+            result = 'something_went_wrong'
         return redirect(url_for('goldis_blueprint.landing_page', result=result))
 
     @goldis_blueprint.route("/404-not-found")
