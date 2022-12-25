@@ -7,7 +7,7 @@
 </style>
 
 <form
-  action="{% if notification  %}/dm-courses_news/{{section_id}}/{{notif_id}}{% else %}/dm-courses_news{% endif %}"
+  action="{% if course_news  %}/dm-courses_news/{{section_id}}/{{notif_id}}{% else %}/dm-courses_news{% endif %}"
   method="POST"
 >
   <div class="form-row">
@@ -27,8 +27,8 @@
         onkeyup="success()"
         class="form-control"
         type="text"
-        name="notification_type"
-        value="{% if notification  %}{{notification.notification_type}}{% endif %}"
+        name="course_news_type"
+        value="{% if course_news  %}{{course_news.course_news_type}}{% endif %}"
       />
     </div>
     <div class="form-group col-12">
@@ -37,10 +37,10 @@
         id="esse2"
         onkeyup="success()"
         class="form-control"
-        name="notification_text"
+        name="course_news_text"
         rows="3"
       >
-{% if notification  %}{{notification.notification_text}}{% endif %}</textarea
+{% if course_news  %}{{course_news.course_news_text}}{% endif %}</textarea
       >
     </div>
   </div>
@@ -73,8 +73,8 @@
 
     {% if courses_news %} {% for notif in courses_news %}
     <tr>
-      <td>{{notif.notification_text}}</td>
-      <td>{{notif.notification_type}}</td>
+      <td>{{notif.course_news_text}}</td>
+      <td>{{notif.course_news_type}}</td>
       <!-- <td>{{title}}</td> -->
       <td>{{notif.jalali_date}}</td>
       <td>
@@ -111,7 +111,7 @@
           <p class="titleNotif"></p>
           <a
             class="btn btn-warning"
-            hf="/dm-delete-notification/"
+            hf="/dm-delete-course_news/"
             href="#"
             >حذف</a
           >
@@ -121,7 +121,7 @@
     </div>
   </div>
 </div>
-{% endfor %} {% if status and status == 'there_is_no_notification' %}
+{% endfor %} {% if status and status == 'there_is_no_course_news' %}
 <div>هیچ موردی برای نمایش وجود ندارد.</div>
 {% endif %} {% endblock %} {% block scripts %}
 <script>
@@ -138,7 +138,7 @@
   $(function () {
     $(".delNotif").click(function () {
       var notif = $(this).data();
-      $("#delete_course .titleNotif").text(notif.notification_text);
+      $("#delete_course .titleNotif").text(notif.course_news_text);
       $("#delete_course a").each(function () {
         $(this).attr("href", $(this).attr("hf") + notif.section_id + "/" + notif.id);
       });

@@ -19,10 +19,10 @@
         <h2>اطلاعیه</h2>
       </div>
       <div class="anc-text cs-scrollbar">
-        {% if all_courses_news %} {% for notification in all_courses_news %}
+        {% if all_courses_news %} {% for course_news in all_courses_news %}
         <div class="anc-row">
           <i class="far fa-badge"></i>
-          {{notification.notification_text}}
+          {{course_news.course_news_text}}
         </div>
         {% endfor %} {% endif %}
       </div>
