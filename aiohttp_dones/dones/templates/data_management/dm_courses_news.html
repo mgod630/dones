@@ -54,9 +54,9 @@
   </button>
 </form>
 {% if status %}
-<h4 class="mt-5">اطلاعیه های درس مورد نظر</h4>
+<p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اطلاعیه های این درس</p>
 {% else %}
-<h4 class="mt-5">اطلاعیه تمام صفحات</h4>
+<p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اطلاعیه تمام صفحات</p>
 {% endif %}
 <div class="table-responsive mt-3">
   <table class="table table-striped">
@@ -122,7 +122,7 @@
   </div>
 </div>
 {% endfor %} {% if status and status == 'there_is_no_course_news' %}
-<div>هیچ موردی برای نمایش وجود ندارد.</div>
+<div class="fw-bolder d-flex justify-content-center">هیچ موردی برای نمایش وجود ندارد.</div>
 {% endif %} {% endblock %} {% block scripts %}
 <script>
   function success() {

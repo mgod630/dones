@@ -1,30 +1,36 @@
-{% extends "layout.html" %}
-{% block styles %}
+{% extends "layout.html" %} {% block styles %}
 <link rel="stylesheet" type="text/css" href="/static/css/my-courses.css?2" />
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 <div class="container">
-    <div class="white-box mt-3 mb-3">
-      <div class="wb-header wbh-purple">
-        <div class="wb-icon"><i class="fal fa-user-graduate"></i></div>
-        <h2>دوره‌های من</h2>
-      </div>
-      {% if courses %}
-      {% for course in courses %}
-      <div class="course-panel mb-2">
-        <div class="cp-header">
-          <div class="course-title">{{course.title}}</div>
-          <div class="course-buttons">
-            <a class="btn btn-outline-dark" href="/course-content/course_{{course.course_id}}/item_{{course.item_id}}">مشاهده</a>
+  <div class="white-box mt-3 mb-3">
+    <div class="wb-header wbh-purple">
+      <div class="wb-icon"><i class="fal fa-user-graduate"></i></div>
+      <h2>دوره‌های من</h2>
+    </div>
+    {% if courses %} {% for course in courses %}
+    <div class="course-panel mb-2">
+      <div class="cp-header">
+        <div class="course-title">{{course.title}}</div>
+        <div class="course-buttons">
+          <a
+            class="btn btn-outline-dark"
+            href="/course-content/course_{{course.course_id}}/item_{{course.item_id}}"
+            >مشاهده</a
+          >
           <!-- <button class="btn btn-info btn-quiz-stats" data-cid="{{course.id}}">ریز نمرات</button> -->
-          <a class="btn btn-outline-dark" href="/quiz-results/item_{{course.item_id}}?user_id={{user.id}}" >ریز نمرات</a>
-          </div>
+          <a
+            class="btn btn-outline-dark"
+            href="/quiz-results/item_{{course.item_id}}?user_id={{user.id}}"
+            >آزمون</a
+          >
         </div>
       </div>
-      {% endfor %}
-      {% else %}
-      <div class="pt-3 pb-3 text-center text-secondary">شما در هیچ دوره ای شرکت نکرده‌اید</div>
-      {% endif %}
+    </div>
+    {% endfor %} {% else %}
+    <div class="pt-3 pb-3 text-center text-secondary">
+      شما در هیچ دوره ای شرکت نکرده‌اید
+    </div>
+    {% endif %}
   </div>
 </div>
 
@@ -33,7 +39,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">ریز نمرات - <span id="course_title"></span></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -56,42 +67,45 @@
       <th scope="col">بهترین نمره</th>
     </tr>
   </thead>
-  <tbody>
-  </tbody>
+  <tbody></tbody>
 </table>
 
-{% endblock %}
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-$(function(){
-  $(".btn-quiz-stats").click(function(){
-    $("#course_title").text($(this).closest(".cp-header").find(".course-title").text());
-    $("#scores_spinner").removeClass("collapse")
-    $("#scores_modal").modal("show");
-    $("#table_wrapper").empty();
-    $.ajax({
-    method: "GET",
-    url: "/json-get-all-quizzes-by-course-id/" + $(this).data("cid")
-    }).done(function (data) {
-      $("#scores_spinner").addClass("collapse");
-      let items = data.course_items
-      for(i in items){
-        $table = $("#scores_table").clone().removeClass("collapse").removeAttr("id")
-        $table.find(".week-title").text(items[i].title);
-        let quizzes = items[i].quizzes;
-        for(j in quizzes){
-          let quizRow = "<tr>"
-          quizRow += "<td>" + quizzes[j].title + "</td>";
-          quizRow += "<td>" + quizzes[j].attendance_count + "</td>";
-          quizRow += "<td>" + quizzes[j].last_score + "</td>";
-          quizRow += "<td>" + quizzes[j].best_score + "</td></tr>";
-          $table.find("tbody").append(quizRow);
+  $(function () {
+    $(".btn-quiz-stats").click(function () {
+      $("#course_title").text(
+        $(this).closest(".cp-header").find(".course-title").text()
+      );
+      $("#scores_spinner").removeClass("collapse");
+      $("#scores_modal").modal("show");
+      $("#table_wrapper").empty();
+      $.ajax({
+        method: "GET",
+        url: "/json-get-all-quizzes-by-course-id/" + $(this).data("cid"),
+      }).done(function (data) {
+        $("#scores_spinner").addClass("collapse");
+        let items = data.course_items;
+        for (i in items) {
+          $table = $("#scores_table")
+            .clone()
+            .removeClass("collapse")
+            .removeAttr("id");
+          $table.find(".week-title").text(items[i].title);
+          let quizzes = items[i].quizzes;
+          for (j in quizzes) {
+            let quizRow = "<tr>";
+            quizRow += "<td>" + quizzes[j].title + "</td>";
+            quizRow += "<td>" + quizzes[j].attendance_count + "</td>";
+            quizRow += "<td>" + quizzes[j].last_score + "</td>";
+            quizRow += "<td>" + quizzes[j].best_score + "</td></tr>";
+            $table.find("tbody").append(quizRow);
+          }
+          $("#table_wrapper").append($table);
+          if (i < items.length - 1) $("#table_wrapper").append("<hr/>");
         }
-        $("#table_wrapper").append($table);
-        if(i < items.length - 1) $("#table_wrapper").append("<hr/>");
-      }
+      });
     });
-  })
-})
+  });
 </script>
 {% endblock %}

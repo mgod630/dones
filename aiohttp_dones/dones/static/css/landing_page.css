@@ -296,6 +296,13 @@ p {
   color: #000;
   word-spacing: 3px;
 }
+.mpara {
+  font-size: 16px;
+  color: #000;
+}
+.mpara2 {
+  font-size: 18px;
+}
 /* .carosCard p {
   position: absolute;
   bottom: 10px;

@@ -1,44 +1,42 @@
-{% extends "data_management/dm_layout.html" %}
-{% set current_tab = 'attenders' %}
-{% block inner_content %}
+{% extends "layout.html" %} {% block styles %}
 <style>
-.quiz-stats {
+  .quiz-stats {
     display: flex;
     margin-bottom: 15px;
-}
-.quiz-stats>div {
+  }
+  .quiz-stats > div {
     background-color: #f2f2f2;
     padding: 6px 10px 5px;
     border-radius: 5px;
     margin: 2px;
     flex: 1;
-}
-.results-title {
+  }
+  .results-title {
     display: flex;
     padding-bottom: 3px;
     margin-bottom: 15px;
     border-bottom: 1px solid #e5e5e5;
-}
-.results-title h4{
+  }
+  .results-title h4 {
     margin: auto 0 auto auto;
-}
-.results-title img{
+  }
+  .results-title img {
     width: 45px;
     margin: auto 0 auto 0;
-}
-.quiz-stats span {
+  }
+  .quiz-stats span {
     font-weight: bold;
     margin-left: 5px;
-}
-.titled-frame {
+  }
+  .titled-frame {
     border: 2px solid #99caff;
     padding: 5px;
     border-radius: 8px;
-}
-.titled-frame:not(:last-child) {
+  }
+  .titled-frame:not(:last-child) {
     margin-bottom: 31px;
-}
-.tf-title {
+  }
+  .tf-title {
     font-weight: bold;
     background-color: #ffffff;
     display: inline-block;
@@ -46,26 +44,26 @@
     top: -15px;
     padding: 0 18px;
     color: #0066d4;
-}
-.table-title {
+  }
+  .table-title {
     margin: 0 auto -10px;
     width: 115px;
     text-align: center;
     color: #de1c42;
     background-color: #fff;
     position: relative;
-}
-.table-title-border {
+  }
+  .table-title-border {
     border-bottom: 1px solid #ff99ad;
     margin-bottom: 20px;
-}
-.katel .table {
+  }
+  .katel .table {
     margin-bottom: 0;
-}
-.katel .table-responsive:not(:last-child) {
+  }
+  .katel .table-responsive:not(:last-child) {
     margin-bottom: 30px;
-}
-.big-score {
+  }
+  .big-score {
     width: 250px;
     margin: 0 auto 15px;
     text-align: center;
@@ -73,27 +71,27 @@
     padding: 15px;
     border-radius: 10px;
     color: #fff;
-}
-.big-score div:first-child {
+  }
+  .big-score div:first-child {
     border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     padding-bottom: 10px;
     margin-bottom: 18px;
-}
-.big-score div:last-child{
+  }
+  .big-score div:last-child {
     font-size: 25px;
     font-weight: bold;
-}
+  }
 
-.mbti-result {
+  .mbti-result {
     display: flex;
     flex-wrap: wrap;
-}
-.mbti-type {
+  }
+  .mbti-type {
     text-align: center;
     background-color: #f2f2f2;
     padding-top: 6px;
-}
-.mbti-trait {
+  }
+  .mbti-trait {
     flex: 0 0 calc(50% - 2px);
     margin: -1px 1px 0;
     text-align: center;
@@ -102,12 +100,12 @@
     height: 32px;
     border-bottom: 1px solid #dee2e6;
     border-top: 1px solid #dee2e6;
-}
-.mbti-trait:nth-child(even) {
+  }
+  .mbti-trait:nth-child(even) {
     padding-right: 0;
     padding-left: 118px;
-}
-.mbti-trait label {
+  }
+  .mbti-trait label {
     display: block;
     margin-bottom: 0;
     padding: 5px 0;
@@ -117,23 +115,23 @@
     bottom: 0;
     width: 115px;
     text-align: right;
-}
-.mbti-trait:nth-child(even) label {
+  }
+  .mbti-trait:nth-child(even) label {
     text-align: left;
     direction: ltr;
     right: auto;
     left: 0;
-}
-.mbti-trait .value {
-    color: #ffF;
+  }
+  .mbti-trait .value {
+    color: #fff;
     padding-top: 8px;
     white-space: nowrap;
     height: 100%;
-}
-.mbti-trait:nth-child(odd) .value {
+  }
+  .mbti-trait:nth-child(odd) .value {
     float: left;
-}
-.mbti-trait label span {
+  }
+  .mbti-trait label span {
     width: 41px;
     height: 21px;
     display: inline-block;
@@ -142,54 +140,64 @@
     padding-top: 2px;
     vertical-align: middle;
     color: white;
-}
+  }
 </style>
-<div class="results-title">
+{% endblock %} {% block content %}
+<!-- <div class="results-title">
     <h4>{{quiz_name_fa}}</h4>
     <img src="/static/template/samah_logo.png">
+</div> -->
+<div class="titled-frame m-5">
+  <div class="tf-title">اطلاعات شرکت کننده</div>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>نام شرکت کننده</th>
+          <th>شماره موبایل</th>
+          <th>جنسیت</th>
+          <th>سن</th>
+          <th>مدرک تحصیلی</th>
+          <th>شغل</th>
+          <th>وضعیت تاهل</th>
+          <!-- <th>تاریخ</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{attender.full_name}}</td>
+          <td>{{attender.mobile}}</td>
+          <td>
+            {% if attender.gender %}{% if attender.gender == 'male'%}مرد{% elif
+            attender.gender == 'female' %}زن{% endif %}{% else %}-{% endif %}
+          </td>
+          <td>{% if attender.age %}{{attender.age}}{% else %}-{% endif %}</td>
+          <td>
+            {% if attender.grade %}{{attender.grade}}{% else %}-{% endif %}
+          </td>
+          <td>{% if attender.job %}{{attender.job}}{% else %}-{% endif %}</td>
+          <td>
+            {% if attender.marital_status %}{% if attender.marital_status ==
+            'single'%}مجرد{% elif attender.marital_status == 'married' %}متاهل{%
+            endif %}{% else %}-{% endif %}
+          </td>
+          <!-- <td>{% if attender.datatime %}{{attender.datatime}}{% else %}-{% endif %}</td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
-{% if attender %}
-<div class="titled-frame">
-    <div class="tf-title">اطلاعات شرکت کننده</div>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>نام شرکت کننده</th>
-                    <th>شماره موبایل</th>
-                    <th>جنسیت</th>
-                    <th>سن</th>
-                    <th>مدرک تحصیلی</th>
-                    <th>شغل</th>
-                    <th>وضعیت تاهل</th>
-                    <!-- <th>تاریخ</th> -->
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{attender.full_name}}</td>
-                    <td>{{attender.mobile}}</td>
-                    <td>{% if attender.gender %}{% if attender.gender == 'male'%}مرد{% elif attender.gender == 'female' %}زن{% endif %}{% else %}-{% endif %}</td>
-                    <td>{% if attender.age %}{{attender.age}}{% else %}-{% endif %}</td>
-                    <td>{% if attender.grade %}{{attender.grade}}{% else %}-{% endif %}</td>
-                    <td>{% if attender.job %}{{attender.job}}{% else %}-{% endif %}</td>
-                    <td>{% if attender.marital_status %}{% if attender.marital_status == 'single'%}مجرد{% elif attender.marital_status == 'married' %}متاهل{% endif %}{% else %}-{% endif %}</td>
-                    <!-- <td>{% if attender.datatime %}{{attender.datatime}}{% else %}-{% endif %}</td> -->
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-{% endif %}
-
 {% if user_quizzes %} {% for quiz in user_quizzes %}
-<div class="titled-frame">
-    <div class="tf-title">اطلاعات آزمون</div>
-    <div class="quiz-stats">
-        <div><span>نام آزمون:</span> {{quiz.title}}</div>
-        <div><span>تاریخ شرکت در آزمون:</span> {{quiz.jalali_date}}</div>
-        <div><span>زمان شرکت در آزمون:</span> {% if quiz.time != '-1' %}{{quiz.jalali_time}}{% else %}-{% endif %}</div>
+<div class="titled-frame mx-5 my-3">
+  <div class="tf-title">اطلاعات آزمون</div>
+  <div class="quiz-stats">
+    <div><span>نام آزمون:</span> {{quiz.title}}</div>
+    <div><span>تاریخ شرکت در آزمون:</span> {{quiz.jalali_date}}</div>
+    <div>
+      <span>زمان شرکت در آزمون:</span> {% if quiz.time != '-1'
+      %}{{quiz.jalali_time}}{% else %}-{% endif %}
     </div>
+  </div>
 </div>
 {% endfor %} {% endif %}
 
@@ -387,12 +395,10 @@
 
 {% if quiz_name == 'no_name_quiz' %}
 <div class="titled-frame">
-    <div class="tf-title">{{quiz_name_fa}}</div>
-    <div class="big-score">
-        <div>تعداد پاسخ‌های صحیح</div>
-        <div>{{right_answer}}</div>
-    </div>
+  <div class="tf-title">{{quiz_name_fa}}</div>
+  <div class="big-score">
+    <div>تعداد پاسخ‌های صحیح</div>
+    <div>{{right_answer}}</div>
+  </div>
 </div>
-{% endif %}
-
-{% endblock %}
+{% endif %} {% endblock %}
