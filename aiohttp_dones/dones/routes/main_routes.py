@@ -12,8 +12,9 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         all_courses = courses_orm.Courses.get_all_courses()
         section_id = '0'
-        all_course_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
-        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_course_news=all_course_news, flash_messages=flash_messages, db_number=db_number)
+        courses_orm.Courses.get_course_by_id(7)
+        all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
+        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_courses_news=all_courses_news, flash_messages=flash_messages, db_number=db_number)
 
     @goldis_blueprint.route("/landing-page")
     def landing_page():
