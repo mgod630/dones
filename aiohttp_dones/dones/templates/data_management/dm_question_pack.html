@@ -105,8 +105,6 @@
       <div class="p-3 w-100">
         <label>گزینه <span class="ques-num">1</span></label>
         <textarea
-          id="f1"
-          onkeyup="success()"
           type="text"
           placeholder="متن جواب"
           class="form-control"
@@ -121,8 +119,6 @@
       <div class="p-3 w-100">
         <label>گزینه <span class="ques-num">2</span></label>
         <textarea
-          id="f3"
-          onkeyup="success()"
           type="text"
           placeholder="متن جواب"
           class="form-control"
@@ -300,9 +296,7 @@
   });
   function success() {
     if (
-      document.getElementById("f1").value === "" ||
       document.getElementById("f2").value === "" ||
-      document.getElementById("f3").value === "" ||
       document.getElementById("f4").value === ""
     ) {
       document.getElementById("form-submit").disabled = true;
