@@ -22,6 +22,19 @@ class Users:
         return data
 
     @staticmethod
+    def get_all_users_reverse():
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = ("SELECT * FROM tbl_users ORDER BY id DESC")
+        cursor.execute(query)
+        data = cursor.fetchall()
+        cnx.close()
+        return data
+
+    @staticmethod
     def get_user_by_id(user_id):
         global connection_pool
         if connection_pool == None:
@@ -62,6 +75,19 @@ class Users:
         if common.check_password(password, row['password']):
             user = row
         return user
+
+    @staticmethod
+    def get_users_count():
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor()
+        query = 'SELECT COUNT(id) FROM tbl_users;'
+        cursor.execute(query)
+        row = cursor.fetchone()
+        cnx.close()
+        return row
 
     @staticmethod
     def insert_new_user(full_name, mobile, g_token, password, national_id, sheba_number, credit_score, user_type, invited_friend_mobile, register_datetime):

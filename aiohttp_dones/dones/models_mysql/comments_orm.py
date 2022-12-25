@@ -98,7 +98,7 @@ class Comments:
         if reply_to_comment_id:
             replied_comment = Comments.get_comment_by_id(reply_to_comment_id)
             if replied_comment:
-                reply_from_comments_ids = replied_comment['reply_from'] + '|-|' + new_comment_id if replied_comment['reply_from'] else new_comment_id
+                reply_from_comments_ids = str(replied_comment['reply_from']) + '|-|' + str(new_comment_id) if replied_comment['reply_from'] else str(new_comment_id)
                 data = {
                     'reply_from':reply_from_comments_ids,
                     'id':replied_comment['id']
@@ -150,8 +150,8 @@ class Comments:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        query = 'SELECT COUNT(id) FROM tbl_comments;'
-        cursor.execute(query, {'id': section_id})
+        query = 'SELECT COUNT(section_id) FROM tbl_comments WHERE section_id=%(section_id)s;'
+        cursor.execute(query, {'section_id': section_id})
         row = cursor.fetchone()
         cnx.close()
         return row

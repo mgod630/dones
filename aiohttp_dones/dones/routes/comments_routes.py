@@ -36,7 +36,7 @@ def make_routes(goldis_blueprint):
         end = start + comments_count_per_page 
         a_page_section_comments = a_page_section_comments[start:end]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
-        pages_count = (comments_count[0] // comments_count_per_page)
+        pages_count = (comments_count[0] // comments_count_per_page)+ 1
         all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
         return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_notifications':all_notifications}
 
@@ -52,7 +52,7 @@ def make_routes(goldis_blueprint):
         end = start + comments_count_per_page 
         a_page_section_comments = a_page_section_comments[start:end]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(item_id)
-        pages_count = (comments_count[0] // comments_count_per_page)
+        pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
         return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': item_id, 'all_notifications':all_notifications}
 
@@ -70,7 +70,7 @@ def make_routes(goldis_blueprint):
             end = start + comments_count_per_page 
             a_page_section_comments = a_page_section_comments[start:end]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
-        pages_count = (comments_count[0] // comments_count_per_page)
+        pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
         return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
 
@@ -86,7 +86,7 @@ def make_routes(goldis_blueprint):
         end = start + comments_count_per_page 
         a_page_section_comments = a_page_section_comments[start:end]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
-        pages_count = (comments_count[0] // comments_count_per_page)
+        pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
         return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
 
@@ -102,7 +102,7 @@ def make_routes(goldis_blueprint):
         end = start + comments_count_per_page 
         a_page_section_comments = a_page_section_comments[start:end]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
-        pages_count = (comments_count[0] // comments_count_per_page)
+        pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
         return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
 
