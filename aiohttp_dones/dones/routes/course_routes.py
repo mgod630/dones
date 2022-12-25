@@ -1,7 +1,7 @@
 import jdatetime , json
 from flask import redirect, render_template, request, session, url_for
 from routes import common
-from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, notifications_orm, user_courses_orm, flash_messages_orm
+from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, course_news_orm, user_courses_orm, flash_messages_orm
 
 flash_messages = []
 
@@ -25,8 +25,8 @@ def make_routes(goldis_blueprint):
         # comments_orm.Comments.insert_new_comment('سلام چطوری  مطوری پطوری', user_name , user_id , f'course_content_{item_id}', None)
         all_comments = comments_orm.Comments.get_comments_by_section_id(
             f'course_content_{course_id}')
-        all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
-        return render_template("course-info.html", course=course, all_notifications=all_notifications, user=user, all_comments=all_comments, flash_messages=flash_messages)
+        all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
+        return render_template("course-info.html", course=course, all_courses_news=all_courses_news, user=user, all_comments=all_comments, flash_messages=flash_messages)
 
     @goldis_blueprint.route('/course-overview/course_<course_id>')
     def course_overview(course_id):
@@ -69,8 +69,10 @@ def make_routes(goldis_blueprint):
             if str(crs_item['id']) == str(item_id):
                 course_item = crs_item
                 break
-        # comments_orm.Comments.insert_new_comment('سلام چطوری  مطوری پطوریs', user_name , user_id , f'course_content_{item_id}', None)
-        quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_ids(item_id)
+        quizzes = quizzes_orm.Quizzes.get_all_quizzes_with_questions(item_id)
+        print(quizzes)
+        if quizzes == []:
+             quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(item_id)
         all_comments = comments_orm.Comments.get_comments_by_section_id(
             f'course_content_{item_id}')
         last_comments = all_comments[0:19]

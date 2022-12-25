@@ -1,13 +1,13 @@
 from models_mysql import  comments_orm
 from flask import redirect, render_template, request
-from models_mysql import courses_orm, items_orm, notifications_orm, questions_orm, comments_orm
+from models_mysql import courses_orm, items_orm, course_news_orm, questions_orm, comments_orm
 from routes import common 
 
 flash_messages = []
 def make_routes(goldis_blueprint):
 
-    @goldis_blueprint.route('/json-get-comments-and-notifications-by-section-id/course_info_<course_id>')
-    def json_get_comments_and_notifications_by_section_id(course_id):    
+    @goldis_blueprint.route('/json-get-comments-and-courses_news-by-section-id/course_info_<course_id>')
+    def json_get_comments_and_courses_news_by_section_id(course_id):    
         page_number = request.args.get('page_number', '1')
         page_number = int(page_number) if str.isdigit(str(page_number)) else 1
         comments_count_per_page = 20
@@ -20,12 +20,12 @@ def make_routes(goldis_blueprint):
             a_page_section_comments = a_page_section_comments[start:end]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
         pages_count = (comments_count[0] // comments_count_per_page) + 1
-        all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
-        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_notifications':all_notifications}
+        all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
+        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_courses_news':all_courses_news}
 
 
-    @goldis_blueprint.route('/json-get-comments-and-notifications-by-section-id/course_overview_<course_id>')
-    def json_get_comments_and_notifications_by_section_id2(course_id):
+    @goldis_blueprint.route('/json-get-comments-and-courses_news-by-section-id/course_overview_<course_id>')
+    def json_get_comments_and_courses_news_by_section_id2(course_id):
         page_number = request.args.get('page_number', '1')
         page_number = int(page_number) if str.isdigit(str(page_number)) else 1
         comments_count_per_page = 20
@@ -37,11 +37,11 @@ def make_routes(goldis_blueprint):
         a_page_section_comments = a_page_section_comments[start:end]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
         pages_count = (comments_count[0] // comments_count_per_page)+ 1
-        all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
-        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_notifications':all_notifications}
+        all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
+        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_courses_news':all_courses_news}
 
-    @goldis_blueprint.route('/json-get-comments-and-notifications-by-section-id/course_content_<item_id>')
-    def json_get_comments_and_notifications_by_section_id3(item_id):
+    @goldis_blueprint.route('/json-get-comments-and-courses_news-by-section-id/course_content_<item_id>')
+    def json_get_comments_and_courses_news_by_section_id3(item_id):
         page_number = request.args.get('page_number', '1')
         page_number = int(page_number) if str.isdigit(str(page_number)) else 1
         comments_count_per_page = 20
@@ -53,8 +53,8 @@ def make_routes(goldis_blueprint):
         a_page_section_comments = a_page_section_comments[start:end]
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(item_id)
         pages_count = (comments_count[0] // comments_count_per_page) + 1
-        all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
-        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': item_id, 'all_notifications':all_notifications}
+        all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
+        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': item_id, 'all_courses_news':all_courses_news}
 
     # comments page
     @goldis_blueprint.route('/comments/course_info_<course_id>')
@@ -120,6 +120,15 @@ def make_routes(goldis_blueprint):
             reply_to = request.form.get('reply_to', None)
             print(reply_to)
             print(section_id)
-            new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != '-1' else None)
-            result = 'succeed'
+            comment_replied = comments_orm.Comments.get_comment_by_id(reply_to)
+            if comment_replied:
+                if comment_replied['is_replied_comment'] == None:
+                    new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != '-1' else None)
+                    result = 'succeed'
+                else:
+                    result = 'you_cant_answer_to_this_comment'
+            else:
+                new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != '-1' else None)
+                result = 'succeed'
+            
         return {'result':result}

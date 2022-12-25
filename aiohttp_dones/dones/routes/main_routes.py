@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, url_for
 from routes import common
-from models_mysql import  courses_orm, notifications_orm, notices_orm, emails_orm
+from models_mysql import  courses_orm, course_news_orm, notices_orm, emails_orm
 
 
 def make_routes(goldis_blueprint):
@@ -12,8 +12,8 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         all_courses = courses_orm.Courses.get_all_courses()
         section_id = '0'
-        all_notifications = notifications_orm.Notifications.get_notifications_by_section_id(section_id)
-        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_notifications=all_notifications, flash_messages=flash_messages, db_number=db_number)
+        all_course_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
+        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_course_news=all_course_news, flash_messages=flash_messages, db_number=db_number)
 
     @goldis_blueprint.route("/landing-page")
     def landing_page():

@@ -46,7 +46,7 @@ $(function(){
     {template: 'comments_dynamic.html', data: 'all_comments', id: 'comments_container'}
   ]
   const loadComments = function(targetPage){
-    loadJson(`/json-get-comments-and-notifications-by-section-id/${sectionId}?page_number=${targetPage}`, structure, function(pageStatus){
+    loadJson(`/json-get-comments-and-courses_news-by-section-id/${sectionId}?page_number=${targetPage}`, structure, function(pageStatus){
       current_page = pageStatus.current_page
       pageNumber = current_page
       pages_count = pageStatus.pages_count

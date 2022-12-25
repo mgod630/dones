@@ -27,7 +27,6 @@ class Comments:
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
         query = "SELECT * FROM tbl_comments WHERE id=%(id)s"
-        # comment_id_int = int(comment_id)
         cursor.execute(query, {'id': comment_id})
         row = cursor.fetchone()
         cnx.close()

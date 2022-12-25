@@ -33,14 +33,26 @@ class Quizzes:
         return row
 
     @staticmethod
-    def get_all_quizzes_by_ids(item_id):
+    def get_all_quizzes_by_item_id(item_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        # query = "SELECT tbl_items.course_id, tbl_items.id, tbl_quizzes.* FROM tbl_items INNER JOIN tbl_quizzes ON tbl_items.id = tbl_quizzes.item_id WHERE (tbl_quizzes.item_id='%(item_id)s' AND tbl_items.course_id='%(course_id)s')"
         query = ("SELECT * FROM tbl_quizzes WHERE item_id=%(item_id)s")
+        cursor.execute(query, {'item_id': item_id})
+        row = cursor.fetchall()
+        cnx.close()
+        return row
+
+    @staticmethod
+    def get_all_quizzes_with_questions(item_id):
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = ("SELECT tbl_quizzes.*, tbl_questions.* FROM tbl_quizzes INNER JOIN tbl_questions ON tbl_questions.quiz_id = tbl_quizzes.id WHERE tbl_quizzes.item_id=%(item_id)s")
         cursor.execute(query, {'item_id': item_id})
         row = cursor.fetchall()
         cnx.close()
