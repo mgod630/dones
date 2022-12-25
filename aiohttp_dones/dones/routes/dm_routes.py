@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, url_for, session
 from routes import common
-import time, secrets
+import time, secrets, json
 import jdatetime
 from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, notifications_orm
 
@@ -220,9 +220,7 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False: return redirect('/404-not-found')
         quizs = quizzes_orm.Quizzes.get_all_quizzes_by_ids(course_item_id)
-        quiz_id = None
-        update_quiz = None
-        return render_template("data_management/dm_quiz.html", user=user, quizs=quizs, course_item_id= course_item_id, update_quiz=update_quiz , quiz_id=quiz_id )   
+        return render_template("data_management/dm_quiz.html", user=user, quizs=quizs, course_item_id= course_item_id)   
 
     @goldis_blueprint.route("/dm-quiz/<course_item_id>", methods=['POST'])
     def dm_quiz_post(course_item_id):
@@ -406,3 +404,18 @@ def make_routes(goldis_blueprint):
             status = 'course_norifications_loaded'
         return render_template("data_management/dm_notification.html", user=user, notifications=course_notifications, all_courses=all_courses, status=status) 
     
+
+    @goldis_blueprint.route("/dm-quiz-users-answers/<quiz_id>")
+    def quiz_results(quiz_id):
+        user = common.get_user_from_token()
+        if is_admin_user(user) == False: return redirect('/404-not-found')
+        quiz = user_courses_orm.User_courses.get_user_quiz_by_quiz_id(quiz_id)
+        all_quizzes = None
+        if quiz:
+            item_id = quiz['item_id']
+            all_quizzes = user_courses_orm.User_courses.get_user_quizzes_by_item_id(item_id)
+            user_quizzes =  user_courses_orm.User_courses.get_all_user_quizzes_by_user_id(user['id'])
+        registered_users = user_courses_orm.User_courses.get_all_registered_users_by_quiz_id(quiz_id)
+        all_answers =  user_courses_orm.User_courses.get_all_user_results_by_ids(user_id=user['id'], quiz_id=quiz_id)
+        all_answers = json.dumps(all_answers) 
+        return render_template('data_management/dm_quiz_registered_users.html',user=user, quiz_id=quiz_id, all_quizzes=all_quizzes, all_answers=all_answers, registered_users=registered_users)

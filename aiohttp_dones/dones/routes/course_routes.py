@@ -1,11 +1,17 @@
-import jdatetime 
-from flask import redirect, render_template, request, session
+import jdatetime , json
+from flask import redirect, render_template, request, session, url_for
 from routes import common
 from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, notifications_orm, user_courses_orm, flash_messages_orm
 
 flash_messages = []
 
 def make_routes(goldis_blueprint):
+    def listToString(list):
+        string = ""
+        for elemnt in list:
+            string = elemnt + ',' + elemnt
+        return string
+
     @goldis_blueprint.route("/course-info/course_<course_id>")
     def course_info(course_id):
         user = common.get_user_from_token()
@@ -78,7 +84,6 @@ def make_routes(goldis_blueprint):
         jalali_time = jdatetime.datetime.now().strftime("%H:%M:%S")
         new_user_course_id = user_courses_orm.User_courses.insert_new_user_course(user_id=user['id'], jalali_date=jalali_date, jalali_time=jalali_time)
         update_user_quiz = user_courses_orm.User_courses.update_user_course(row_id=new_user_course_id, quiz_id=quiz_id)
-
         last_user_answers = []
         quizzes = quizzes_orm.Quizzes.get_all_quizzes()
         quiz = None
@@ -87,8 +92,26 @@ def make_routes(goldis_blueprint):
                 quiz = qz
                 break
         questions = questions_orm.Questions.get_all_questions_by_ids(quiz_id)
+        quiz = quizzes_orm.Quizzes.get_quiz_by_id(quiz_id)
+        item_id = quiz['item_id']
+        item = items_orm.Items.get_item_by_id(item_id)
+        course_id = item['course_id']
+        return render_template("quiz-content.html", user=user, quiz=quiz, flash_messages=flash_messages, questions=questions, last_user_answers=last_user_answers, course_id=course_id, item_id=item_id, quiz_id=quiz_id)
 
-        return render_template("quiz-content.html", user=user, quiz=quiz, flash_messages=flash_messages, questions=questions, last_user_answers=last_user_answers)
+    @goldis_blueprint.route('/set-user-answers', methods=['POST'])
+    def set_user_answers():
+        user = common.get_user_from_token()
+        course_id = request.args.get('course_id')
+        item_id = request.args.get('item_id')
+        quiz_id = request.args.get('quiz_id')
+        jalali_date = jdatetime.datetime.now().strftime("%Y/%m/%d")
+        jalali_time = jdatetime.datetime.now().strftime("%H:%M:%S")
+        all_answers = request.form.get('all_answers')
+        json_all_answers = json.loads(all_answers)
+        string_all_answers = ','.join([str(elem) for i,elem in enumerate(json_all_answers)])
+        new_user_result_id = user_courses_orm.User_courses.insert_new_user_course(user_id=user['id'], jalali_date=jalali_date, jalali_time=jalali_time)
+        user_courses_orm.User_courses.update_user_course(row_id=new_user_result_id, quiz_id=quiz_id,user_answers=string_all_answers)
+        return redirect(url_for('goldis_blueprint.course_content', course_id=course_id, item_id=item_id))
 
     @goldis_blueprint.route('/my-courses')
     def my_courses():
@@ -103,3 +126,5 @@ def make_routes(goldis_blueprint):
         user_id = request.args.get('user_id')
         user_quizzes = user_courses_orm.User_courses.get_user_quizzes_by_item_id(item_id)
         return render_template('quiz_results.html', user=user, attender=user, user_quizzes=user_quizzes)
+
+    
