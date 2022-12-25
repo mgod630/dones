@@ -421,59 +421,59 @@
     countdown();
     setInterval(countdown, 1000);
 
-    // $(function () {
-    //   $("#participate").click(function () {
-    //     $.ajax({
-    //       method: "POST",
-    //       url: "/landing-page-post",
-    //       data: { email },
-    //     })
-    //       .done(function (resp) {
-    //         if (resp.result == "email_already_exists") {
-    //           $("#result_email_message")
-    //             .addClass("text-success")
-    //             .text("این ایمیل قبلا ثبت نام کرده است.")
-    //             .slideDown();
-    //         } else if (resp.result == "email_successfully_stored") {
-    //           $("#result_email_message")
-    //             .addClass("text-success")
-    //             .text("ایمیل شما با موفقیت ثبت شد.")
-    //             .slideDown();
-    //         } else {
-    //           $("#result_email_message")
-    //             .addClass("text-danger")
-    //             .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
-    //             .slideDown();
-    //         }
-    //       })
-    //       .fail(function (err) {
-    //         $("#result_email_message")
-    //           .addClass("text-danger")
-    //           .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
-    //           .slideDown();
-    //       });
-    //   });
-    // });
-
-    $(document).ready(function () {
-      $("#landing-page-form").on("submit", function (event) {
+    $(function () {
+      $("#participate").click(function () {
         $.ajax({
-          data: {
-            email: $("emailInput").val(),
-          },
-          type: "POST",
+          method: "POST",
           url: "/landing-page-post",
-        }).done(function (data) {
-          if (data.error) {
-            $("#negAnswer").text(data.error).show();
-            $("#posAnswer").hide();
-          } else {
-            $("#posAnswer").text(data.error).show();
-            $("#negAnswer").hide();
-          }
-        });
+          data: { email },
+        })
+          .done(function (resp) {
+            if (resp.result == "email_already_exists") {
+              $("#result_email_message")
+                .addClass("text-success")
+                .text("این ایمیل قبلا ثبت نام کرده است.")
+                .slideDown();
+            } else if (resp.result == "email_successfully_stored") {
+              $("#result_email_message")
+                .addClass("text-success")
+                .text("ایمیل شما با موفقیت ثبت شد.")
+                .slideDown();
+            } else {
+              $("#result_email_message")
+                .addClass("text-danger")
+                .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
+                .slideDown();
+            }
+          })
+          .fail(function (err) {
+            $("#result_email_message")
+              .addClass("text-danger")
+              .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
+              .slideDown();
+          });
       });
     });
+
+    // $(document).ready(function () {
+    //   $("#landing-page-form").on("submit", function (event) {
+    //     $.ajax({
+    //       data: {
+    //         email: $("emailInput").val(),
+    //       },
+    //       type: "POST",
+    //       url: "/landing-page-post",
+    //     }).done(function (data) {
+    //       if (data.error) {
+    //         $("#negAnswer").text(data.error).show();
+    //         $("#posAnswer").hide();
+    //       } else {
+    //         $("#posAnswer").text(data.error).show();
+    //         $("#negAnswer").hide();
+    //       }
+    //     });
+    //   });
+    // });
 
     // $("#recipeCarousel").carousel({
     //   interval: 3000,
