@@ -150,7 +150,7 @@
       {template: 'comments_static.html', data: 'all_comments', id: 'all_comments'}
     ]
     const courseId = $("#all_comments").data("id")
-    loadJson(`/json-get-comments-and-notifications-by-section-id/course_content_${courseId}`, comments)
+    loadJson(`/json-get-comments-and-courses_news-by-section-id/course_content_${courseId}`, comments)
   })
 </script>
 {% endblock %}

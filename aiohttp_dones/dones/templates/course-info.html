@@ -62,7 +62,7 @@
       <div class="wb-icon"><i class="fal fa-exclamation"></i></div>
       <h2>اطلاعیه‌ها</h2>
     </div>
-    <div class="anc-text cs-scrollbar" id="notifications">
+    <div class="anc-text cs-scrollbar" id="courses_news">
       {% include 'spinner.html' %}
     </div>
   </div>
@@ -160,10 +160,10 @@
 $(function(){
   const structure = [
     {template: 'comments_static.html', data: 'all_comments', id: 'all_comments'},
-    {template: 'notifications.html', data: 'all_notifications', id: 'notifications'}
+    {template: 'courses_news.html', data: 'all_courses_news', id: 'courses_news'}
   ]
   const courseId = $("#all_comments").data("id")
-  loadJson(`/json-get-comments-and-notifications-by-section-id/course_info_${courseId}`, structure)
+  loadJson(`/json-get-comments-and-courses_news-by-section-id/course_info_${courseId}`, structure)
   $("#discount_code").on('keyup', function(e){
     const baseLink = $("#payment_link").data('base_link')
     const params = e.target.value !== '' ? '&takhfif_name='+e.target.value : ''
