@@ -91,7 +91,6 @@
     {% endfor %} {% endif %}
   </table>
 </div>
-{% for notif in courses_news %}
 <div class="modal" tabindex="-1" role="dialog" id="delete_course">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -121,7 +120,7 @@
     </div>
   </div>
 </div>
-{% endfor %} {% if status and status == 'there_is_no_course_news' %}
+{% if status and status == 'there_is_no_course_news' or  not courses_news %}
 <div class="fw-bolder d-flex justify-content-center">هیچ موردی برای نمایش وجود ندارد.</div>
 {% endif %} {% endblock %} {% block scripts %}
 <script>

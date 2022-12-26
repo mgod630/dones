@@ -19,16 +19,16 @@
         بازگشت <i class="fas fa-chevron-left"></i>
       </a>
     </div>
-    <div class="section-header sch-course" id="course_section">
+    <div class="my-3 section-header sch-course" id="course_section">
       <i class="fas fa-graduation-cap ml-1"></i> آموزش {% if quizzes %}
       <a class="btn btn-outline-secondary" href="#quiz_section"
         ><i class="fas fa-file-check ml-1"></i> برو به آزمون</a
       >
       {% endif %}
     </div>
-    <div>{{course_item.description|safe}}</div>
+    <div class="eduTitle my-2">{{course_item.description|safe}}</div>
     {% if quizzes %}
-    <div class="section-header sch-quiz" id="quiz_section">
+    <div class="mt-4 section-header sch-quiz" id="quiz_section">
       <i class="fas fa-file-check ml-1"></i> آزمون
       <a class="btn btn-outline-secondary" href="#course_section"
         ><i class="fas fa-graduation-cap ml-1"></i> برو به آموزش</a
@@ -63,6 +63,7 @@
               >
             </td>
           </tr>
+          <tr></tr>
           {% endfor %}
         </tbody>
       </table>
