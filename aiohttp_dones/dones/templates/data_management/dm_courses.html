@@ -237,13 +237,13 @@
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>آدرس لوگو:</label>
-                                <input type="text" class="form-control ltr" name="logo_path" value="{% if course_id  %}{{update_course.logo_path}}{% endif %}">
+                                <input id="logoInput" type="text" class=" form-control ltr" name="logo_path" value="{% if course_id  %}{{update_course.logo_path}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>آدرس عکس دوره:</label>
-                                <input type="text" class="form-control ltr" name="image_path" value="{% if course_id  %}{{update_course.image_path}}{% endif %}">
+                                <input id="imageInput" type="text" class="form-control ltr" name="image_path" value="{% if course_id  %}{{update_course.image_path}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -314,6 +314,18 @@ $(function(){
 
         $("#course_settings").modal("show");
     });
+    $('#submitbtn').click(function(){
+        var input = document.getElementById('logoInput');
+        if(input.value.length == 0)
+            // $("#logoInput").attr("src", "..\..\static\template\goldis-logo-horizontal.png")
+            input.value = "../../static/template/goldis-logo-horizontal.png"
+    })
+    $('#submitbtn').click(function(){
+        var input = document.getElementById('imageInput');
+        if(input.value.length == 0)
+            // $("#logoInput").attr("src", "..\..\static\template\goldis-logo-horizontal.png")
+            input.value = "../../static/template/4321da5b-57d7-49f7-abe1-3ad1c6c3abd9-cb9d6e5bef65.small.png"
+    })
 })
 
 function success() {
