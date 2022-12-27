@@ -67,10 +67,10 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
     def course_content(course_id, item_id):
         user = common.get_user_from_token()
-        user_course = user_courses_orm.User_courses.get_user_courses_by_course_id(course_id)
-        if user_course and user_course['item_id'] != int(item_id):
+        user_item = user_items_orm.User_items.get_user_items_by_item_id(item_id)
+        if user_item and user_item['item_id'] != int(item_id):
             unix_datetime = time.time()
-            new_user_item_id = user_courses_orm.User_courses.insert_new_user_item(user_id = user['id'], unix_datetime=unix_datetime)
+            new_user_item_id = user_items_orm.User_items.insert_new_user_item(user_id = user['id'], item_id=item_id, unix_datetime=unix_datetime)
 
         all_courses = courses_orm.Courses.get_all_courses()
         course = None
@@ -134,20 +134,20 @@ def make_routes(goldis_blueprint):
             course = courses_orm.Courses.get_course_by_id(crs['course_id'])
             crs['title'] = course['title']
             user_courses_with_title.append(crs)
-        return render_template('my-courses.html', user=user, courses = user_courses_with_title, course=course, flash_messages = flash_messages)
+        return render_template('my-courses.html', user=user, courses = user_courses_with_title, flash_messages = flash_messages)
     
-    @goldis_blueprint.route('/my-courses')
+    @goldis_blueprint.route('/my-items')
     def my_items():
         user = common.get_user_from_token()
         flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(user['g_token'])
         user_items = user_items_orm.User_items.get_all_user_items_by_user_id(user['id'])
-        user_courses_with_title = []
+        user_items_with_title = []
         course = None
-        for crs in user_courses:
-            course = courses_orm.Courses.get_course_by_id(crs['course_id'])
-            crs['title'] = course['title']
-            user_courses_with_title.append(crs)
-        return render_template('my-courses.html', user=user, courses = user_courses_with_title, course=course, flash_messages = flash_messages)
+        for it in user_items:
+            item = items_orm.Items.get_item_by_id(it['item_id'])
+            it['title'] = item['title']
+            user_items_with_title.append(it)
+        return render_template('my-items.html', user=user, items = user_items_with_title, flash_messages = flash_messages)
 
     @goldis_blueprint.route("/quiz-results/item_<item_id>")
     def user_quizzes(item_id):

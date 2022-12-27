@@ -7,20 +7,20 @@
       <div class="wb-icon"><i class="fal fa-user-graduate"></i></div>
       <h2>دوره‌های من</h2>
     </div>
-    {% if courses %} {% for course in courses %}
+    {% if items %} {% for course in items %}
     <div class="course-panel mb-2">
       <div class="cp-header">
         <div class="course-title">{{course.title}}</div>
         <div class="course-buttons">
           <a
             class="btn btn-outline-dark"
-            href="/course-overview/course_{{course.course_id}}"
+            href="/course-content/item_{{item.item_id}}"
             >مشاهده</a
           >
-          <!-- <button class="btn btn-info btn-quiz-stats" data-cid="{{course.id}}">ریز نمرات</button> -->
+          <!-- <button class="btn btn-info btn-quiz-stats" data-cid="{{item.id}}">ریز نمرات</button> -->
           <a
             class="btn btn-outline-dark"
-            href="/my-items?user_id={{user.id}}"
+            href="/quiz-results/item_{{item.item_id}}?user_id={{user.id}}"
             >آزمون</a
           >
         </div>
