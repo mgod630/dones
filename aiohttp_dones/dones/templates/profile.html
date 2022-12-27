@@ -3,16 +3,52 @@
 <link rel="stylesheet" type="text/css" href="/static/css/forms.css?1" />
 <link rel="stylesheet" type="text/css" href="/static/css/profile.css?3" />
 <style>
-  .myLabel{
+  /* .myLabel{
   display: inline-block;
-  /* background-color: indigo; */
   color: white;
   padding: 0.5rem;
-  /* font-family: sans-serif; */
   border-radius: 0.3rem;
   cursor: pointer;
   margin-top: 1rem;
 }
+.profile-pic {
+    width: 200px;
+    max-height: 200px;
+    display: inline-block;
+}
+.file-upload {
+    display: none;
+}
+.circle {
+    border-radius: 100% !important;
+    overflow: hidden;
+    width: 128px;
+    height: 128px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    position: absolute;
+    top: 72px;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+.p-image {
+  position: absolute;
+  top: 167px;
+  right: 30px;
+  color: #666666;
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.p-image:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.upload-button {
+  font-size: 1.2em;
+}
+.upload-button:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+  color: #999;
+} */
 </style>
 {% endblock %}
 {% block content %}
@@ -27,12 +63,21 @@
       <div class="row">
         <div class="col-12 col-sm-4">
           <div class="pr-region">
+            <div class="circle profile-picture">
+              <img class="profile-pic" src="../static/template/profile.jpg">
+            </div>
+            <div class="p-image">
+              <!-- <i class="fa fa-camera upload-button"></i> -->
+               <input class="file-upload mx-5 my-2" type="file" accept="image/*"/>
+            </div>
+          </div>
+          <!-- <div class="pr-region">
             <div class="profile-picture">
               <img src="../static/template/profile.jpg">
               <input type="file" id="actual-btn" hidden/>
               <label class="myLabel btn btn-success" for="actual-btn">تغییر عکس</label>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="col-12 col-sm-8">
           <div class="pr-region">
@@ -109,6 +154,21 @@
       }
       $("#password_panel").slideToggle();
     });
-  });
+    var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('.profile-pic').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(".file-upload").on('change', function(){
+        readURL(this);
+    });
+    $(".upload-button").on('click', function() {
+       $(".file-upload").click();
+    });
+});
 </script>
 {% endblock %}

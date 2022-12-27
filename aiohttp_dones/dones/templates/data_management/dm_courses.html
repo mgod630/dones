@@ -99,7 +99,7 @@
             <td>{{course.jalali_start_datetime}}</td>
             <td>{{course.price}}</td>
             <td>
-                <button class="btn btn-success show-settings" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}"{% endfor %} >
+                <button class="btn btn-success show-settings btn-sm" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}"{% endfor %} >
                     <i class="far fa-cog"></i>
                 </button>
             </td>

@@ -96,13 +96,47 @@
             <a class="btn btn-primary btn-sm" href="/dm-quiz-users-answers/{{quiz.id}}"><i class='far fa-eye'></i></a>
         </td>
         <!-- <td><a class="btn btn-success btn-sm" href="/quiz-registered-users/{{quiz.id}}"><i class="far fa-user"></i></a></td> -->
-        <td><a class="btn btn-success btn-sm" href="/dm-quiz/{{course_item_id}}/{{quiz.id}}"><i class="far fa-cog"></i></a></td>
-        <td><a class="btn btn-warning btn-sm" href="/dm-delete-quiz/{{course_item_id}}/{{quiz.id}}"><i class='far fa-trash-alt'></i></a></td>
+        <td><a class=" btn btn-success btn-sm" href="/dm-quiz/{{course_item_id}}/{{quiz.id}}"><i class="far fa-cog"></i></a></td>
+        <td>
+          <a class="delItem btn btn-warning btn-sm" {% for attr in quiz if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{quiz[attr]}}" {% endfor %} >
+            <i class="far fa-trash-alt"></i>
+          </a>
+        </td>
     </tr>
     {% endfor %}
 {% endif %}
 </table>
 {% endblock %}
+
+<div class="modal" tabindex="-1" role="dialog" id="delete_course">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">حذف اطلاعیه</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="course-details-wrapper">
+          <p class="titleNotif"></p>
+          <a
+            class="btn btn-warning"
+            hf="/dm-delete-course-item/"
+            href="#"
+            >حذف</a
+          >
+          <button class="btn mx-3" data-dismiss="modal">لغو</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% block scripts %}
 <script>
   function success() {
@@ -116,5 +150,15 @@
       document.getElementById("submitbtn").disabled = false;
     }
   }
+  $(function () {
+    $(".delItem").click(function () {
+      var notif = $(this).data();
+      $("#delete_course .titleNotif").text(notif.title);
+      $("#delete_course a").each(function () {
+        $(this).attr("href",$(this).attr("hf") +  notif.course_id + "/" + notif.id);
+      });
+      $("#delete_course").modal("show");
+    });
+  });
 </script>
 {% endblock %}

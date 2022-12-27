@@ -100,18 +100,25 @@
       ></a>
     </td>
     <td>
-      <a class="btn btn-success btn-sm" href="/dm-course-items/{{course_id}}/{{course_items[i].id}}"
-      ><i class="far fa-cog"></i</a>
-      </td>
-      <td>
-        <button class="delNotif btn btn-warning" {% for attr in i if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{i[attr]}}" {% endfor %} >
-          <i class="far fa-trash-alt"></i>
-        </button>
-      </td>
+      <a
+        class="btn btn-success btn-sm"
+        href="/dm-course-items/{{course_id}}/{{course_items[i].id}}"
+        ><i class="far fa-cog"></i
+      ></a>
+    </td>
+    <!-- <td>
+      <a class="btn btn-warning btn-sm" href="{{all_course_item_id_link[i]}}"
+        ><i class="far fa-trash-alt"></i
+      ></a>
+    </td> -->
+    <td>
+      <a class="delItem btn btn-warning btn-sm" {% for attr in course_items[i] if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course_items[i][attr]}}" {% endfor %} >
+        <i class="far fa-trash-alt"></i>
+      </a>
+    </td>
   </tr>
   {% endfor %} {% endif %}
 </table>
-
 <div class="modal" tabindex="-1" role="dialog" id="delete_course">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -131,7 +138,7 @@
           <p class="titleNotif"></p>
           <a
             class="btn btn-warning"
-            hf="/dm-delete-course_news/"
+            hf="/dm-delete-course-item/"
             href="#"
             >حذف</a
           >
@@ -155,14 +162,11 @@
     }
   }
   $(function () {
-    $(".delNotif").click(function () {
+    $(".delItem").click(function () {
       var notif = $(this).data();
       $("#delete_course .titleNotif").text(notif.title);
       $("#delete_course a").each(function () {
-        $(this).attr(
-          "href",
-          $(this).attr("hf") + notif.section_id + "/" + notif.id
-        );
+        $(this).attr("href",$(this).attr("hf") +  notif.course_id + "/" + notif.id);
       });
       $("#delete_course").modal("show");
     });

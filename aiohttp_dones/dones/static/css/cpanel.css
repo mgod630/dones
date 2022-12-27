@@ -47,12 +47,12 @@
   margin: auto;
   display: block;
 }
-.fa-cog,
+/* .fa-cog,
 .fa-trash-alt {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 .warningTitle {
   font-size: 20px;
   font-weight: 800;

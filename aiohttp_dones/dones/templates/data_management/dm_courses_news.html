@@ -53,9 +53,9 @@
     ثبت
   </button>
 </form>
-{% if status %}
-<p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اطلاعیه های این درس</p>
-{% else %}
+{% if status %} {% if all_courses %}
+<p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اطلاعیه های {{all_courses[0].title}}</p>
+{% endif %}{% else %}
 <p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اطلاعیه تمام صفحات</p>
 {% endif %}
 <div class="table-responsive mt-3">
@@ -78,14 +78,14 @@
       <!-- <td>{{title}}</td> -->
       <td>{{notif.jalali_date}}</td>
       <td>
-        <button class="btn btn-success btn-sm">
+        <a class="btn btn-success btn-sm" href="/dm-courses_news/{{notif.section_id}}/{{notif.id}}">
           <i class="far fa-cog"></i>
-        </button>
+        </a>
       </td>
       <td>
-        <button class="delNotif btn btn-warning" {% for attr in notif if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{notif[attr]}}" {% endfor %} >
+        <a class="delNotif btn btn-warning btn-sm" {% for attr in notif if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{notif[attr]}}" {% endfor %} >
           <i class="far fa-trash-alt"></i>
-        </button>
+        </a>
       </td>
     </tr>
     {% endfor %} {% endif %}
