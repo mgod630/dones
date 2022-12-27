@@ -1,9 +1,7 @@
 from flask import current_app as app
 import mysql.connector.pooling
-import uuid
 
 connection_pool = None
-
 
 class Courses:
     @staticmethod
@@ -33,23 +31,21 @@ class Courses:
         return row
 
     @staticmethod
-    def insert_new_course(welcome_text, body_html, free_items_count, course_result, title, institute, jalali_start_datetime, jalali_end_datetime, price, logo_path, image_path, description, video_path):
+    def insert_new_course(welcome_text, body_html, title, institute, unix_start_datetime, unix_end_datetime, price, logo_path, image_path, description, video_path):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_course = ("INSERT INTO `tbl_courses` (`welcome_text`, `body_html`, `free_items_count`, `course_result`, `title`, `institute`, `jalali_start_datetime`, `jalali_end_datetime`, `price`, `logo_path`, `image_path`, `description`, `video_path`) VALUES" +
-                      "( %(welcome_text)s, %(body_html)s, %(free_items_count)s, %(course_result)s, %(title)s, %(institute)s, %(jalali_start_datetime)s, %(jalali_end_datetime)s, %(price)s, %(logo_path)s, %(image_path)s, %(description)s, %(video_path)s)")
+        add_course = ("INSERT INTO `tbl_courses` (`welcome_text`, `body_html`, `title`, `institute`, `unix_start_datetime`, `unix_end_datetime`, `price`, `logo_path`, `image_path`, `description`, `video_path`) VALUES" +
+                      "( %(welcome_text)s, %(body_html)s, %(title)s, %(institute)s, %(unix_start_datetime)s, %(unix_end_datetime)s, %(price)s, %(logo_path)s, %(image_path)s, %(description)s, %(video_path)s)")
         data_course = {
             'welcome_text': welcome_text,
             'body_html': body_html,
-            'free_items_count': free_items_count,
-            'course_result': course_result,
             'title': title,
             'institute': institute,
-            'jalali_start_datetime': jalali_start_datetime,
-            'jalali_end_datetime': jalali_end_datetime,
+            'unix_start_datetime': unix_start_datetime,
+            'unix_end_datetime': unix_end_datetime,
             'price': price,
             'logo_path': logo_path,
             'image_path': image_path,
@@ -63,7 +59,7 @@ class Courses:
         return inserted_record_id
 
     @staticmethod
-    def update_course(id, welcome_text=None, body_html=None, free_items_count=None, course_result=None, title=None, institute=None, jalali_start_datetime=None, jalali_end_datetime=None, price=None, logo_path=None, image_path=None, description=None, video_path=None):
+    def update_course(id, welcome_text=None, body_html=None, course_result=None, title=None, institute=None, unix_start_datetime=None, unix_end_datetime=None, price=None, logo_path=None, image_path=None, description=None, video_path=None):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -74,18 +70,16 @@ class Courses:
             update_string += f'welcome_text=%(welcome_text)s,'
         if body_html:
             update_string += f'body_html=%(body_html)s,'
-        if free_items_count:
-            update_string += f'free_items_count=%(free_items_count)s,'
         if course_result:
             update_string += f'course_result=%(course_result)s,'
         if title:
             update_string += f'title = %(title)s,'
         if institute:
             update_string += f'institute=%(institute)s,'
-        if jalali_start_datetime:
-            update_string += f'jalali_start_datetime=%(jalali_start_datetime)s,'
-        if jalali_end_datetime:
-            update_string += f'jalali_end_datetime=%(jalali_end_datetime)s,'
+        if unix_start_datetime:
+            update_string += f'unix_start_datetime=%(unix_start_datetime)s,'
+        if unix_end_datetime:
+            update_string += f'unix_end_datetime=%(unix_end_datetime)s,'
         if price:
             update_string += f'price=%(price)s,'
         if logo_path:
@@ -101,12 +95,11 @@ class Courses:
         data_course = {
             'welcome_text': welcome_text,
             'body_html': body_html,
-            'free_items_count': free_items_count,
             'course_result': course_result,
             'title': title,
             'institute': institute,
-            'jalali_start_datetime': jalali_start_datetime,
-            'jalali_end_datetime': jalali_end_datetime,
+            'unix_start_datetime': unix_start_datetime,
+            'unix_end_datetime': unix_end_datetime,
             'price': price,
             'logo_path': logo_path,
             'image_path': image_path,
@@ -147,4 +140,4 @@ class Courses:
 if __name__ == '__main__':
     connection_pool = mysql.connector.pooling.MySQLConnectionPool(
         user="root", password="", database='goldis', use_pure=False, pool_name="my_pool", pool_size=32, buffered=True)
-
+    
