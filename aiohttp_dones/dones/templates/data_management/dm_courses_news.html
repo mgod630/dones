@@ -20,7 +20,7 @@
         {% endfor %} {% endif %}
       </select>
     </div>
-    <div class="form-group col-12">
+    <!-- <div class="form-group col-12">
       <label><span style="color: red"> * </span>نوع اطلاعیه</label>
       <input
         id="esse1"
@@ -30,7 +30,7 @@
         name="course_news_type"
         value="{% if course_news  %}{{course_news.course_news_type}}{% endif %}"
       />
-    </div>
+    </div> -->
     <div class="form-group col-12">
       <label><span style="color: red"> * </span>متن اطلاعیه</label>
       <textarea
@@ -63,7 +63,7 @@
     <thead>
       <tr>
         <th>متن اطلاعیه</th>
-        <th>نوع اطلاعیه</th>
+        <!-- <th>نوع اطلاعیه</th> -->
         <!-- <th>صفحه اطلاعیه</th> -->
         <th>تاریخ اطلاعیه</th>
         <th>ویرایش</th>
@@ -74,7 +74,7 @@
     {% if courses_news %} {% for notif in courses_news %}
     <tr>
       <td>{{notif.course_news_text}}</td>
-      <td>{{notif.course_news_type}}</td>
+      <!-- <td>{{notif.course_news_type}}</td> -->
       <!-- <td>{{title}}</td> -->
       <td>{{notif.jalali_date}}</td>
       <td>
@@ -126,7 +126,7 @@
 <script>
   function success() {
     if (
-      document.getElementById("esse1").value === "" ||
+      // document.getElementById("esse1").value === "" ||
       document.getElementById("esse2").value === ""
     ) {
       document.getElementById("submitbtn").disabled = true;

@@ -105,7 +105,7 @@
           value="{% if user_id  %}{{update_user.mobile}}{% endif %}"
         />
       </div>
-      <div class="form-group col-md-3">
+      <!-- <div class="form-group col-md-3">
         <label><span style="color: red"> * </span>کد ملی</label>
         <input
           id="f3"
@@ -118,7 +118,7 @@
           name="national_id"
           value="{% if user_id and update_user.national_id %}{{update_user.national_id}}{% endif %}"
         />
-      </div>
+      </div> -->
       <div class="form-group col-md-3 {% if user_id %}d-none{% endif %}">
         <label><span style="color: red"> * </span>رمزعبور</label>
         <input
@@ -205,11 +205,11 @@
         <th>نوع کاربر</th>
         <th>نام کاربر</th>
         <th>موبایل</th>
-        <th>جنسیت</th>
+        <!-- <th>جنسیت</th>
         <th>سن</th>
         <th>تحصیلات</th>
         <th>شغل</th>
-        <th>وضعیت تاهل</th>
+        <th>وضعیت تاهل</th> -->
         <th>تنظیمات</th>
       </tr>
     </thead>
@@ -222,7 +222,7 @@
       </td>
       <td>{{user.full_name}}</td>
       <td>{{user.mobile}}</td>
-      <td>
+      <!-- <td>
         {% if user.gender %}{% if user.gender == 'male'%}مرد{% elif user.gender
         == 'female' %}زن{% endif %}{% endif %}
       </td>
@@ -233,7 +233,7 @@
         {% if user.marital_status %}{% if user.marital_status ==
         'single'%}مجرد{% elif user.marital_status == 'married' %}متاهل{% endif
         %}{% endif %}
-      </td>
+      </td> -->
       <td>
         <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
           ><i class="far fa-cog"></i
@@ -295,7 +295,7 @@
     if (
       document.getElementById("f1").value === "" ||
       document.getElementById("f2").value === "" ||
-      document.getElementById("f3").value === "" ||
+      // document.getElementById("f3").value === "" ||
       document.getElementById("f4").value === "" ||
       document.getElementById("f4").value === "" ||
       document.getElementById("f5").value === ""
