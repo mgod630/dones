@@ -26,7 +26,7 @@
             </div>
           {#<div class="info-bit">
                   <span>قیمت:</span><span>
-                    {% if course.price == '0' %}
+                    {% if course.price == 0 %}
                       رایگان
                     {% else %}
                       {{ '{0:,}'.format(course.price|int) }} ریال

@@ -108,6 +108,7 @@
         {% endif %}
     </table>
 </div>
+{% for course in all_courses%}
 <div class="modal" tabindex="-1" role="dialog" id="course_settings">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -170,14 +171,14 @@
                                 <i class="far fa-copy"></i>
                                 کپی
                             </a> -->
-                            <a class="btn btn-outline-danger" hf="/dm-delete-course/" href="#">
+                            <a class="delNotif btn btn-outline-danger  btn-sm" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}" {% endfor %} >
                                 <i style="display: inline-block;" class="far fa-trash-alt"></i>
                                 حذف
                             </a>
-                            <button style="width: 50%; height: 90%;" class="btn btn-outline-success " hf="/dm-courses/" href="#">
+                            <a class="btn btn-outline-success virayesh" hf="/dm-courses/" href="#" style="width: 50%; height: 90%;" >
                                 <i class="far fa-pen"></i>
                                 ویرایش
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -186,6 +187,7 @@
     </div>
   </div>
 </div>
+{% endfor %}
 <div class="modal" tabindex="-1" role="dialog" id="new_course">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -285,10 +287,45 @@
         </div>
     </div>
 </div>
+<div class="modal" tabindex="-1" role="dialog" id="delete_course">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">حذف اطلاعیه</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="course-details-wrapper">
+            <p class="titleNotif"></p>
+            <a
+              class="btn btn-warning" hf="/dm-delete-course/" href="#"
+              >حذف</a
+            >
+            <button class="btn mx-3" data-dismiss="modal">لغو</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 {% block scripts %}
 <script>
 $(function(){
+    $(".delNotif").click(function () {
+      var notif = $(this).data();
+      $("#delete_course .titleNotif").text(notif.course_news_text);
+      $("#delete_course a").each(function () {
+        $(this).attr("href", $(this).attr("hf") + notif.id);
+      });
+      $("#delete_course").modal("show");
+    });
     $(".show-settings").click(function(){
         var course_data = $(this).data();
         $("#course_settings .modal-header img").attr("src", course_data.logo_path);
@@ -302,7 +339,8 @@ $(function(){
         $("#course_settings .course-details>div:eq(2)>span:last-child").text(course_data.jalali_end_datetime)
         $("#course_settings .course-details>div:eq(3)>span:last-child").text(course_data.price == 0 ? "رایگان" : course_data.price + " تومان")
 
-        $("#course_settings .course-actions button").click(function(){
+        $("#course_settings .course-actions .virayesh").click(function(e){
+            // e.preventDefault()
             $("#course_settings").modal('hide')
             $(this).attr("href",$(this).attr("hf") + course_data.id)
             $('#new_course').modal('show');

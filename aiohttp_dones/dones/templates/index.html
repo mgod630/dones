@@ -60,15 +60,13 @@
           <div class="crd-detail">
             <span>مدرس:</span><span>{{course.institute}}</span>
           </div>
-          {#
           <div class="crd-detail">
             <span>قیمت:</span
             ><span>
-              {% if course.price == '0' %} رایگان {% else %} {{
+              {% if course.price == 0 %} رایگان {% else %} {{
               '{0:,}'.format(course.price|int) }} تومان {% endif %}
             </span>
           </div>
-          #}
           <a
             href="{{url_for('goldis_blueprint.course_info', course_id=course.id)}}"
             class="btn btn-primary btn-block"
