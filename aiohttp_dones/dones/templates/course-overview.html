@@ -20,7 +20,7 @@
             </div>
           {#<div class="info-bit">
               <span>قیمت:</span><span>
-                {% if course.price == '0' %}
+                {% if course.price == 0 %}
                   رایگان
                 {% else %}
                   {{ '{0:,}'.format(course.price|int) }} ریال
@@ -28,7 +28,7 @@
               </span>
             </div>#}
           </div>
-          {% if course.price != '0' and not course.is_enrolled %}
+          {% if course.price != 0 and not course.is_enrolled %}
           <a href="#payment_modal" data-toggle="modal" class="btn btn-success btn-block">خرید</a>
           {% endif %}
         </div>
@@ -36,7 +36,7 @@
       <div class="col-12 col-lg-8">
         <div class="course-info-text">
           <h2>{{course.title}} 
-            <a href="javascript:history.back()" class="btn btn-outline-light">بازگشت <i class="fas fa-chevron-left"></i></a>
+            <a href="javascript:history.go(-1)" class="btn btn-outline-light">بازگشت <i class="fas fa-chevron-left"></i></a>
           </h2>
           <div class="course-image d-block d-lg-none" style="background-image: url({{course.image_path}})"></div>
           <p>{{course.welcome_text|safe}}</p>
@@ -132,5 +132,6 @@
       $("#payment_link").attr("href","/" + $(this).data("id") + "?course_id=" + $("#payment_link").data("cid"))
     });
   });
+
 </script>
 {% endblock %}

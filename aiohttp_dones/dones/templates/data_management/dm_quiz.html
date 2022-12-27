@@ -98,7 +98,7 @@
         <!-- <td><a class="btn btn-success btn-sm" href="/quiz-registered-users/{{quiz.id}}"><i class="far fa-user"></i></a></td> -->
         <td><a class=" btn btn-success btn-sm" href="/dm-quiz/{{course_item_id}}/{{quiz.id}}"><i class="far fa-cog"></i></a></td>
         <td>
-          <a class="delItem btn btn-warning btn-sm" {% for attr in quiz if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{quiz[attr]}}" {% endfor %} >
+          <a class="delNotif btn btn-warning btn-sm" {% for attr in quiz if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{quiz[attr]}}" {% endfor %} >
             <i class="far fa-trash-alt"></i>
           </a>
         </td>
@@ -127,7 +127,7 @@
           <p class="titleNotif"></p>
           <a
             class="btn btn-warning"
-            hf="/dm-delete-course-item/"
+            hf="/dm-delete-course_news/"
             href="#"
             >حذف</a
           >
@@ -151,12 +151,12 @@
     }
   }
   $(function () {
-    $(".delItem").click(function () {
-      var notif = $(this).data();
-      $("#delete_course .titleNotif").text(notif.title);
-      $("#delete_course a").each(function () {
-        $(this).attr("href",$(this).attr("hf") +  notif.course_id + "/" + notif.id);
-      });
+    $(".delNotif").click(function () {
+      // var notif = $(this).data();
+      // $("#delete_course .titleNotif").text(notif.title);
+      // $("#delete_course a").each(function () {
+      //   $(this).attr("href", $(this).attr("hf") + notif.quiz_id);
+      // });
       $("#delete_course").modal("show");
     });
   });

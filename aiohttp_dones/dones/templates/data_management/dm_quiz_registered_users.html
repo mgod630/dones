@@ -46,12 +46,12 @@
         <td>{% if user.jalali_date %}{{user.jalali_date}}{% endif %}</td>
         <td>{% if user.jalali_time %}{{user.jalali_time}}{% endif %}</td>
         <td>
-          {% if user.user_answers %} <button class="answersModal btn btn-warning" {% for attr in user if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{user[attr]}}" {% endfor %} >
-            نمایش جواب
-          </button> {% else %}
+          {% if user.user_answers %}
+          <a class="delNotif btn btn-warning btn-sm" {% for attr in user if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{user[attr]}}" {% endfor %} >
+          نمایش جواب
+          </a> {% else %}
           <div>بدون جواب</div>
           {% endif %}
-          
         </td>
       </tr>
       {% endfor %} {% endif %}
@@ -62,12 +62,12 @@
   {% endif %}
   <input type="hidden" name="mobile" value="" />
 </form>
-{% if quiz in quizs %}
-<div class="modal" tabindex="-1" role="dialog" id="answer_mo">
+
+<div class="modal" tabindex="-1" role="dialog" id="delete_course">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">آزمون {{quiz.id}} شما</h5>
+        <h5 class="modal-title">نتیجه آزمون شما</h5>
         <button
           type="button"
           class="close"
@@ -79,13 +79,13 @@
       </div>
       <div class="modal-body">
         <div class="course-details-wrapper">
-          <div class="allOfAnswers"></div>
+          <p class="titleNotif"></p>
         </div>
       </div>
     </div>
   </div>
 </div>
-{% endif %} {% endblock %} {% block scripts %}
+ {% endblock %} {% block scripts %}
 <script>
   $("input[type=radio]").on("click", function (e) {
     checkedItems = [];
@@ -101,13 +101,13 @@
     }
   });
   $(function () {
-    $(".answersModal").click(function () {
-      var ansModal = $(this).data();
-      // $("#answer_mo .allOfAnswers").text(ansModal.user_answers);
-      // $("#answer_mo a").each(function () {
-      //   $(this).attr("href", $(this).attr("hf") + notif.section_id + "/" + notif.id);
-      // });
-      $("#answer_mo").modal("show");
+    $(".delNotif").click(function () {
+      var notif = $(this).data();
+      $("#delete_course .titleNotif").text(notif.user_answers);
+      $("#delete_course a").each(function () {
+        $(this).attr("href", $(this).attr("hf") + notif.section_id + "/" + notif.id);
+      });
+      $("#delete_course").modal("show");
     });
   });
 </script>

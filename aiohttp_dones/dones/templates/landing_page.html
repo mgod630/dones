@@ -266,22 +266,22 @@
         <div class="container">
           <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
-              <div class="item active">
+              <div class="item">
                 <div
                   class="d-flex flex-column align-items-center justify-content-center text-center"
                 >
                   <img
-                    src="../static/template/banner (1).jpg"
+                    src="../static/template/IMG_20221227_154152_190.jpg"
                     alt=""
                     style="width: 200px; height: 200px; border-radius: 50%"
                   />
                   <p class="mt-4 fs-4 fw-bold">
-                    Lorem ipsum dolor, sit amet consectetur <br />
-                    adipisicing elit. Mollitia laboriosam laudant
+                    خوبیه این دوره اینه که صرفا آموزش نیست و <br />
+                    با پروژه واقعی فرق چندانی نداره
                   </p>
                 </div>
               </div>
-              <div class="item">
+              <div class="item active">
                 <div
                   class="d-flex flex-column align-items-center justify-content-center text-center"
                 >
@@ -391,11 +391,50 @@
             </button>
           </div>
         </form>
+        <!-- <form id='formId' action=''> Name:
+          <input type='text' 
+                 id='nm' 
+                 name='nm'> 
+          </input>
+          <br> Student ID:
+          <input type='text' 
+                 id='studentId' 
+                 name='studentId'> 
+          </input>
+          <br> Contact No. :
+          <input type='text' 
+                 id='contactNumber' 
+                 name='contactNumber'> 
+          </input>
+          <br>
+          <button type='submit' 
+                 id='submitButton'>
+              Submit
+          </button>
+      </form> -->
       </div>
       <img src="../static/template/عکس فوتر.png" alt="" class="pb-4" />
     </div>
   </body>
   <script>
+    // $(() => {
+    //     $("#submitButton").click(function(ev) {
+    //         var form = $("#formId");
+    //         var url = form.attr('action');
+    //         $.ajax({
+    //             type: "POST",
+    //             url: url,
+    //             data: form.serialize(),
+    //             success: function(data) {
+    //                 alert("Form Submited Successfully");
+    //             },
+    //             error: function(data) {
+    //                 alert("some Error");
+    //             }
+    //         });
+    //     });
+    // });
+
     const TI11 = "22 march 2023";
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
@@ -418,7 +457,7 @@
     setInterval(countdown, 1000);
 
     $(function () {
-      $("#participate").click(function () {
+      $("#landing-page-form").submit(function () {
         $.ajax({
           method: "POST",
           url: "/landing-page-post",
@@ -426,6 +465,7 @@
         })
           .done(function (resp) {
             if (resp.result == "email_already_exists") {
+              // console.log("این ایمیل قبلا ثبت نام کرده است.");
               $("#result_email_message")
                 .addClass("text-success")
                 .text("این ایمیل قبلا ثبت نام کرده است.")

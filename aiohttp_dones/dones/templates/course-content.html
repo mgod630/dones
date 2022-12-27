@@ -15,7 +15,7 @@
         <div>{{course_item.title}}</div>
         <div>{{course.title}}</div>
       </div>
-      <a href="javascript:history.back()" class="btn btn-outline-light">
+      <a href="javascript:history.go(-1)" class="btn btn-outline-light">
         بازگشت <i class="fas fa-chevron-left"></i>
       </a>
     </div>
@@ -103,9 +103,15 @@
           </div>
         </div>
         <div class="cc-quiz-row">
+          {% if quiz.question_count %}
           <a class="btn btn-warning" href="/quiz/quiz_{{quiz.id}}"
             >ورود به آزمون</a
           >
+          {% else %}
+          <a class="btn btn-danger" href="/quiz/quiz_{{quiz.id}}"
+            >ورود به آزمون</a
+          >
+          {% endif %}
         </div>
       </div>
       {% endfor %}
@@ -182,5 +188,12 @@
       comments
     );
   });
+  // function success() {
+  //   if (document.getElementById("esse1").value === "") {
+  //     document.getElementById("submitbtn").disabled = true;
+  //   } else {
+  //     document.getElementById("submitbtn").disabled = false;
+  //   }
+  // }
 </script>
 {% endblock %}
