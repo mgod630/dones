@@ -2,9 +2,10 @@ import enum
 from flask import current_app as app
 import mysql.connector.pooling
 from routes import common
-from models_mysql import items_orm, itemzes_orm, courses_orm
+from models_mysql import items_orm, courses_orm
 
 connection_pool = None
+
 
 class User_items:
     @staticmethod
@@ -58,7 +59,7 @@ class User_items:
     #     row = cursor.fetchall()
     #     cnx.close()
     #     return row
-        
+
     @staticmethod
     def get_user_items_by_item_id(item_id):
         global connection_pool
@@ -104,11 +105,11 @@ class User_items:
             update_string += f'unix_datetime=%(unix_datetime)s,'
         if item_id:
             update_string += f'item_id=%(item_id)s,'
-          
+
         update_string = update_string.rstrip(',')
         add_user = f"UPDATE tbl_user_items SET {update_string} WHERE id='{row_id}'"
         update_query_string = {
-            'item_id':item_id,
+            'item_id': item_id,
             'unix_datetime': unix_datetime,
         }
         cursor.execute(add_user, update_query_string)
@@ -142,7 +143,7 @@ class User_items:
         cnx.close()
         return True
 
- 
+
 if __name__ == '__main__':
     connection_pool = mysql.connector.pooling.MySQLConnectionPool(
         user="root", password="", database='goldis', use_pure=False, pool_name="my_pool", pool_size=32, buffered=True)
