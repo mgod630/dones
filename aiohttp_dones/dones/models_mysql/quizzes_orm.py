@@ -4,7 +4,6 @@ from models_mysql import items_orm
 
 connection_pool = None
 
-
 class Quizzes:
     @staticmethod
     def get_all_quizzes():
@@ -52,26 +51,32 @@ class Quizzes:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = ("SELECT tbl_quizzes.*, tbl_questions.* FROM tbl_quizzes INNER JOIN tbl_questions ON tbl_questions.quiz_id = tbl_quizzes.id WHERE tbl_quizzes.item_id=%(item_id)s")
+        query = ("SELECT qz.*, qs.question_text, qs.options, qs.answer_number, qs.answer_description FROM tbl_quizzes qz INNER JOIN tbl_questions qs ON qs.quiz_id = qz.id WHERE qz.item_id=%(item_id)s")
         cursor.execute(query, {'item_id': item_id})
         row = cursor.fetchall()
         cnx.close()
         return row
 
     @staticmethod
-    def insert_new_quiz(item_id, title, jalali_start_datetime, jalali_end_datetime, description, question_count, duration, attendance_max, quiz_type):
+    def insert_new_quiz(item_id, title, unix_start_datetime, unix_end_datetime, description='empty', question_count=0, duration=1, attendance_max=1, quiz_type=1):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_quiz = ("INSERT INTO `tbl_quizzes` (`item_id`, `title`, `jalali_start_datetime`, `jalali_end_datetime`, `description`, `question_count`, `duration`, `attendance_max`, `quiz_type`) VALUES" +
-                    "( %(item_id)s, %(title)s, %(jalali_start_datetime)s, %(jalali_end_datetime)s, %(description)s, %(question_count)s, %(duration)s, %(attendance_max)s, %(quiz_type)s)")
+        if question_count == '': question_count = 0
+        else: question_count = int(question_count)
+        if duration == '': duration = 1
+        else: duration = int(duration)
+        if attendance_max == '' : attendance_max = 1
+        else: attendance_max = int(attendance_max)
+        add_quiz = ("INSERT INTO `tbl_quizzes` (`item_id`, `title`, `unix_start_datetime`, `unix_end_datetime`, `description`, `question_count`, `duration`, `attendance_max`, `quiz_type`) VALUES" +
+                    "( %(item_id)s, %(title)s, %(unix_start_datetime)s, %(unix_end_datetime)s, %(description)s, %(question_count)s, %(duration)s, %(attendance_max)s, %(quiz_type)s)")
         data_quiz = {
             'item_id': item_id,
             'title': title,
-            'jalali_start_datetime': jalali_start_datetime,
-            'jalali_end_datetime': jalali_end_datetime,
+            'unix_start_datetime': unix_start_datetime,
+            'unix_end_datetime': unix_end_datetime,
             'description': description,
             'question_count': question_count,
             'duration': duration,
@@ -85,7 +90,7 @@ class Quizzes:
         return inserted_record_id
 
     @staticmethod
-    def update_quiz(id, title=None, jalali_start_datetime=None, jalali_end_datetime=None, description=None, question_count=None, duration=None, attendance_max=None, quiz_type=None):
+    def update_quiz(id, title=None, unix_start_datetime=None, unix_end_datetime=None, description=None, question_count=None, duration=None, attendance_max=None, quiz_type=None, user_answers=None):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -94,10 +99,10 @@ class Quizzes:
         update_string = ''
         if title:
             update_string += f'title = %(title)s,'
-        if jalali_start_datetime:
-            update_string += f'jalali_start_datetime=%(jalali_start_datetime)s,'
-        if jalali_end_datetime:
-            update_string += f'jalali_end_datetime=%(jalali_end_datetime)s,'
+        if unix_start_datetime:
+            update_string += f'unix_start_datetime=%(unix_start_datetime)s,'
+        if unix_end_datetime:
+            update_string += f'unix_end_datetime=%(unix_end_datetime)s,'
         if description:
             update_string += f'description=%(description)s,'
         if question_count:
@@ -108,17 +113,20 @@ class Quizzes:
             update_string += f'attendance_max=%(attendance_max)s,'
         if quiz_type:
             update_string += f"quiz_type=%(quiz_type)s"
+        if user_answers:
+            update_string += f"user_answers=%(user_answers)s"
         update_string = update_string.rstrip(',')
         add_quiz = f"UPDATE tbl_quizzes SET {update_string} WHERE id='{id}'"
         data_quiz = {
             'title': title,
-            'jalali_start_datetime': jalali_start_datetime,
-            'jalali_end_datetime': jalali_end_datetime,
+            'unix_start_datetime': unix_start_datetime,
+            'unix_end_datetime': unix_end_datetime,
             'description': description,
             'question_count': question_count,
             'duration': duration,
             'attendance_max': attendance_max,
             'quiz_type': quiz_type,
+            'user_answers': user_answers
         }
         cursor.execute(add_quiz, data_quiz)
         cnx.commit()
@@ -132,7 +140,6 @@ class Quizzes:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        # query = "DELETE q.* FROM tbl_quizzes q INNER JOIN tbl_items i ON q.item_id = i.id WHERE (q.id='%(quiz_id)s' AND q.item_id='%(item_id)s' AND i.course_id = '%(course_id)s')"
         query = "DELETE FROM tbl_quizzes WHERE id = %(quiz_id)s"
         cursor.execute(query, {'quiz_id': quiz_id})
         cnx.commit()
@@ -140,22 +147,6 @@ class Quizzes:
         return True
 
 
-def quizzes_orm_functions_test():
-    import random
-    i = random.randint(1, 1000)
-    last_id = Quizzes.insert_new_quiz(
-        f'title{i}', f'code{i}', f'unit_fa{i}', f'image_path{i}', f'description{i}', i, 0, f'{i*11}', i, i)
-    update = Quizzes.update_quiz(last_id, title=f'Updated_title{i}')
-    last_quiz = Quizzes.get_quiz_by_id(last_id)
-    print(last_quiz)
-    print('-' * 80)
-    all_quizzes = Quizzes.get_all_quizzes()
-    print(all_quizzes)
-    return True
-
-
 if __name__ == '__main__':
     connection_pool = mysql.connector.pooling.MySQLConnectionPool(
         user="root", password="", database='goldis', use_pure=False, pool_name="my_pool", pool_size=32, buffered=True)
-    quizzes_orm_functions_test()
-    print('Everything is alright!')

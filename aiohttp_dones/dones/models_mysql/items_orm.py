@@ -3,7 +3,6 @@ import mysql.connector.pooling
 
 connection_pool = None
 
-
 class Items:
     @staticmethod
     def get_all_items():
@@ -45,19 +44,19 @@ class Items:
         return data
 
     @staticmethod
-    def insert_new_item(course_id, title, jalali_start_datetime, jalali_end_datetime, description):
+    def insert_new_item(course_id=0, title='empty', unix_start_datetime=0, unix_end_datetime=0, description='empty'):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_item = ("INSERT INTO `tbl_items` (`course_id`, `title`, `jalali_start_datetime`, `jalali_end_datetime`, `description`) VALUES" +
-                    "( %(course_id)s, %(title)s, %(jalali_start_datetime)s, %(jalali_end_datetime)s, %(description)s)")
+        add_item = ("INSERT INTO `tbl_items` (`course_id`, `title`, `unix_start_datetime`, `unix_end_datetime`, `description`) VALUES" +
+                    "( %(course_id)s, %(title)s, %(unix_start_datetime)s, %(unix_end_datetime)s, %(description)s)")
         data_item = {
             'course_id': course_id,
             'title': title,
-            'jalali_start_datetime': jalali_start_datetime,
-            'jalali_end_datetime': jalali_end_datetime,
+            'unix_start_datetime': unix_start_datetime,
+            'unix_end_datetime': unix_end_datetime,
             'description': description
         }
         cursor.execute(add_item, data_item)
@@ -67,7 +66,7 @@ class Items:
         return inserted_record_id
 
     @staticmethod
-    def update_item(id, title=None, jalali_start_datetime=None, jalali_end_datetime=None, description=None):
+    def update_item(id, title=None, unix_start_datetime=None, unix_end_datetime=None, description=None):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -76,18 +75,18 @@ class Items:
         update_string = ''
         if title:
             update_string += f'title = %(title)s,'
-        if jalali_start_datetime:
-            update_string += f'jalali_start_datetime=%(jalali_start_datetime)s,'
-        if jalali_end_datetime:
-            update_string += f'jalali_end_datetime=%(jalali_end_datetime)s,'
+        if unix_start_datetime:
+            update_string += f'unix_start_datetime=%(unix_start_datetime)s,'
+        if unix_end_datetime:
+            update_string += f'unix_end_datetime=%(unix_end_datetime)s,'
         if description:
             update_string += f'description=%(description)s,'
         update_string = update_string.rstrip(',')
         add_item = f"UPDATE tbl_items SET {update_string} WHERE id='{id}'"
         data_item = {
             'title': title,
-            'jalali_start_datetime': jalali_start_datetime,
-            'jalali_end_datetime': jalali_end_datetime,
+            'unix_start_datetime': unix_start_datetime,
+            'unix_end_datetime': unix_end_datetime,
             'description': description
         }
         cursor.execute(add_item, data_item)
@@ -111,16 +110,15 @@ class Items:
 
 
 def items_orm_functions_test():
-    import random
-    i = random.randint(1, 1000)
-    last_id = Items.insert_new_item(
-        f'title{i}', f'code{i}', f'unit_fa{i}', f'image_path{i}', f'description{i}', i, 0, f'{i*11}', i, i)
-    update = Items.update_item(last_id, title=f'Updated_title{i}')
-    last_item = Items.get_item_by_id(last_id)
-    print(last_item)
-    print('-' * 80)
+    # import random
+    # i = random.randint(1, 1000)
+    # last_id = Items.insert_new_item(
+    #     f'title{i}', f'description{i}')
+    # update = Items.update_item(last_id, title=f'Updated_title{i}')
+    # last_item = Items.get_item_by_id(last_id)
+    Items.insert_new_item(course_id=13, title='جلسه 1',description='deieei')
     all_items = Items.get_all_items()
-    print(all_items)
+    
     return True
 
 
