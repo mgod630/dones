@@ -1,7 +1,7 @@
 import jdatetime , json, time, tools
 from flask import redirect, render_template, request, session, url_for
 from routes import common
-from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, course_news_orm, user_courses_orm, flash_messages_orm, user_quizzes_orm
+from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, course_news_orm, user_courses_orm, flash_messages_orm, user_quizzes_orm, user_items_orm
 
 flash_messages = []
 
@@ -29,7 +29,7 @@ def make_routes(goldis_blueprint):
     def course_overview(course_id):
         user = common.get_user_from_token()
         if user == None:
-            flash_messages_orm.Flash_messages.insert_new_flash_message('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger') 
+            flash_messages_orm.Flash_messages.insert_new_flash_message(message='کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', message_type='danger') 
             return redirect('/')
         else:
             user_full_name = user['full_name']
@@ -128,13 +128,26 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(user['g_token'])
         user_courses = user_courses_orm.User_courses.get_user_courses_by_user_id(user['id'])
-        user_courses_title = []
+        user_courses_with_title = []
         course = None
         for crs in user_courses:
             course = courses_orm.Courses.get_course_by_id(crs['course_id'])
             crs['title'] = course['title']
-            user_courses_title.append(crs)
-        return render_template('my-courses.html', user=user, courses = user_courses_title, flash_messages = flash_messages)
+            user_courses_with_title.append(crs)
+        return render_template('my-courses.html', user=user, courses = user_courses_with_title, course=course, flash_messages = flash_messages)
+    
+    @goldis_blueprint.route('/my-courses')
+    def my_items():
+        user = common.get_user_from_token()
+        flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(user['g_token'])
+        user_items = user_items_orm.User_items.get_all_user_items_by_user_id(user['id'])
+        user_courses_with_title = []
+        course = None
+        for crs in user_courses:
+            course = courses_orm.Courses.get_course_by_id(crs['course_id'])
+            crs['title'] = course['title']
+            user_courses_with_title.append(crs)
+        return render_template('my-courses.html', user=user, courses = user_courses_with_title, course=course, flash_messages = flash_messages)
 
     @goldis_blueprint.route("/quiz-results/item_<item_id>")
     def user_quizzes(item_id):
