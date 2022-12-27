@@ -37,7 +37,7 @@ class Flash_messages:
     #   danger = enum.auto()
 
     @staticmethod
-    def insert_new_flash_message(user_token, message, message_type):
+    def insert_new_flash_message(user_token='empty', message='empty', message_type='empty'):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
