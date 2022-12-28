@@ -6,7 +6,7 @@
 <h4 style="text-align: center">
   <a href="/quiz-results/{{quizzes[0].id}}/{{user_id}}">نتیجه ی آزمون</a>
 </h4>
-{% endif %} 
+{% endif %}
 <div class="container course-content-container">
   <div class="white-box mt-3 mb-3">
     <div class="wb-header wbh-purple">
@@ -108,8 +108,8 @@
             >ورود به آزمون</a
           >
           {% else %}
-          <a class="btn btn-danger" href="/quiz/quiz_{{quiz.id}}"
-            >ورود به آزمون</a
+          <a disabled id="submitbtn" class="btn btn-danger text-light"
+            >بدون سوال</a
           >
           {% endif %}
         </div>
@@ -188,6 +188,8 @@
       comments
     );
   });
+  document.getElementById("submitbtn").disabled = true;
+
   // function success() {
   //   if (document.getElementById("esse1").value === "") {
   //     document.getElementById("submitbtn").disabled = true;
