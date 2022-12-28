@@ -1,5 +1,10 @@
 {% extends "layout.html" %} {% block styles %}
 <style>
+  .neverTry {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 20px 13%;
+  }
   .quiz-stats {
     display: flex;
     margin-bottom: 15px;
@@ -29,6 +34,7 @@
     margin-left: 5px;
   }
   .titled-frame {
+    width: 80%;
     border: 2px solid #99caff;
     padding: 5px;
     border-radius: 8px;
@@ -147,59 +153,65 @@
     <h4>{{quiz_name_fa}}</h4>
     <img src="/static/template/samah_logo.png">
 </div> -->
-<div class="titled-frame m-5">
-  <div class="tf-title">اطلاعات شرکت کننده</div>
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>نام شرکت کننده</th>
-          <th>شماره موبایل</th>
-          <!-- <th>جنسیت</th>
-          <th>سن</th>
-          <th>مدرک تحصیلی</th>
-          <th>شغل</th>
-          <th>وضعیت تاهل</th> -->
-          <!-- <th>تاریخ</th> -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{attender.full_name}}</td>
-          <td>{{attender.mobile}}</td>
-          <!-- <td>
-            {% if attender.gender %}{% if attender.gender == 'male'%}مرد{% elif
-            attender.gender == 'female' %}زن{% endif %}{% else %}-{% endif %}
-          </td>
-          <td>{% if attender.age %}{{attender.age}}{% else %}-{% endif %}</td>
-          <td>
-            {% if attender.grade %}{{attender.grade}}{% else %}-{% endif %}
-          </td>
-          <td>{% if attender.job %}{{attender.job}}{% else %}-{% endif %}</td>
-          <td>
-            {% if attender.marital_status %}{% if attender.marital_status ==
-            'single'%}مجرد{% elif attender.marital_status == 'married' %}متاهل{%
-            endif %}{% else %}-{% endif %}
-          </td> -->
-          <!-- <td>{% if attender.datatime %}{{attender.datatime}}{% else %}-{% endif %}</td> -->
-        </tr>
-      </tbody>
-    </table>
+<div class="d-flex justify-content-center">
+  <div class="titled-frame m-5">
+    <div class="tf-title">اطلاعات شرکت کننده</div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>نام شرکت کننده</th>
+            <th>شماره موبایل</th>
+            <!-- <th>جنسیت</th>
+            <th>سن</th>
+            <th>مدرک تحصیلی</th>
+            <th>شغل</th>
+            <th>وضعیت تاهل</th> -->
+            <!-- <th>تاریخ</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{attender.full_name}}</td>
+            <td>{{attender.mobile}}</td>
+            <!-- <td>
+              {% if attender.gender %}{% if attender.gender == 'male'%}مرد{% elif
+              attender.gender == 'female' %}زن{% endif %}{% else %}-{% endif %}
+            </td>
+            <td>{% if attender.age %}{{attender.age}}{% else %}-{% endif %}</td>
+            <td>
+              {% if attender.grade %}{{attender.grade}}{% else %}-{% endif %}
+            </td>
+            <td>{% if attender.job %}{{attender.job}}{% else %}-{% endif %}</td>
+            <td>
+              {% if attender.marital_status %}{% if attender.marital_status ==
+              'single'%}مجرد{% elif attender.marital_status == 'married' %}متاهل{%
+              endif %}{% else %}-{% endif %}
+            </td> -->
+            <!-- <td>{% if attender.datatime %}{{attender.datatime}}{% else %}-{% endif %}</td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 {% if user_quizzes %} {% for quiz in user_quizzes %}
-<div class="titled-frame mx-5 my-3">
-  <div class="tf-title">اطلاعات آزمون</div>
-  <div class="quiz-stats">
-    <div><span>نام آزمون:</span> {{quiz.title}}</div>
-    <div><span>تاریخ شرکت در آزمون:</span> {{quiz.date}}</div>
-    <!-- <div>
-      <span>زمان شرکت در آزمون:</span> {% if quiz.time != '-1'
-      %}{{quiz.time}}{% else %}-{% endif %}
-    </div> -->
+<div class="d-flex justify-content-center">
+  <div class="titled-frame mx-auto my-3">
+    <div class="tf-title">اطلاعات آزمون</div>
+    <div class="quiz-stats">
+      <div><span>نام آزمون:</span> {{quiz.title}}</div>
+      <div><span>تاریخ شرکت در آزمون:</span> {{quiz.date}}</div>
+      <!-- <div>
+          <span>زمان شرکت در آزمون:</span> {% if quiz.time != '-1'
+          %}{{quiz.time}}{% else %}-{% endif %}
+        </div> -->
+    </div>
   </div>
 </div>
-{% endfor %} {% endif %}
+{% endfor %} {% else %}
+<div class="neverTry">شما تاکنون در هیچ آزمونی شرکت نکرده اید</div>
+{% endif %}
 
 <!-- {% if quiz_name == 'katel' %}
 <div class="titled-frame katel">
