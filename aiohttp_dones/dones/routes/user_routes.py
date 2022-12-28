@@ -48,7 +48,7 @@ def make_routes(goldis_blueprint):
         registering_code = 0
         g_token = secrets.token_hex()
         # user_type = users_orm.Users.Types.new_user
-        user_type = 1
+        user_type = 0
         user = users_orm.Users.get_user_by_mobile(mobile)
         if user:
             status = 'mobile_already_exist'

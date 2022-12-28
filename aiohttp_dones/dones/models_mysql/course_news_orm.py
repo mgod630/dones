@@ -65,7 +65,7 @@ class Courses_news:
         return inserted_record_id
 
     @staticmethod
-    def update_course_news(id, section_id, unix_datetime, course_news_type, course_news_text):
+    def update_course_news(id, section_id, unix_datetime, course_news_text):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -83,7 +83,6 @@ class Courses_news:
         data_course_news = {
             'section_id': section_id,
             'unix_datetime': unix_datetime,
-            'course_news_type': course_news_type,
             'course_news_text': course_news_text,
         }
         cursor.execute(add_course_news, data_course_news)

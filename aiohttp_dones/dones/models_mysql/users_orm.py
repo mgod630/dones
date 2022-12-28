@@ -189,7 +189,7 @@ class Users:
 
     class Types(enum.Enum):
         blocked_user = enum.auto()
-        new_user = enum.auto()
+        new_user = 0
         verified_customer = enum.auto()
         system_user = enum.auto()
         admin = enum.auto()
