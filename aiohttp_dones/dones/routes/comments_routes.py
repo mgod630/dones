@@ -118,17 +118,16 @@ def make_routes(goldis_blueprint):
             comment_text = request.form.get('comment_text', None)
             section_id = request.form.get('section_id', None)
             reply_to = request.form.get('reply_to', None)
-            print(reply_to)
-            print(section_id)
+            reply_to = int(reply_to)
             comment_replied = comments_orm.Comments.get_comment_by_id(reply_to)
             if comment_replied:
-                if comment_replied['is_replied_comment'] == None:
-                    new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != '-1' else None)
+                if comment_replied['reply_to_comment_id'] == -1:
+                    new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != -1 else -1)
                     result = 'succeed'
                 else:
                     result = 'you_cant_answer_to_this_comment'
             else:
-                new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != '-1' else None)
+                new_comment = comments_orm.Comments.insert_new_comment(comment_text = comment_text, sender_name = user['full_name'], sender_id = user['id'] ,section_id = section_id, reply_to_comment_id = reply_to if reply_to != -1 else -1)
                 result = 'succeed'
             
         return {'result':result}
