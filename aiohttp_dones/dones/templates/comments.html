@@ -18,8 +18,8 @@
               </div>
               <input type="hidden" id="section_id" value="{{section_id}}">
               <input type="hidden" id="reply_to" value="-1">
-              <textarea rows="4" class="form-control mb-2" id="reply_text" placeholder="چیزی بنویسید"></textarea>
-              <button class="btn btn-success" id="post_comment">ارسال</button>
+              <textarea rows="4" class="form-control mb-2" id="reply_text" onkeyup="success()" placeholder="چیزی بنویسید"></textarea>
+              <button disabled class="btn btn-success" id="post_comment" >ارسال</button>
           </div>
           <hr>
           <div id="comments_container" class="relative-wrapper" data-id="{{section_id}}">
@@ -71,8 +71,17 @@ function GoBackWithRefresh(event) {
     // } else {
     //     window.history.back();
     // }
-    window.location.reload(history.back());
+    // window.location.reload(history.back());
+    window.location=document.referrer;
 }
-
+function success() {
+    if (
+      document.getElementById("reply_text").value === ""
+    ) {
+      document.getElementById("post_comment").disabled = true;
+    } else {
+      document.getElementById("post_comment").disabled = false;
+    }
+  }
 </script>
 {% endblock %}

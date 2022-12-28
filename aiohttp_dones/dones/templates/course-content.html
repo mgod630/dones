@@ -1,6 +1,16 @@
 {% extends "layout.html" %} {% block styles %}
 <link rel="stylesheet" href="/static/css/mejs/mediaelementplayer.min.css" />
 <link rel="stylesheet" href="/static/css/course-content.css?2" />
+<style>
+  #submitbtn {
+    color: white;
+    background-color: red;
+  }
+  #submitbtn:hover {
+    color: white;
+    background-color: red;
+  }
+</style>
 {% endblock %} {% block content %} {% if allowed_view_results == 'True' %}
 <br />
 <h4 style="text-align: center">
@@ -108,9 +118,7 @@
             >ورود به آزمون</a
           >
           {% else %}
-          <a disabled id="submitbtn" class="btn btn-danger text-light"
-            >بدون سوال</a
-          >
+          <a disabled id="submitbtn" class="btn">بدون سوال</a>
           {% endif %}
         </div>
       </div>
