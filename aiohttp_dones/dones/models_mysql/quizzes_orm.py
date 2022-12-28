@@ -90,7 +90,7 @@ class Quizzes:
         return inserted_record_id
 
     @staticmethod
-    def update_quiz(id, title=None, unix_start_datetime=None, unix_end_datetime=None, description=None, question_count=None, duration=None, attendance_max=None, quiz_type=None, user_answers=None):
+    def update_quiz(id, title=None, unix_start_datetime=None, unix_end_datetime=None, description=None, question_count=None, duration=None, attendance_max=None, quiz_type=None, user_answers='empty'):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -112,7 +112,7 @@ class Quizzes:
         if attendance_max:
             update_string += f'attendance_max=%(attendance_max)s,'
         if quiz_type:
-            update_string += f"quiz_type=%(quiz_type)s"
+            update_string += f"quiz_type=%(quiz_type)s,"
         if user_answers:
             update_string += f"user_answers=%(user_answers)s"
         update_string = update_string.rstrip(',')

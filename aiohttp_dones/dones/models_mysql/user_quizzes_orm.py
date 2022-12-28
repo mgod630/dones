@@ -79,7 +79,7 @@ class User_quizzes:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_user = ("INSERT INTO `tbl_user_quizzes` (`user_id`, `unix_datetime`, `quiz_id`) VALUES" +
+        add_user = ("INSERT INTO `tbl_user_quizzes` (`user_id`, `unix_datetime`, `quiz_id`, `user_answers`) VALUES" +
                     "( %(user_id)s, %(unix_datetime)s, %(quiz_id)s, %(user_answers)s)")
         data_user = {
             'user_id': user_id,
