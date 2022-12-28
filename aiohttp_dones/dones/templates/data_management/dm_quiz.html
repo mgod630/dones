@@ -106,13 +106,12 @@
     {% endfor %}
 {% endif %}
 </table>
-{% endblock %}
 
 <div class="modal" tabindex="-1" role="dialog" id="delete_course">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">حذف اطلاعیه</h5>
+        <h5 class="modal-title">حذف آزمون</h5>
         <button
           type="button"
           class="close"
@@ -127,7 +126,7 @@
           <p class="titleNotif"></p>
           <a
             class="btn btn-warning"
-            hf="/dm-delete-course_news/"
+            hf="/dm-delete-quiz/{{course_item_id}}/"
             href="#"
             >حذف</a
           >
@@ -137,6 +136,7 @@
     </div>
   </div>
 </div>
+{% endblock %}
 {% block scripts %}
 <script>
   function success() {
@@ -152,11 +152,11 @@
   }
   $(function () {
     $(".delNotif").click(function () {
-      // var notif = $(this).data();
-      // $("#delete_course .titleNotif").text(notif.title);
-      // $("#delete_course a").each(function () {
-      //   $(this).attr("href", $(this).attr("hf") + notif.quiz_id);
-      // });
+      var notif = $(this).data();
+      $("#delete_course .titleNotif").text(notif.title);
+      $("#delete_course a").each(function () {
+        $(this).attr("href", $(this).attr("hf") + notif.id);
+      });
       $("#delete_course").modal("show");
     });
   });

@@ -83,6 +83,7 @@
                 <th></th>
                 <th>عنوان</th>
                 <th>تاریخ اغاز</th>
+                <th>تاریخ پایان</th>
                 <th>قیمت</th>
                 <th></th>
             </tr>
@@ -97,6 +98,7 @@
             </td>
             <td>{{course.title}}</td>
             <td>{{course.jalali_start_datetime}}</td>
+            <td>{{course.jalali_end_datetime}}</td>
             <td>{{course.price}}</td>
             <td>
                 <button class="btn btn-success show-settings btn-sm" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}"{% endfor %} >
