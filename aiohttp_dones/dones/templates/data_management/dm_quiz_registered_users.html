@@ -26,8 +26,8 @@
                     <th>تحصیلات</th>
                     <th>شغل</th>
                     <th>وضعیت تاهل</th> -->
+          <th>نام آزمون</th>
           <th>تاریخ شرکت در آزمون</th>
-          <th>زمان شرکت در آزمون</th>
           <th>جواب ها</th>
         </tr>
       </thead>
@@ -43,10 +43,10 @@
                 <td>{% if user.grade %}{{user.grade}}{% endif %}</td>
                 <td>{% if user.job %}{{user.job}}{% endif %}</td>
                 <td>{% if user.marital_status %}{% if user.marital_status == 'single'%}مجرد{% elif user.marital_status == 'married' %}متاهل{% endif %}{% endif %}</td> -->
+        <td>{% if user.title %}{{user.title}}{% endif %}</td>
         <td>{% if user.jalali_date %}{{user.jalali_date}}{% endif %}</td>
-        <td>{% if user.jalali_time %}{{user.jalali_time}}{% endif %}</td>
         <td>
-          {% if user.user_answers %}
+          {% if user.user_answers != 'empty' %}
           <a class="delNotif btn btn-warning btn-sm" {% for attr in user if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{user[attr]}}" {% endfor %} >
           نمایش جواب
           </a> {% else %}
@@ -58,7 +58,7 @@
     </table>
   </div>
   {% else %}
-  <div style="font-size: large">تاکنون کسی در این آزمون شرکت نکرده است</div>
+  <div style="font-size: large">تاکنون کسی در این آزمون شرکت نکرده است.</div>
   {% endif %}
   <input type="hidden" name="mobile" value="" />
 </form>

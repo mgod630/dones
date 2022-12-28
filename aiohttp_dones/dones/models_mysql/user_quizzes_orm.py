@@ -40,7 +40,7 @@ class User_quizzes:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = ("SELECT uq.* , i.item_id, qz.title FROM tbl_user_quizzes uq INNER JOIN tbl_user_items i ON i.user_id = uq.user_id INNER JOIN tbl_quizzes qz ON qz.id = uq.quiz_id WHERE (i.item_id=%(item_id)s AND i.user_id=%(user_id)s)")
+        query = ("SELECT uq.*, q.item_id, q.id FROM tbl_user_quizzes uq INNER JOIN tbl_quizzes q ON q.id = uq.quiz_id WHERE (uq.user_id=%(user_id)s AND q.item_id=%(item_id)s)")
         cursor.execute(query, {'user_id': user_id, 'item_id': item_id})
         row = cursor.fetchall()
         cnx.close()
@@ -66,7 +66,7 @@ class User_quizzes:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = ("SELECT tbl_user_quizzes.*, tbl_users.* FROM tbl_user_quizzes INNER JOIN tbl_users ON tbl_user_quizzes.user_id = tbl_users.id WHERE quiz_id=%(quiz_id)s")
+        query = ("SELECT tbl_user_quizzes.*, tbl_users.*, tbl_quizzes.title FROM tbl_user_quizzes INNER JOIN tbl_users ON tbl_user_quizzes.user_id = tbl_users.id INNER JOIN tbl_quizzes ON tbl_quizzes.id = tbl_user_quizzes.quiz_id WHERE quiz_id=%(quiz_id)s")
         data = { 
             'quiz_id':quiz_id
         }
@@ -76,14 +76,14 @@ class User_quizzes:
         return data
         
     @staticmethod
-    def get_user_quiz_by_quiz_id(quiz_id):
+    def get_user_quiz_by_quiz_id(user_id, quiz_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_user_quizzes WHERE quiz_id=%(quiz_id)s"
-        cursor.execute(query, {'quiz_id': quiz_id})
+        query = "SELECT uq.*, q.item_id, q.id, q.title FROM tbl_user_quizzes uq INNER JOIN tbl_quizzes q ON q.id = uq.quiz_id WHERE (uq.user_id=%(user_id)s AND uq.quiz_id=%(quiz_id)s)"
+        cursor.execute(query, {'quiz_id': quiz_id, 'user_id': user_id})
         row = cursor.fetchone()
         cnx.close()
         return row

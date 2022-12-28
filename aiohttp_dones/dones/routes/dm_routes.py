@@ -493,7 +493,7 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
-        quiz = user_quizzes_orm.User_quizzes.get_user_quiz_by_quiz_id(quiz_id)
+        quiz = user_quizzes_orm.User_quizzes.get_user_quiz_by_quiz_id(user['id'], quiz_id)
         user_quizzes = None
         if quiz:
             item_id = quiz['item_id']
