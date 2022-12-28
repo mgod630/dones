@@ -155,11 +155,11 @@
         <tr>
           <th>نام شرکت کننده</th>
           <th>شماره موبایل</th>
-          <th>جنسیت</th>
+          <!-- <th>جنسیت</th>
           <th>سن</th>
           <th>مدرک تحصیلی</th>
           <th>شغل</th>
-          <th>وضعیت تاهل</th>
+          <th>وضعیت تاهل</th> -->
           <!-- <th>تاریخ</th> -->
         </tr>
       </thead>
@@ -167,7 +167,7 @@
         <tr>
           <td>{{attender.full_name}}</td>
           <td>{{attender.mobile}}</td>
-          <td>
+          <!-- <td>
             {% if attender.gender %}{% if attender.gender == 'male'%}مرد{% elif
             attender.gender == 'female' %}زن{% endif %}{% else %}-{% endif %}
           </td>
@@ -180,7 +180,7 @@
             {% if attender.marital_status %}{% if attender.marital_status ==
             'single'%}مجرد{% elif attender.marital_status == 'married' %}متاهل{%
             endif %}{% else %}-{% endif %}
-          </td>
+          </td> -->
           <!-- <td>{% if attender.datatime %}{{attender.datatime}}{% else %}-{% endif %}</td> -->
         </tr>
       </tbody>
@@ -192,11 +192,11 @@
   <div class="tf-title">اطلاعات آزمون</div>
   <div class="quiz-stats">
     <div><span>نام آزمون:</span> {{quiz.title}}</div>
-    <div><span>تاریخ شرکت در آزمون:</span> {{quiz.jalali_date}}</div>
-    <div>
+    <div><span>تاریخ شرکت در آزمون:</span> {{quiz.date}}</div>
+    <!-- <div>
       <span>زمان شرکت در آزمون:</span> {% if quiz.time != '-1'
-      %}{{quiz.jalali_time}}{% else %}-{% endif %}
-    </div>
+      %}{{quiz.time}}{% else %}-{% endif %}
+    </div> -->
   </div>
 </div>
 {% endfor %} {% endif %}

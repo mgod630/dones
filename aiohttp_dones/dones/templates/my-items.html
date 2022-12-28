@@ -5,12 +5,12 @@
   <div class="white-box mt-3 mb-3">
     <div class="wb-header wbh-purple">
       <div class="wb-icon"><i class="fal fa-user-graduate"></i></div>
-      <h2>دوره‌های من</h2>
+      <h2>جلسات من</h2>
     </div>
-    {% if items %} {% for course in items %}
+    {% if items %} {% for item in items %}
     <div class="course-panel mb-2">
       <div class="cp-header">
-        <div class="course-title">{{course.title}}</div>
+        <div class="course-title">{{item.title}}</div>
         <div class="course-buttons">
           <a
             class="btn btn-outline-dark"
@@ -28,7 +28,7 @@
     </div>
     {% endfor %} {% else %}
     <div class="pt-3 pb-3 text-center text-secondary">
-      شما در هیچ دوره ای شرکت نکرده‌اید
+      شما در هیچ جلسه ای شرکت نکرده‌اید
     </div>
     {% endif %}
   </div>
