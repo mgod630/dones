@@ -161,11 +161,11 @@
                                 <i class="far fa-user"></i>
                                 کاربران
                             </a> -->
-                            <a class="btn btn-outline-primary" hf="/dm-course-items/" href="#">
+                            <a class="dcitems btn btn-outline-primary" hf="/dm-course-items/" href="#">
                                 <i class="far fa-list"></i>
                                 آیتم‌ها
                             </a>
-                            <a class="btn btn-outline-primary" hf="/dm-courses_news/" href="#">
+                            <a class="dcitems btn btn-outline-primary" hf="/dm-courses_news/" href="#">
                                 <i class="far fa-bell-exclamation"></i>
                                 اطلاعیه‌ها
                             </a>
@@ -173,11 +173,11 @@
                                 <i class="far fa-copy"></i>
                                 کپی
                             </a> -->
-                            <a class="delNotif btn btn-outline-danger  btn-sm" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}" {% endfor %} >
+                            <a class="delNotif btn btn-outline-danger" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}" {% endfor %} >
                                 <i style="display: inline-block;" class="far fa-trash-alt"></i>
                                 حذف
                             </a>
-                            <a class="btn btn-outline-success virayesh" hf="/dm-courses/" href="#" style="width: 50%; height: 90%;" >
+                            <a class="virayesh btn btn-outline-success" hf="/dm-courses/" href="#" style="width: 50%; height: 90%;" >
                                 <i class="far fa-pen"></i>
                                 ویرایش
                             </a>
@@ -320,14 +320,6 @@
 {% block scripts %}
 <script>
 $(function(){
-    $(".delNotif").click(function () {
-      var notif = $(this).data();
-      $("#delete_course .titleNotif").text(notif.course_news_text);
-      $("#delete_course a").each(function () {
-        $(this).attr("href", $(this).attr("hf") + notif.id);
-      });
-      $("#delete_course").modal("show");
-    });
     $(".show-settings").click(function(){
         var course_data = $(this).data();
         $("#course_settings .modal-header img").attr("src", course_data.logo_path);
@@ -340,19 +332,27 @@ $(function(){
         $("#course_settings .course-details>div:eq(1)>span:last-child").text(course_data.jalali_start_datetime)
         $("#course_settings .course-details>div:eq(2)>span:last-child").text(course_data.jalali_end_datetime)
         $("#course_settings .course-details>div:eq(3)>span:last-child").text(course_data.price == 0 ? "رایگان" : course_data.price + " تومان")
+       
+        $("#course_settings").modal("show");
 
+        $(".delNotif").click(function () {
+            $("#delete_course .titleNotif").text(course_data.title);
+            $("#delete_course a").each(function () {
+                $(this).attr("href", $(this).attr("hf") + course_data.id);
+            });
+            $("#delete_course").modal("show");
+        });
         $("#course_settings .course-actions .virayesh").click(function(e){
             // e.preventDefault()
-            $("#course_settings").modal('hide')
+            // $("#course_settings").modal('hide')
             $(this).attr("href",$(this).attr("hf") + course_data.id)
-            $('#new_course').modal('show');
+            // $('#new_course').modal('show');
   });
         
-        $("#course_settings .course-actions a").each(function(){
+        $("#course_settings .course-actions .dcitems").each(function(){
             $(this).attr("href",$(this).attr("hf") + course_data.id)
         });
 
-        $("#course_settings").modal("show");
     });
     $('#submitbtn').click(function(){
         var logo = document.getElementById('logoInput');
@@ -361,7 +361,6 @@ $(function(){
         if(logo.value.length == 0)
             logo.value = "../../static/template/goldis-logo-horizontal.png"
         if(image.value.length == 0)
-            // $("#logoInput").attr("src", "..\..\static\template\goldis-logo-horizontal.png")
             image.value = "../../static/template/4321da5b-57d7-49f7-abe1-3ad1c6c3abd9-cb9d6e5bef65.small.png"
         if(institute.value.length == 0)
             institute.value = 'فول استک'
