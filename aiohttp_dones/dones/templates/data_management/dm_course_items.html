@@ -117,11 +117,6 @@
         ><i class="far fa-cog"></i
       ></a>
     </td>
-    <!-- <td>
-      <a class="btn btn-warning btn-sm" href="{{all_course_item_id_link[i]}}"
-        ><i class="far fa-trash-alt"></i
-      ></a>
-    </td> -->
     <td>
       <a class="delItem btn btn-warning btn-sm" {% for attr in course_items[i] if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course_items[i][attr]}}" {% endfor %} >
         <i class="far fa-trash-alt"></i>

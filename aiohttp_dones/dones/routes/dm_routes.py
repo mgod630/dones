@@ -176,20 +176,12 @@ def make_routes(goldis_blueprint):
             return redirect('/404-not-found')
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         len_course_items = len(course_items) if course_items else None
-        course_item_id_edit = None
-        update_course_item = None
-        all_course_item_id_link = []
-        if course_items:
-            for course_item in course_items:
-                course_item_id = course_item['id']
-                course_item_id_link = f'/dm-delete-course-item/{course_id}/{course_item_id}'
-                all_course_item_id_link.append(course_item_id_link)
         items_jalali_datetime = []
         for item in course_items:
             item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
             item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
             items_jalali_datetime.append(item)
-        return render_template("data_management/dm_course_items.html", user=user, course_items=items_jalali_datetime, update_course_item=update_course_item, course_id=course_id, len=len_course_items, course_item_id=course_item_id_edit, all_course_item_id_link=all_course_item_id_link)
+        return render_template("data_management/dm_course_items.html", user=user, course_items=items_jalali_datetime, course_id=course_id, len=len_course_items)
 
     @goldis_blueprint.route("/dm-course-items/<course_id>", methods=['POST'])
     def dm_course_items_post(course_id):
@@ -209,14 +201,6 @@ def make_routes(goldis_blueprint):
         unix_end_datetime = jalali_to_unix(jalali_end_datetime)
         new_course_item = items_orm.Items.insert_new_item(
             course_id=course_id, title=title, unix_start_datetime=unix_start_datetime, unix_end_datetime=unix_end_datetime, description=description)
-        course_items = items_orm.Items.get_all_items_by_course_id(course_id)
-        len_course_items = len(course_items) if course_items else None
-        all_course_item_id_link = []
-        if course_items:
-            for course_item in course_items:
-                course_item_id = course_item['id']
-                course_item_id_link = f'/dm-delete-course-item/{course_id}/{course_item_id}'
-                all_course_item_id_link.append(course_item_id_link)
         return redirect(url_for('goldis_blueprint.dm_course_items', course_id=course_id))
 
     # update item
@@ -250,18 +234,12 @@ def make_routes(goldis_blueprint):
             update_course_item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_start_datetime'])
             update_course_item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_end_datetime'])
             len_course_items = len(course_items) if course_items else None
-            all_course_item_id_link = []
-            if course_items:
-                for course_item in course_items:
-                    course_item_id = course_item['id']
-                    course_item_id_link = f'/dm-delete-course-item/{course_id}/{course_item_id}'
-                    all_course_item_id_link.append(course_item_id_link)
             items_jalali_datetime = []
             for item in course_items:
                 item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
                 item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
                 items_jalali_datetime.append(item)
-            return render_template("data_management/dm_course_items.html", user=user, course_items=course_items, update_course_item=update_course_item, course_id=course_id, len=len_course_items, course_item_id=course_item_id, all_course_item_id_link=all_course_item_id_link)
+            return render_template("data_management/dm_course_items.html", user=user, course_items=course_items, update_course_item=update_course_item, course_id=course_id, len=len_course_items, course_item_id=course_item_id)
 
     # delete item
     @goldis_blueprint.route("/dm-delete-course-item/<course_id>/<course_item_id>")

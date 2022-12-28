@@ -74,7 +74,6 @@ def make_routes(goldis_blueprint):
         if not user_item :
             unix_datetime = time.time()
             new_user_item_id = user_items_orm.User_items.insert_new_user_item(user_id=user['id'], item_id=item_id, unix_datetime=unix_datetime)
-
         all_courses = courses_orm.Courses.get_all_courses()
         course = None
         for crs in all_courses:
@@ -87,10 +86,9 @@ def make_routes(goldis_blueprint):
             if str(crs_item['id']) == str(item_id):
                 course_item = crs_item
                 break
-        quizzes = quizzes_orm.Quizzes.get_all_quizzes_with_questions(item_id)
-        if quizzes == []:
-            quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(item_id)
-
+        # quizzes = quizzes_orm.Quizzes.get_all_quizzes_with_questions(item_id)
+        # if quizzes == []:
+        quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(item_id)
         quizzes_jalali_datetime = []
         for quiz in quizzes:
             quiz['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])

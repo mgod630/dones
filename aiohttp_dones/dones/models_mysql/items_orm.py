@@ -66,7 +66,7 @@ class Items:
         return inserted_record_id
 
     @staticmethod
-    def update_item(id, title=None, unix_start_datetime=None, unix_end_datetime=None, description=None):
+    def update_item(id, title='empty', unix_start_datetime=0, unix_end_datetime=0, description='empty'):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -80,7 +80,7 @@ class Items:
         if unix_end_datetime:
             update_string += f'unix_end_datetime=%(unix_end_datetime)s,'
         if description:
-            update_string += f'description=%(description)s,'
+            update_string += f'description=%(description)s'
         update_string = update_string.rstrip(',')
         add_item = f"UPDATE tbl_items SET {update_string} WHERE id='{id}'"
         data_item = {
