@@ -33,6 +33,19 @@ class Comments:
         return row
 
     @staticmethod
+    def get_comments_id_by_reply_to_comment_id(reply_to_comment_id):
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = "SELECT id FROM tbl_comments WHERE reply_to_comment_id=%(reply_to_comment_id)s"
+        cursor.execute(query, {'reply_to_comment_id': reply_to_comment_id})
+        row = cursor.fetchall()
+        cnx.close()
+        return row
+
+    @staticmethod
     def get_comments_by_section_id(section_id, comments_count_per_page=20, reversed_ordering=False):
         global connection_pool
         if connection_pool == None:
@@ -53,65 +66,47 @@ class Comments:
         if comments_ids and len(comments_ids) > 0:
             for comment_id in comments_ids:
                 comment = Comments.get_comment_by_id(comment_id['id'])
-                if comment and comment['is_replied_comment'] == None :
+                if comment and comment['reply_to_comment_id'] == -1:
                     all_comments.append(comment)
-                    if comment['reply_from']:
-                        reply_comments = comment['reply_from'].split('|-|')
-                        for reply_comment_id in reply_comments:
-                            reply_comment = Comments.get_comment_by_id(
-                                reply_comment_id)
+                    
+                    reply_comments_id = Comments.get_comments_id_by_reply_to_comment_id(comment['id'])
+                    print(reply_comments_id)
+                    
+                    if reply_comments_id != []:
+                        for reply_comment_id in reply_comments_id:
+                            reply_comment = Comments.get_comment_by_id(reply_comment_id['id'])
                             if reply_comment:
-                                reply_comment['depth'] = 2
+                                # reply_comment['depth'] = 2
+                                Comments.update_comment(id=reply_comment['id'], depth=2)
                                 all_comments.append(reply_comment)
-
-        # query = "SELECT * FROM tbl_comments WHERE section_id=%(section_id)s"
-        # cursor.execute(query, {'section_id':section_id})
-        # all_comments = cursor.fetchone()
-        # cnx.close()
-        # print(all_comments)
         return all_comments
 
     @staticmethod
-    def insert_new_comment(comment_text, sender_name, sender_id, section_id, reply_to_comment_id=None):
+    def insert_new_comment(comment_text, sender_name, sender_id, section_id, reply_to_comment_id=-1, depth=0):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_comment = ("INSERT INTO `tbl_comments` (`comment_text`, `sender_name`, `sender_id`, `section_id`, `is_replied_comment`) VALUES" +
-                       "( %(comment_text)s, %(sender_name)s, %(sender_id)s, %(section_id)s, %(is_replied_comment)s)")
+        add_comment = ("INSERT INTO `tbl_comments` (`comment_text`, `sender_name`, `sender_id`, `section_id`, `depth`,`reply_to_comment_id`) VALUES" +
+                       "( %(comment_text)s, %(sender_name)s, %(sender_id)s, %(section_id)s, %(depth)s, %(reply_to_comment_id)s)")
         data_comment = {
             'comment_text': comment_text,
             'sender_name': sender_name,
             'sender_id': sender_id,
             'section_id': section_id,
-            'is_replied_comment': None
+            'depth': depth,
+            'reply_to_comment_id': reply_to_comment_id,
         }
-        if reply_to_comment_id:
-            data_comment['is_replied_comment'] = 1
+         
         cursor.execute(add_comment, data_comment)
         new_comment_id = cursor.lastrowid
         cnx.commit()
         cnx.close()
-
-        if reply_to_comment_id:
-            replied_comment = Comments.get_comment_by_id(reply_to_comment_id)
-            if replied_comment:
-                reply_from_comments_ids = str(replied_comment['reply_from']) + '|-|' + str(new_comment_id) if replied_comment['reply_from'] else str(new_comment_id)
-                data = {
-                    'reply_from':reply_from_comments_ids,
-                    'id':replied_comment['id']
-                }
-                cnx = connection_pool.get_connection()
-                cursor = cnx.cursor(dictionary=True)
-                cursor.execute("UPDATE tbl_comments SET reply_from=%(reply_from)s WHERE id=%(id)s", data)
-                cnx.commit()
-                cnx.close()
-                # app['redis_pool'].hset(repliedـcomment["id"], 'reply_from', reply_from_comments_ids)
         return new_comment_id
 
     @staticmethod
-    def update_comment(id, comment_text=None, sender_name=None, sender_id=None, section_id=None, reply_to_comment_id=None):
+    def update_comment(id, comment_text=None, sender_name=None, sender_id=None, section_id=None, reply_to_comment_id=None, depth=None):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -126,6 +121,8 @@ class Comments:
             update_string += f'sender_id=%(sender_id)s,'
         if section_id:
             update_string += f'section_id=%(section_id)s,'
+        if depth:
+            update_string += f'depth=%(depth)s,'
         if reply_to_comment_id:
             update_string += f'reply_to_comment_id = %(reply_to_comment_id)s,'
         update_string = update_string.rstrip(',')
@@ -135,6 +132,7 @@ class Comments:
             'sender_name': sender_name,
             'sender_id': sender_id,
             'section_id': section_id,
+            'depth': depth,
             'reply_to_comment_id': reply_to_comment_id
         }
         cursor.execute(add_comment, data_comment)
