@@ -233,7 +233,7 @@
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>نام موسسه:</label>
-                                <input  type="text" class="form-control" name="institute" value="{% if course_id  %}{{update_course.institute}}{% endif %}">
+                                <input id="instituteInput" type="text" class="form-control" name="institute" value="{% if course_id  %}{{update_course.institute}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -353,19 +353,18 @@ $(function(){
         $("#course_settings").modal("show");
     });
     $('#submitbtn').click(function(){
-        var input = document.getElementById('logoInput');
-        if(input.value.length == 0)
+        var logo = document.getElementById('logoInput');
+        var image = document.getElementById('imageInput');
+        var institute = document.getElementById('instituteInput');
+        if(logo.value.length == 0)
+            logo.value = "../../static/template/goldis-logo-horizontal.png"
+        if(image.value.length == 0)
             // $("#logoInput").attr("src", "..\..\static\template\goldis-logo-horizontal.png")
-            input.value = "../../static/template/goldis-logo-horizontal.png"
-    })
-    $('#submitbtn').click(function(){
-        var input = document.getElementById('imageInput');
-        if(input.value.length == 0)
-            // $("#logoInput").attr("src", "..\..\static\template\goldis-logo-horizontal.png")
-            input.value = "../../static/template/4321da5b-57d7-49f7-abe1-3ad1c6c3abd9-cb9d6e5bef65.small.png"
+            image.value = "../../static/template/4321da5b-57d7-49f7-abe1-3ad1c6c3abd9-cb9d6e5bef65.small.png"
+        if(institute.value.length == 0)
+            institute.value = 'فول استک'
     })
 })
-
 function success() {
 	 if(document.getElementById("esse1").value==="" || document.getElementById("esse2").value==="" || document.getElementById("esse3").value==="" || document.getElementById('esse4').value==='') { 
             document.getElementById('submitbtn').disabled = true; 

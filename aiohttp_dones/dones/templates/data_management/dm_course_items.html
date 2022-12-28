@@ -58,6 +58,17 @@
     </div>
     <div class="col-12">
       <div class="form-step">
+        <label>لینک ویدئو:</label>
+        <input
+          class="form-control"
+          type="text"
+          name="title"
+          value="{% if course_item_id  %}{{update_course_item.title}}{% endif %}"
+        />
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="form-step">
         <label>توضیحات</label>
         <textarea name="description" class="form-control" rows="3">
 {% if course_item_id  %}{{update_course_item.description}}{% endif %}</textarea
