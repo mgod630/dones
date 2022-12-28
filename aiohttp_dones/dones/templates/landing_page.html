@@ -81,8 +81,7 @@
       integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
       crossorigin="anonymous"
     ></script>
-    <div class="d-flex bg-dark text-light"></div>
-    <div
+    <!-- <div
       id="posAnswer"
       class="alert alert-success"
       role="alert"
@@ -93,9 +92,9 @@
       class="alert alert-danger"
       role="alert"
       style="display: none; position: relative"
-    ></div>
-    <div class="collapse" id="result_email_message"></div>
+    ></div> -->
     <div style="margin-bottom: 0" class="header">
+      <div class="text-danger" id="result_email_message">asdfsd</div>
       <img
         style="position: relative"
         src="../static/template/خدام 3.png"
@@ -375,14 +374,13 @@
             class="d-flex flex-column justify-content-around align-items-center flex-md-row"
           >
             <input
-              id="emailIput"
+              id="emailInput"
               name="email"
               type="email"
               class="myInput"
               placeholder="ایمیل خود را وارد کنید"
             />
             <button
-              id="participate"
               style="width: 100px"
               class="mybtn rounded-5 m-3"
               type="submit"
@@ -456,40 +454,42 @@
     countdown();
     setInterval(countdown, 1000);
 
-    $(function () {
-      $("#landing-page-form").submit(function () {
-        $.ajax({
-          method: "POST",
-          url: "/landing-page-post",
-          data: { email },
-        })
-          .done(function (resp) {
-            if (resp.result == "email_already_exists") {
-              // console.log("این ایمیل قبلا ثبت نام کرده است.");
-              $("#result_email_message")
-                .addClass("text-success")
-                .text("این ایمیل قبلا ثبت نام کرده است.")
-                .slideDown();
-            } else if (resp.result == "email_successfully_stored") {
-              $("#result_email_message")
-                .addClass("text-success")
-                .text("ایمیل شما با موفقیت ثبت شد.")
-                .slideDown();
-            } else {
-              $("#result_email_message")
-                .addClass("text-danger")
-                .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
-                .slideDown();
-            }
-          })
-          .fail(function (err) {
-            $("#result_email_message")
-              .addClass("text-danger")
-              .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
-              .slideDown();
-          });
-      });
-    });
+    // $(function () {
+    //   $("#landing-page-form").submit(function (event) {
+    //     const email = $("#emailInput").val();
+    //     $("#result_email_message").removeClass("text-danger text-success");
+    //     $.ajax({
+    //       type: "POST",
+    //       url: "/landing-page-post",
+    //       data: { email },
+    //     })
+    //     .done(function (resp) {
+    //       if (resp.result == "email_already_exists") {
+    //         $("#result_email_message")
+    //           .addClass("text-success")
+    //           .text("این ایمیل قبلا ثبت نام کرده است.")
+    //           .slideDown();
+    //       } else if (resp.result == "email_successfully_stored") {
+    //         $("#result_email_message")
+    //           .addClass("text-success")
+    //           .text("ایمیل شما با موفقیت ثبت شد.")
+    //           .slideDown();
+    //       } else {
+    //         $("#result_email_message")
+    //           .addClass("text-danger")
+    //           .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
+    //           .slideDown();
+    //       }
+    //     })
+    //     .fail(function (err) {
+    //       $("#result_email_message")
+    //         .addClass("text-danger")
+    //         .text("خطای غیر منتظره. لطفا مجدداً تلاش نمایید.")
+    //         .slideDown();
+    //     });
+    //     event.preventDefault();
+    //   });
+    // });
 
     // $(document).ready(function () {
     //   $("#landing-page-form").on("submit", function (event) {
