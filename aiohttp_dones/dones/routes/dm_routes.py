@@ -1,8 +1,8 @@
 from flask import redirect, render_template, request, url_for, session
 from routes import common
 import tools
-import time, jdatetime, secrets, json
-from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, course_news_orm
+import time, secrets, json
+from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, course_news_orm, user_quizzes_orm
 
 
 def make_routes(goldis_blueprint):
@@ -355,16 +355,6 @@ def make_routes(goldis_blueprint):
         quizzes_orm.Quizzes.delete_quiz_by_id(quiz_id)
         return redirect(url_for('goldis_blueprint.dm_quiz', course_item_id=course_item_id))
 
-    @goldis_blueprint.route("/quiz-registered-users/<quiz_id>")
-    def quiz_registered_users(quiz_id):
-        user = common.get_user_from_token()
-        if is_admin_user(user) == False:
-            return redirect('/404-not-found')
-        quiz = user_courses_orm.User_courses.get_user_quiz_by_quiz_id(quiz_id)
-        registered_users = user_courses_orm.User_courses.get_all_registered_users_by_quiz_id(
-            quiz_id)
-        return render_template('data_management/dm_quiz_registered_users.html', quiz_id=quiz_id, user=user, registered_users=registered_users)
-
     # dm questions
     @goldis_blueprint.route("/dm-question/<quiz_id>")
     def dm_question(quiz_id):
@@ -415,8 +405,6 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
-        question_id = int(question_id)
-        quiz_id = int(quiz_id)
         questions_orm.Questions.delete_question_by_id(question_id)
         return redirect(url_for('goldis_blueprint.dm_question', quiz_id=quiz_id))
 
@@ -425,10 +413,13 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
-        course_title = None
         all_courses = courses_orm.Courses.get_all_courses()
         all_courses_news = course_news_orm.Courses_news.get_all_courses_news()
-        return render_template("data_management/dm_courses_news.html", user=user, courses_news=all_courses_news, all_courses=all_courses)   
+        courses_news_jalali_datetime = []
+        for course_news in all_courses_news:
+            course_news['jalali_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course_news['unix_datetime'])
+            courses_news_jalali_datetime.append(course_news)
+        return render_template("data_management/dm_courses_news.html", user=user, courses_news=courses_news_jalali_datetime, all_courses=all_courses)   
 
     @goldis_blueprint.route("/dm-courses_news", methods=['POST'])
     def dm_courses_news_post():
@@ -497,21 +488,28 @@ def make_routes(goldis_blueprint):
     
 
     @goldis_blueprint.route("/dm-quiz-users-answers/<quiz_id>")
+    @goldis_blueprint.route("/quiz-registered-users/<quiz_id>")
     def quiz_results(quiz_id):
         user = common.get_user_from_token()
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
-        quiz = user_courses_orm.User_courses.get_user_quiz_by_quiz_id(quiz_id)
-        all_quizzes = None
+        quiz = user_quizzes_orm.User_quizzes.get_user_quiz_by_quiz_id(quiz_id)
+        user_quizzes = None
         if quiz:
             item_id = quiz['item_id']
-            all_quizzes = user_courses_orm.User_courses.get_user_quizzes_by_item_id(
-                item_id)
-            user_quizzes = user_courses_orm.User_courses.get_all_user_quizzes_by_user_id(
-                user['id'])
-        registered_users = user_courses_orm.User_courses.get_all_registered_users_by_quiz_id(
+            user_quizzes = user_quizzes_orm.User_quizzes.get_all_user_quizzes_by_ids(user['id'], item_id)
+        registered_users = user_quizzes_orm.User_quizzes.get_all_registered_users_by_quiz_id(
             quiz_id)
-        all_answers = user_courses_orm.User_courses.get_all_user_results_by_ids(
+        all_answers = user_quizzes_orm.User_quizzes.get_all_user_results_by_ids(
             user_id=user['id'], quiz_id=quiz_id)
         all_answers = json.dumps(all_answers)
-        return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=all_quizzes, all_answers=all_answers, registered_users=registered_users)
+        return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=user_quizzes, all_answers=all_answers, registered_users=registered_users)
+
+    
+    # def quiz_registered_users(quiz_id):
+    #     user = common.get_user_from_token()
+    #     if is_admin_user(user) == False:
+    #         return redirect('/404-not-found')
+    #     registered_users = user_quizzes_orm.User_quizzes.get_all_registered_users_by_quiz_id(
+    #         quiz_id)
+    #     return render_template('data_management/dm_quiz_registered_users.html', quiz_id=quiz_id, user=user, registered_users=registered_users)

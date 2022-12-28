@@ -46,21 +46,37 @@ class User_quizzes:
         cnx.close()
         return row
 
-    # @staticmethod
-    # def get_all_user_results_by_ids(user_id, quiz_id):
-    #     global connection_pool
-    #     if connection_pool == None:
-    #         connection_pool = app.config['mysql_connection_pool']
-    #     cnx = connection_pool.get_connection()
-    #     cursor = cnx.cursor(dictionary=True)
-    #     query = "SELECT user_answers FROM tbl_user_quizzes WHERE (user_id=%(user_id)s AND quiz_id=%(quiz_id)s)"
-    #     cursor.execute(query, {'user_id': user_id, 'quiz_id': quiz_id})
-    #     row = cursor.fetchall()
-    #     cnx.close()
-    #     return row
+    @staticmethod
+    def get_all_user_results_by_ids(user_id, quiz_id):
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = "SELECT user_answers FROM tbl_user_quizzes WHERE (user_id=%(user_id)s AND quiz_id=%(quiz_id)s)"
+        cursor.execute(query, {'user_id': user_id, 'quiz_id': quiz_id})
+        row = cursor.fetchall()
+        cnx.close()
+        return row
+
+    @staticmethod
+    def get_all_registered_users_by_quiz_id(quiz_id):
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = ("SELECT tbl_user_quizzes.*, tbl_users.* FROM tbl_user_quizzes INNER JOIN tbl_users ON tbl_user_quizzes.user_id = tbl_users.id WHERE quiz_id=%(quiz_id)s")
+        data = { 
+            'quiz_id':quiz_id
+        }
+        cursor.execute(query, data)
+        data = cursor.fetchall()
+        cnx.close()
+        return data
         
     @staticmethod
-    def get_user_quizzes_by_quiz_id(quiz_id):
+    def get_user_quiz_by_quiz_id(quiz_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']

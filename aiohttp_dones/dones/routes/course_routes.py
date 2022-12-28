@@ -108,7 +108,7 @@ def make_routes(goldis_blueprint):
         if user == None:
             flash_messages_orm.Flash_messages.insert_new_flash_message(message='کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', message_type='danger') 
             return redirect('/')
-        user_quiz = user_quizzes_orm.User_quizzes.get_user_quizzes_by_quiz_id(quiz_id)
+        user_quiz = user_quizzes_orm.User_quizzes.get_user_quiz_by_quiz_id(quiz_id)
         unix_datetime = time.time()
         new_user_quiz_id = user_quizzes_orm.User_quizzes.insert_new_user_quiz(user_id=user['id'], quiz_id=quiz_id, unix_datetime=unix_datetime)
         last_user_answers = []
