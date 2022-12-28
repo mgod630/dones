@@ -184,7 +184,12 @@ def make_routes(goldis_blueprint):
                 course_item_id = course_item['id']
                 course_item_id_link = f'/dm-delete-course-item/{course_id}/{course_item_id}'
                 all_course_item_id_link.append(course_item_id_link)
-        return render_template("data_management/dm_course_items.html", user=user, course_items=course_items, update_course_item=update_course_item, course_id=course_id, len=len_course_items, course_item_id=course_item_id_edit, all_course_item_id_link=all_course_item_id_link)
+        items_jalali_datetime = []
+        for item in course_items:
+            item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
+            item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
+            items_jalali_datetime.append(item)
+        return render_template("data_management/dm_course_items.html", user=user, course_items=items_jalali_datetime, update_course_item=update_course_item, course_id=course_id, len=len_course_items, course_item_id=course_item_id_edit, all_course_item_id_link=all_course_item_id_link)
 
     @goldis_blueprint.route("/dm-course-items/<course_id>", methods=['POST'])
     def dm_course_items_post(course_id):
@@ -249,6 +254,11 @@ def make_routes(goldis_blueprint):
                     course_item_id = course_item['id']
                     course_item_id_link = f'/dm-delete-course-item/{course_id}/{course_item_id}'
                     all_course_item_id_link.append(course_item_id_link)
+            items_jalali_datetime = []
+            for item in course_items:
+                item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
+                item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
+                items_jalali_datetime.append(item)
             return render_template("data_management/dm_course_items.html", user=user, course_items=course_items, update_course_item=update_course_item, course_id=course_id, len=len_course_items, course_item_id=course_item_id, all_course_item_id_link=all_course_item_id_link)
 
     # delete item
@@ -266,8 +276,13 @@ def make_routes(goldis_blueprint):
     def dm_quiz(course_item_id):
         user = common.get_user_from_token()
         if is_admin_user(user) == False: return redirect('/404-not-found')
-        quizs = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(course_item_id)
-        return render_template("data_management/dm_quiz.html", user=user, quizs=quizs, course_item_id= course_item_id)   
+        quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(course_item_id)
+        quizzes_jalali_datetime = []
+        for quiz in quizzes:
+            quiz['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
+            quiz['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
+            quizzes_jalali_datetime.append(quiz)
+        return render_template("data_management/dm_quiz.html", user=user, quizs=quizzes_jalali_datetime, course_item_id= course_item_id)   
 
     @goldis_blueprint.route("/dm-quiz/<course_item_id>", methods=['POST'])
     def dm_quiz_post(course_item_id):
@@ -321,8 +336,13 @@ def make_routes(goldis_blueprint):
             return redirect(url_for('goldis_blueprint.dm_quiz', course_item_id=course_item_id))
         else:
             update_quiz = quizzes_orm.Quizzes.get_quiz_by_id(quiz_id)
-            quizs = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(course_item_id)
-            return render_template("data_management/dm_quiz.html", user=user, quizs=quizs, course_item_id= course_item_id, update_quiz=update_quiz , quiz_id=quiz_id)
+            quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(course_item_id)
+            quizzes_jalali_datetime = []
+            for quiz in quizzes:
+                quiz['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
+                quiz['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
+                quizzes_jalali_datetime.append(quiz)
+            return render_template("data_management/dm_quiz.html", user=user, quizs=quizzes_jalali_datetime, course_item_id= course_item_id, update_quiz=update_quiz , quiz_id=quiz_id)
     
     @goldis_blueprint.route("/dm-delete-quiz/<course_item_id>/<quiz_id>")
     def dm_delete_quiz(course_item_id, quiz_id):

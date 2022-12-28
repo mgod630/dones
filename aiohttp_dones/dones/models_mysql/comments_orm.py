@@ -67,11 +67,8 @@ class Comments:
             for comment_id in comments_ids:
                 comment = Comments.get_comment_by_id(comment_id['id'])
                 if comment and comment['reply_to_comment_id'] == -1:
-                    all_comments.append(comment)
-                    
+                    all_comments.append(comment)                  
                     reply_comments_id = Comments.get_comments_id_by_reply_to_comment_id(comment['id'])
-                    print(reply_comments_id)
-                    
                     if reply_comments_id != []:
                         for reply_comment_id in reply_comments_id:
                             reply_comment = Comments.get_comment_by_id(reply_comment_id['id'])

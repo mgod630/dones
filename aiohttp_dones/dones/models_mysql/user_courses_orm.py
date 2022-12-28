@@ -117,28 +117,6 @@ class User_courses:
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
         update_string = ''
-        # if item_id : 
-        #   item = items_orm.Items.get_item_by_id(item_id)
-        #   course = courses_orm.Courses.get_course_by_id(item['course_id'])
-        #   course_id = item['course_id']
-        #   item_title = f"{item['title']} درس {course['title']}"
-        #   update_string += f'item_id = %(item_id)s,'
-        #   update_string += f'course_id = %(course_id)s,'
-        #   update_string += f'title = %(title)s,'
-        
-        # if quiz_id:
-        #   print('sql' + quiz_id)
-        #   quiz = quizzes_orm.Quizzes.get_quiz_by_id(quiz_id)
-        #   item_id = quiz['item_id'] 
-        #   item = items_orm.Items.get_item_by_id(item_id)
-        #   course = courses_orm.Courses.get_course_by_id(item['course_id'])
-        #   course_id = item['course_id']
-        #   item_title = f"آزمون {quiz['title']}"
-        #   update_string += f'item_id = %(item_id)s,'
-        #   update_string += f'course_id = %(course_id)s,'
-        #   update_string += f'quiz_id=%(quiz_id)s,'
-        #   update_string += f'title = %(title)s,'
-        #   update_string += f'user_answers = %(user_answers)s'
 
         if unix_datetime:
             update_string += f'unix_datetime=%(unix_datetime)s,'

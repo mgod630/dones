@@ -90,10 +90,17 @@ def make_routes(goldis_blueprint):
         quizzes = quizzes_orm.Quizzes.get_all_quizzes_with_questions(item_id)
         if quizzes == []:
             quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(item_id)
+
+        quizzes_jalali_datetime = []
+        for quiz in quizzes:
+            quiz['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
+            quiz['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
+            quizzes_jalali_datetime.append(quiz)
+
         all_comments = comments_orm.Comments.get_comments_by_section_id(
             f'course_content_{item_id}')
         last_comments = all_comments[0:19]
-        return render_template("course-content.html", course=course, course_item=course_item, user=user, all_comments=last_comments, flash_messages=flash_messages, quizzes=quizzes)
+        return render_template("course-content.html", course=course, course_item=course_item, user=user, all_comments=last_comments, flash_messages=flash_messages, quizzes=quizzes_jalali_datetime)
 
     @goldis_blueprint.route("/quiz/quiz_<quiz_id>")
     def quiz_content(quiz_id):

@@ -79,7 +79,6 @@ class Flash_messages:
         cursor.execute(query, {'user_token': user_token})
         cnx.commit()
         cnx.close()
-        print('deleted')
         return True
 
 if __name__ == '__main__':

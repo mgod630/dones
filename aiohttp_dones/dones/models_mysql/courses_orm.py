@@ -134,7 +134,6 @@ class Courses:
         cursor.execute(query, {'id': id})
         cnx.commit()
         cnx.close()
-        print('deleted')
         return True
 
 if __name__ == '__main__':

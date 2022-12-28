@@ -105,7 +105,6 @@ class Items:
         cursor.execute(query, {'id': id})
         cnx.commit()
         cnx.close()
-        print('deleted')
         return True
 
 
