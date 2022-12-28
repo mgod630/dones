@@ -59,7 +59,7 @@ class Courses:
         return inserted_record_id
 
     @staticmethod
-    def update_course(id, welcome_text=None, body_html=None, course_result=None, title=None, institute=None, unix_start_datetime=None, unix_end_datetime=None, price=None, logo_path=None, image_path=None, description=None, video_path=None):
+    def update_course(id, welcome_text=None, body_html=None, title=None, institute=None, unix_start_datetime=None, unix_end_datetime=None, price=None, logo_path=None, image_path=None, description=None, video_path=None):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -70,8 +70,6 @@ class Courses:
             update_string += f'welcome_text=%(welcome_text)s,'
         if body_html:
             update_string += f'body_html=%(body_html)s,'
-        if course_result:
-            update_string += f'course_result=%(course_result)s,'
         if title:
             update_string += f'title = %(title)s,'
         if institute:
@@ -95,7 +93,6 @@ class Courses:
         data_course = {
             'welcome_text': welcome_text,
             'body_html': body_html,
-            'course_result': course_result,
             'title': title,
             'institute': institute,
             'unix_start_datetime': unix_start_datetime,

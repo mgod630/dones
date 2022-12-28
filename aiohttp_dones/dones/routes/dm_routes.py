@@ -123,8 +123,6 @@ def make_routes(goldis_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
-        course_result = None
-        update_course = courses_orm.Courses.get_course_by_id(course_id)
         if request.method == 'POST':
             title = request.form.get('title', None)
             jalali_start_datetime = request.form.get(
@@ -145,11 +143,13 @@ def make_routes(goldis_blueprint):
                 return unix_datetime
             unix_start_datetime = jalali_to_unix(jalali_start_datetime)
             unix_end_datetime = jalali_to_unix(jalali_end_datetime)
-            edit_course = courses_orm.Courses.update_course(id=course_id, welcome_text=welcome_text, body_html=body_html, course_result=course_result, title=title, institute=institute,
+            edit_course = courses_orm.Courses.update_course(id=course_id, welcome_text=welcome_text, body_html=body_html, title=title, institute=institute,
                                                             unix_start_datetime=unix_start_datetime, unix_end_datetime=unix_end_datetime, price=price, logo_path=logo_path, image_path=image_path, description=description, video_path=video_path)
-            all_courses = courses_orm.Courses.get_all_courses()
             return redirect('/dm-courses')
-        else:
+        else: 
+            update_course = courses_orm.Courses.get_course_by_id(course_id)
+            update_course['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course['unix_start_datetime'])
+            update_course['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course['unix_end_datetime'])
             all_courses = courses_orm.Courses.get_all_courses()
             courses_jalali_datetime = []
             for course in all_courses:
@@ -247,6 +247,8 @@ def make_routes(goldis_blueprint):
             course_items = items_orm.Items.get_all_items_by_course_id(
                 course_id)
             update_course_item = items_orm.Items.get_item_by_id(course_item_id)
+            update_course_item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_start_datetime'])
+            update_course_item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_end_datetime'])
             len_course_items = len(course_items) if course_items else None
             all_course_item_id_link = []
             if course_items:
@@ -310,7 +312,6 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/dm-quiz/<course_item_id>/<quiz_id>", methods=['GET', 'POST'])
     def edit_quiz(course_item_id, quiz_id):
         user = common.get_user_from_token()
-        print(quiz_id)
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
         if request.method == 'POST':
@@ -336,6 +337,8 @@ def make_routes(goldis_blueprint):
             return redirect(url_for('goldis_blueprint.dm_quiz', course_item_id=course_item_id))
         else:
             update_quiz = quizzes_orm.Quizzes.get_quiz_by_id(quiz_id)
+            update_quiz['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_quiz['unix_start_datetime'])
+            update_quiz['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_quiz['unix_end_datetime'])
             quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(course_item_id)
             quizzes_jalali_datetime = []
             for quiz in quizzes:
