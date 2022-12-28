@@ -40,7 +40,7 @@ class User_quizzes:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = ("SELECT uq.* , i.item_id, qz.title FROM tbl_user_quizzes uq INNER JOIN tbl_user_items i ON i.user_id = uq.user_id INNER JOIN tbl_quizzes qz ON qz.id = uq.quiz_id WHERE i.item_id=%(item_id)s")
+        query = ("SELECT uq.* , i.item_id, qz.title FROM tbl_user_quizzes uq INNER JOIN tbl_user_items i ON i.user_id = uq.user_id INNER JOIN tbl_quizzes qz ON qz.id = uq.quiz_id WHERE (i.item_id=%(item_id)s AND i.user_id=%(user_id)s)")
         cursor.execute(query, {'user_id': user_id, 'item_id': item_id})
         row = cursor.fetchall()
         cnx.close()

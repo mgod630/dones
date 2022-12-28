@@ -2,7 +2,7 @@ import enum
 from flask import current_app as app
 import mysql.connector.pooling
 from routes import common
-from models_mysql import items_orm, courses_orm
+from models_mysql import user_courses_orm, courses_orm
 
 connection_pool = None
 
@@ -35,40 +35,27 @@ class User_items:
         return row
 
     @staticmethod
-    def get_all_user_items_by_ids(user_id, item_id):
+    def get_all_user_items_by_ids(user_id, course_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = ("SELECT qz.* , i.course_id FROM tbl_user_items qz INNER JOIN tbl_user_items i ON i.user_id = qz.user_id WHERE i.item_id=%(item_id)s")
-        cursor.execute(query, {'user_id': user_id, 'item_id': item_id})
+        query = ("SELECT ui.*, i.course_id, i.id FROM tbl_user_items ui INNER JOIN tbl_items i ON i.id = ui.item_id WHERE (ui.user_id=%(user_id)s AND i.course_id=%(course_id)s) ")
+        cursor.execute(query, {'user_id': user_id, 'course_id': course_id})
         row = cursor.fetchall()
         cnx.close()
         return row
 
-    # @staticmethod
-    # def get_all_user_results_by_ids(user_id, item_id):
-    #     global connection_pool
-    #     if connection_pool == None:
-    #         connection_pool = app.config['mysql_connection_pool']
-    #     cnx = connection_pool.get_connection()
-    #     cursor = cnx.cursor(dictionary=True)
-    #     query = "SELECT user_answers FROM tbl_user_items WHERE (user_id=%(user_id)s AND item_id=%(item_id)s)"
-    #     cursor.execute(query, {'user_id': user_id, 'item_id': item_id})
-    #     row = cursor.fetchall()
-    #     cnx.close()
-    #     return row
-
     @staticmethod
-    def get_user_items_by_item_id(item_id):
+    def get_user_item_by_ids(user_id, item_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_user_items WHERE item_id=%(item_id)s"
-        cursor.execute(query, {'item_id': item_id})
+        query = "SELECT * FROM tbl_user_items WHERE (item_id=%(item_id)s AND user_id=%(user_id)s)"
+        cursor.execute(query, {'user_id': user_id, 'item_id': item_id})
         row = cursor.fetchone()
         cnx.close()
         return row

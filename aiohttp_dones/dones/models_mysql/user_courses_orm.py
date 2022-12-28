@@ -45,14 +45,14 @@ class User_courses:
         return row
         
     @staticmethod
-    def get_user_courses_by_course_id(course_id):
+    def get_user_course_by_ids(user_id, course_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_user_courses WHERE course_id=%(course_id)s"
-        cursor.execute(query, {'course_id': course_id})
+        query = "SELECT * FROM tbl_user_courses WHERE (user_id=%(user_id)s AND course_id=%(course_id)s)"
+        cursor.execute(query, {'user_id': user_id, 'course_id': course_id})
         row = cursor.fetchone()
         cnx.close()
         return row
