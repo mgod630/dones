@@ -29,14 +29,14 @@
         </div>
         <div class="col-12 col-md-4">
             <div class="form-step">
-                <label>تعداد سوالات:</label>
-                <input type="number" min="0" class="form-control" name="question_count" value="{% if quiz_id %}{{update_quiz.question_count}}{% endif %}">
+                <label><span style="color: red;"> * </span>تعداد سوالات:</label>
+                <input id="esse4" onkeyup="success()" type="number" min="0" class="form-control" name="question_count" value="{% if quiz_id %}{{update_quiz.question_count}}{% endif %}">
             </div>
         </div>
         <div class="col-12 col-md-4">
             <div class="form-step">
-                <label>مدت آزمون:</label>
-                <input type="number" min="0" class="form-control" name="duration" value="{% if quiz_id %}{{update_quiz.duration}}{% endif %}">
+                <label><span style="color: red;"> * </span>مدت آزمون:</label>
+                <input id="esse5" onkeyup="success()" type="number" min="0" class="form-control" name="duration" value="{% if quiz_id %}{{update_quiz.duration}}{% endif %}">
             </div>
         </div>
         <div class="col-12 col-md-4">
@@ -143,7 +143,11 @@
     if (
       document.getElementById("esse1").value === "" ||
       document.getElementById("esse2").value === "" ||
-      document.getElementById("esse3").value === ""
+      document.getElementById("esse3").value === "" ||
+      document.getElementById("esse4").value === "" ||
+      document.getElementById("esse5").value === "" ||
+      document.getElementById("esse4").value === "0" ||
+      document.getElementById("esse5").value === "0" 
     ) {
       document.getElementById("submitbtn").disabled = true;
     } else {
