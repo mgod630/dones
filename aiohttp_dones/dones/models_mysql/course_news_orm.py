@@ -51,7 +51,7 @@ class Courses_news:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_course_news = ("INSERT INTO `tbl_courses_news` (`section_id`, `unix_datetime`, `course_news_type`, `course_news_text`) VALUES" +
+        add_course_news = ("INSERT INTO `tbl_courses_news` (`section_id`, `unix_datetime`, `course_news_text`) VALUES" +
                       "( %(section_id)s, %(unix_datetime)s, %(course_news_text)s)")
         data_course_news = {
             'section_id': section_id,
