@@ -174,7 +174,7 @@ def make_routes(goldis_blueprint):
         user_quizzes = user_quizzes_orm.User_quizzes.get_all_user_quizzes_by_ids(user['id'], item_id)
         user_quizzes_jalali_datetime = []
         for quiz in user_quizzes:
-            quiz['jalali_date'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_datetime'])
+            quiz['date'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_datetime'])
             user_quizzes_jalali_datetime.append(quiz)
         return render_template('quiz_results.html', user=user, attender=user, user_quizzes=user_quizzes_jalali_datetime)
 

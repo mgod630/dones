@@ -1,27 +1,27 @@
 import datetime, time, json
 
 # def send_sms(mobile, sms_text):
-    # url = "http://ws.smartsms.ir/sms.asmx?WSDL"
-    # client = Client(url, timeout=240)
-    # originator = '50002237167'  # 500059962
-    # message = '''
-    # <xmsrequest>
-    # <userid>53741</userid>
-    # <password>Salam159!</password>
-    # <action>smssend</action>
-    # <body>
-    # <type>oto</type>
-    # ''' +\
-    #     '<recipient mobile="{}" originator="{}" >{}</recipient>'.format(mobile, originator, sms_text) +\
-    #     '''
-    # </body>
-    # </xmsrequest>
-    # '''
-    # response = client.service.XmsRequest(requestData=message)
-    # result = False
-    # if '<code id="0">ok</code>' in response:
-    #     result = True
-    # return result
+#     url = "http://ws.smartsms.ir/sms.asmx?WSDL"
+#     client = Client(url, timeout=240)
+#     originator = '50002237167'  # 500059962
+#     message = '''
+#     <xmsrequest>
+#     <userid>53741</userid>
+#     <password>Salam159!</password>
+#     <action>smssend</action>
+#     <body>
+#     <type>oto</type>
+#     ''' +\
+#         '<recipient mobile="{}" originator="{}" >{}</recipient>'.format(mobile, originator, sms_text) +\
+#         '''
+#     </body>
+#     </xmsrequest>
+#     '''
+#     response = client.service.XmsRequest(requestData=message)
+#     result = False
+#     if '<code id="0">ok</code>' in response:
+#         result = True
+#     return result
 
 # class sms_pattern_code():
 # 	forget_password = 'oiamrcnhwfr8l95'
