@@ -472,22 +472,18 @@ def make_routes(goldis_blueprint):
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
         quiz = user_quizzes_orm.User_quizzes.get_user_quiz_by_quiz_id(user['id'], quiz_id)
+        user_quizzes_jalali_datetime = []
         user_quizzes = None
         if quiz:
             item_id = quiz['item_id']
             user_quizzes = user_quizzes_orm.User_quizzes.get_all_user_quizzes_by_ids(user['id'], item_id)
         registered_users = user_quizzes_orm.User_quizzes.get_all_registered_users_by_quiz_id(
             quiz_id)
+        for user in registered_users:
+                user['jalali_date'] = tools.Date_converter.unix_timestamp_to_jalali(user['unix_datetime'])
+                user_quizzes_jalali_datetime.append(user)
         all_answers = user_quizzes_orm.User_quizzes.get_all_user_results_by_ids(
             user_id=user['id'], quiz_id=quiz_id)
         all_answers = json.dumps(all_answers)
-        return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=user_quizzes, all_answers=all_answers, registered_users=registered_users)
-
-    
-    # def quiz_registered_users(quiz_id):
-    #     user = common.get_user_from_token()
-    #     if is_admin_user(user) == False:
-    #         return redirect('/404-not-found')
-    #     registered_users = user_quizzes_orm.User_quizzes.get_all_registered_users_by_quiz_id(
-    #         quiz_id)
-    #     return render_template('data_management/dm_quiz_registered_users.html', quiz_id=quiz_id, user=user, registered_users=registered_users)
+        
+        return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=user_quizzes, all_answers=all_answers, registered_users=user_quizzes_jalali_datetime)
