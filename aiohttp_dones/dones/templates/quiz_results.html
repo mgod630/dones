@@ -195,7 +195,7 @@
     </div>
   </div>
 </div>
-{% if user_quizzes %} {% for quiz in user_quizzes %}
+{% for user in registered_users %} {% if user.user_answers != 'empty' %}
 <div class="d-flex justify-content-center">
   <div class="titled-frame mx-auto my-3">
     <div class="tf-title">اطلاعات آزمون</div>
@@ -209,9 +209,9 @@
     </div>
   </div>
 </div>
-{% endfor %} {% else %}
+{% else %}
 <div class="neverTry">شما تاکنون در هیچ آزمونی شرکت نکرده اید</div>
-{% endif %}
+{% endif %}{% endfor %}
 
 <!-- {% if quiz_name == 'katel' %}
 <div class="titled-frame katel">

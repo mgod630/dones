@@ -1,16 +1,6 @@
 {% extends "layout.html" %} {% block styles %}
 <link rel="stylesheet" href="/static/css/mejs/mediaelementplayer.min.css" />
 <link rel="stylesheet" href="/static/css/course-content.css?2" />
-<style>
-  #submitbtn {
-    color: white;
-    background-color: red;
-  }
-  #submitbtn:hover {
-    color: white;
-    background-color: red;
-  }
-</style>
 {% endblock %} {% block content %} {% if allowed_view_results == 'True' %}
 <br />
 <h4 style="text-align: center">
@@ -95,8 +85,12 @@
           <div>{{quiz.jalali_end_datetime}}</div>
         </div>
         <div class="cc-quiz-row">
-          <div>تعداد شرکت:</div>
+          <div>شرکت کننده:</div>
           <div>{{quiz.attendance_max}}</div>
+        </div>
+        <div class="cc-quiz-row">
+          <div>سوالات:</div>
+          <div>{{quiz.question_count}}</div>
         </div>
         <div class="cc-quiz-row">
           <div>آخرین نمره:</div>
@@ -113,13 +107,20 @@
           </div>
         </div>
         <div class="cc-quiz-row">
-          {% if quiz.question_count %}
-          <a class="btn btn-warning" href="/quiz/quiz_{{quiz.id}}"
+          <a
+            {%
+            if
+            quiz.question_count
+            %}
+            disabled
+            {%
+            endif
+            %}
+            id="submitbtn"
+            class="btn btn-warning"
+            href="/quiz/quiz_{{quiz.id}}"
             >ورود به آزمون</a
           >
-          {% else %}
-          <a disabled id="submitbtn" class="btn">بدون سوال</a>
-          {% endif %}
         </div>
       </div>
       {% endfor %}
@@ -182,6 +183,11 @@
 <script src="/static/js/mediaelement-and-player.min.js"></script>
 <script>
   $(function () {
+    if (document.getElementById("esse1").value === "") {
+      document.getElementById("submitbtn").disabled = true;
+    } else {
+      document.getElementById("submitbtn").disabled = false;
+    }
     if ($(".mejs").length > 0) $(".mejs").mediaelementplayer();
     const comments = [
       {
@@ -196,14 +202,6 @@
       comments
     );
   });
-  document.getElementById("submitbtn").disabled = true;
-
-  // function success() {
-  //   if (document.getElementById("esse1").value === "") {
-  //     document.getElementById("submitbtn").disabled = true;
-  //   } else {
-  //     document.getElementById("submitbtn").disabled = false;
-  //   }
-  // }
+  // document.getElementById("submitbtn").disabled = true;
 </script>
 {% endblock %}

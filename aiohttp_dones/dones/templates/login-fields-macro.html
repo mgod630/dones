@@ -31,6 +31,7 @@
         </span>
         {% if size == 'normal' %}
         <input class="form-control {% if inp_type == 'fullname' %}rtl{% endif %}{% if inp_type == 'text' %}rtl text-right{% endif %}"
+               id= "{% if '{{ input_templates[inp_type].type }}' == 'password' %} passInput {% endif %}"
                name="{% if name %}{{name}}{% else %}{{section}}_{{inp_type}}{% endif %}"
                value="{{ value }}"
                placeholder="{% if section != 'sg' %}{{ input_templates[inp_type].placeholder }}{% endif %}"
@@ -40,6 +41,11 @@
                {% if required %}data-required="true"{% endif %}
                maxlength="{{ input_templates[inp_type].length }}"
         >
+        {% if inp_type == 'password' %}
+        <span style="cursor: pointer; position: absolute; top: 35px; left: 10px;" class="show-pass">
+            <i class="fas fa-eye"></i>
+        </span>
+        {% endif %}
         {% else %}
         <textarea class="form-control {% if inp_type == 'fullname' %}rtl{% endif %}{% if inp_type == 'text' %}rtl text-right{% endif %}"
                name="{{section}}_{{inp_type}}"

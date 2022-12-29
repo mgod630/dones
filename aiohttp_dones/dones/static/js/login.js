@@ -128,6 +128,15 @@
       $("#" + formId).submit();
     }
   }
+  $(".show-pass").on("click", function () {
+    let passField = $(this).closest("div").find("input.form-control");
+    if (passField.attr("type") == "password") {
+      passField.attr("type", "text");
+    } else {
+      console.log("sss");
+      passField.attr("type", "password");
+    }
+  });
 });
 regexes = {
   mobile: /09([0-9])\d{8}$/,
@@ -187,11 +196,11 @@ function isValidNationalId(input) {
   sum %= 11;
   return (sum < 2 && check == sum) || (sum >= 2 && check + sum == 11);
 }
-function myFunction() {
-  var x = document.getElementById("myInput");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-}
+// function showPass() {
+//   var x = document.getElementById("passInput");
+//   if (x.type === "password") {
+//     x.type = "text";
+//   } else {
+//     x.type = "password";
+//   }
+// }
