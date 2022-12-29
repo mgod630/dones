@@ -1,17 +1,14 @@
 import secrets, time
-from flask import render_template, request, redirect, session, url_for, jsonify, g, current_app as app
+from flask import render_template, request, redirect, session, url_for, flash, current_app as app
 from routes import common
 from models_mysql import users_orm, accounts_orm, flash_messages_orm, user_courses_orm
-status= ''
-user= None 
-flash_messages= None
 
 def make_routes(goldis_blueprint):
       
     @goldis_blueprint.route('/login')
     def login():
         all_users = users_orm.Users.get_all_users()
-        return render_template('login.html',status=status, user=None, flash_messages=flash_messages)
+        return render_template('login.html', user=None)
 
     @goldis_blueprint.route('/login-post', methods=['POST'])
     def login_post():
@@ -27,14 +24,14 @@ def make_routes(goldis_blueprint):
                 return redirect(url_for('goldis_blueprint.home'))
             else :
                 status = 'incorrect_password'
-                return render_template('login.html',status=status, user=None, flash_messages=flash_messages)
+                return render_template('login.html',status=status, user=None)
         except TypeError:
             status = 'user_not_found'
-            return render_template('login.html',status=status, user=None, flash_messages=flash_messages)
+            return render_template('login.html',status=status, user=None)
       
     @goldis_blueprint.route('/signup')
     def signup():
-        return render_template('login.html',status=status, user=None, flash_messages=flash_messages)
+        return render_template('login.html', user=None)
 
     @goldis_blueprint.route('/signup-post', methods=['POST'])
     def signup_post():
@@ -52,7 +49,7 @@ def make_routes(goldis_blueprint):
         user = users_orm.Users.get_user_by_mobile(mobile)
         if user:
             status = 'mobile_already_exist'
-            return render_template('login.html',status=status, user=None, flash_messages=flash_messages)
+            return render_template('login.html',status=status, user=None)
         else :
             new_user_id = users_orm.Users.insert_new_user(full_name, mobile, g_token, password, user_type, time.time(), registering_code)
             new_user_account_id = accounts_orm.Accounts.insert_new_account(new_user_id, accounts_orm.Accounts.Types.A)
@@ -67,15 +64,12 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route('/profile')
     def profile():
         user = common.get_user_from_token()
-        flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(user['g_token'])
-        flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(user['g_token'])
-        return render_template('profile.html', user=user, flash_messages= flash_messages)
+        return render_template('profile.html', user=user)
 
     @goldis_blueprint.route('/profile', methods=['POST'])
     def profile_post():
         user = common.get_user_from_token()
         user_full_name = user['full_name']
-        flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(user['g_token'])
         if request.form.get('sg_current_password') != 'None' and request.form.get('sg_new_password', 'None') != 'None':
             current_password = request.form.get('sg_current_password', 'None') 
             if common.check_password(current_password, user['password']) :
@@ -83,18 +77,16 @@ def make_routes(goldis_blueprint):
                 mobile = request.form.get('sg_mobile', 'None')
                 full_name = request.form.get('sg_fullname', 'None')
                 update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name, password=new_password)
-                flash_messages_orm.Flash_messages.insert_new_flash_message(user['g_token'], f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success') 
+                flash(f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success')
             else:
-                flash_messages_orm.Flash_messages.insert_new_flash_message(user['g_token'], f'{user_full_name} گرامی، رمز عبور فعلی، صحیح نمی باشد.', 'danger') 
+                flash(f'{user_full_name} گرامی، رمز عبور فعلی، صحیح نمی باشد.', 'danger')
             user = common.get_user_from_token()
-            flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(user['g_token'])
             return redirect('/profile')
         else:
             mobile = request.form.get('sg_mobile', 'None')
             full_name = request.form.get('sg_fullname', 'None')
             update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name)
-            flash_messages_orm.Flash_messages.insert_new_flash_message(user['g_token'], f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success') 
-            flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(user['g_token'])
+            flash(f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success')
             user = common.get_user_from_token()
             return redirect('/profile')
 
