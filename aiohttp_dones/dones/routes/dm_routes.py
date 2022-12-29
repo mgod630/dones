@@ -485,5 +485,7 @@ def make_routes(goldis_blueprint):
         all_answers = user_quizzes_orm.User_quizzes.get_all_user_results_by_ids(
             user_id=user['id'], quiz_id=quiz_id)
         all_answers = json.dumps(all_answers)
-        
-        return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=user_quizzes, all_answers=all_answers, registered_users=user_quizzes_jalali_datetime)
+
+        questions = questions_orm.Questions.get_all_questions_by_id_quiz_id(quiz_id)
+        print(questions)
+        return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=user_quizzes, all_answers=all_answers, registered_users=user_quizzes_jalali_datetime, questions=questions)

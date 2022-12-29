@@ -1,9 +1,7 @@
 import jdatetime , json, time, tools
-from flask import redirect, render_template, request, session, url_for
+from flask import redirect, render_template, request, session, url_for, flash
 from routes import common
-from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, course_news_orm, user_courses_orm, flash_messages_orm, user_quizzes_orm, user_items_orm
-
-flash_messages = []
+from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, course_news_orm, user_courses_orm ,user_quizzes_orm, user_items_orm
 
 def make_routes(goldis_blueprint):
     @goldis_blueprint.route("/course-info/course_<course_id>")
@@ -23,13 +21,13 @@ def make_routes(goldis_blueprint):
         all_comments = comments_orm.Comments.get_comments_by_section_id(
             f'course_content_{course_id}')
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
-        return render_template("course-info.html", course=course, all_courses_news=all_courses_news, user=user, all_comments=all_comments, flash_messages=flash_messages)
+        return render_template("course-info.html", course=course, all_courses_news=all_courses_news, user=user, all_comments=all_comments)
 
     @goldis_blueprint.route('/course-overview/course_<course_id>')
     def course_overview(course_id):
         user = common.get_user_from_token()
         if user == None:
-            flash_messages_orm.Flash_messages.insert_new_flash_message(message='کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', message_type='danger') 
+            flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
         else:
             user_full_name = user['full_name']
@@ -55,20 +53,20 @@ def make_routes(goldis_blueprint):
             new_user_course_id = user_courses_orm.User_courses.insert_new_user_course(user_id = user['id'], course_id=course_id,price=course['price'],unix_datetime=unix_datetime)
             
         if course['unix_start_datetime'] >= time.time():
-            flash_messages_orm.Flash_messages.insert_new_flash_message(user['g_token'], f'{user_full_name} گرامی زمان شروع این دوره هنوز نرسیده است.', 'danger') 
+            flash(f'{user_full_name} گرامی زمان شروع این دوره هنوز نرسیده است.', 'danger')
             return redirect('/')
         if course['unix_end_datetime'] <= time.time():
-            flash_messages_orm.Flash_messages.insert_new_flash_message(user['g_token'], f'{user_full_name} گرامی زمان شرکت در این دوره به پایان رسیده است.', 'danger') 
+            flash(f'{user_full_name} گرامی زمان شرکت در این دوره به پایان رسیده است.', 'danger')
             return redirect('/')
         all_comments = comments_orm.Comments.get_comments_by_section_id(
             f'course_overview_{course_id}')
-        return render_template("course-overview.html", course=course, course_items=items_jalali_datetime,user=user, all_comments=all_comments, flash_messages=flash_messages)
+        return render_template("course-overview.html", course=course, course_items=items_jalali_datetime,user=user, all_comments=all_comments)
 
     @goldis_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
     def course_content(course_id, item_id):
         user = common.get_user_from_token()
         if user == None:
-            flash_messages_orm.Flash_messages.insert_new_flash_message(message='کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', message_type='danger') 
+            flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
         user_item = user_items_orm.User_items.get_user_item_by_ids(user_id=user['id'], item_id=item_id)
         if not user_item :
@@ -98,13 +96,13 @@ def make_routes(goldis_blueprint):
         all_comments = comments_orm.Comments.get_comments_by_section_id(
             f'course_content_{item_id}')
         last_comments = all_comments[0:19]
-        return render_template("course-content.html", course=course, course_item=course_item, user=user, all_comments=last_comments, flash_messages=flash_messages, quizzes=quizzes_jalali_datetime)
+        return render_template("course-content.html", course=course, course_item=course_item, user=user, all_comments=last_comments, quizzes=quizzes_jalali_datetime)
 
     @goldis_blueprint.route("/quiz/quiz_<quiz_id>")
     def quiz_content(quiz_id):
         user = common.get_user_from_token()
         if user == None:
-            flash_messages_orm.Flash_messages.insert_new_flash_message(message='کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', message_type='danger') 
+            flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
         unix_datetime = time.time()
         new_user_quiz_id = user_quizzes_orm.User_quizzes.insert_new_user_quiz(user_id=user['id'], quiz_id=quiz_id, unix_datetime=unix_datetime)
@@ -115,7 +113,7 @@ def make_routes(goldis_blueprint):
         item_id = quiz['item_id']
         item = items_orm.Items.get_item_by_id(item_id)
         course_id = item['course_id']
-        return render_template("quiz-content.html", user=user, quiz=quiz, flash_messages=flash_messages, questions=questions, last_user_answers=last_user_answers, course_id=course_id, item_id=item_id, quiz_id=quiz_id)
+        return render_template("quiz-content.html", user=user, quiz=quiz, questions=questions, last_user_answers=last_user_answers, course_id=course_id, item_id=item_id, quiz_id=quiz_id)
 
     @goldis_blueprint.route('/set-user-answers', methods=['POST'])
     def send_user_answers():
@@ -136,9 +134,8 @@ def make_routes(goldis_blueprint):
     def my_courses():
         user = common.get_user_from_token()
         if user == None:
-            flash_messages_orm.Flash_messages.insert_new_flash_message(message='کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', message_type='danger') 
+            flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
-        flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(user['g_token'])
         user_courses = user_courses_orm.User_courses.get_user_courses_by_user_id(user['id'])
         user_courses_with_title = []
         course = None
@@ -147,15 +144,14 @@ def make_routes(goldis_blueprint):
                 course = courses_orm.Courses.get_course_by_id(crs['course_id'])
                 crs['title'] = course['title']
                 user_courses_with_title.append(crs)
-        return render_template('my-courses.html', user=user, courses = user_courses_with_title, flash_messages = flash_messages)
+        return render_template('my-courses.html', user=user, courses = user_courses_with_title)
     
     @goldis_blueprint.route('/my-items')
     def my_items():
         user = common.get_user_from_token()
         if user == None:
-            flash_messages_orm.Flash_messages.insert_new_flash_message(message='کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', message_type='danger') 
+            flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
-        flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(user['g_token'])
         course_id = request.args.get('course_id')
         user_items = user_items_orm.User_items.get_all_user_items_by_ids(user['id'], course_id)
         user_items_with_title = []
@@ -163,18 +159,18 @@ def make_routes(goldis_blueprint):
             item = items_orm.Items.get_item_by_id(it['item_id'])
             it['title'] = item['title']
             user_items_with_title.append(it)
-        return render_template('my-items.html', user=user, items = user_items_with_title, flash_messages = flash_messages, course_id=course_id)
+        return render_template('my-items.html', user=user, items = user_items_with_title, course_id=course_id)
 
     @goldis_blueprint.route("/quiz-results/item_<item_id>")
     def user_quizzes(item_id):
         user = common.get_user_from_token()
         if user == None:
-            flash_messages_orm.Flash_messages.insert_new_flash_message(message='کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', message_type='danger') 
+            flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
         user_quizzes = user_quizzes_orm.User_quizzes.get_all_user_quizzes_by_ids(user['id'], item_id)
         user_quizzes_jalali_datetime = []
         for quiz in user_quizzes:
-            quiz['jalali_date'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_datetime'])
+            quiz['date'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_datetime'])
             user_quizzes_jalali_datetime.append(quiz)
         return render_template('quiz_results.html', user=user, attender=user, user_quizzes=user_quizzes_jalali_datetime)
 
