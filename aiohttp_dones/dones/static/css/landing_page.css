@@ -125,6 +125,7 @@ p {
   border-radius: 6px;
   border: none;
   outline: none;
+  font-size: small;
 }
 
 /* carousel */
@@ -210,8 +211,8 @@ p {
   filter: grayscale(50%);
 }
 .owl-carousel button span {
-  color: #fff;
-  font-size: 50px;
+  /* color: #fff; */
+  font-size: 25px;
 }
 .hoverButton {
   transition: 0.5s;
@@ -290,7 +291,7 @@ p {
 }
 .underCounter {
   position: absolute;
-  top: 215px;
+  top: 225px;
   right: 70%;
   font-size: 1.5em;
   color: #000;
@@ -301,7 +302,7 @@ p {
   color: #000;
 }
 .mpara2 {
-  font-size: 18px;
+  font-size: 17px;
 }
 /* .carosCard p {
   position: absolute;
@@ -354,7 +355,7 @@ p {
   }
   .counter {
     top: 380px;
-    right: 48%;
+    right: 45%;
   }
   .counter .countdown p,
   .counter .countdown span {

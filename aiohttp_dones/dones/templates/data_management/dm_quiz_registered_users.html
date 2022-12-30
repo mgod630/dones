@@ -47,9 +47,8 @@
         <td>{% if user.jalali_date %}{{user.jalali_date}}{% endif %}</td>
         <td>
           {% if user.user_answers != 'empty' %}
-          <a class="delNotif btn btn-warning btn-sm" {% for attr in user if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{user[attr]}}" {% endfor %} >
-          نمایش جواب
-          </a> {% else %}
+          <a class="delNotif btn btn-warning btn-sm" {% for attr in user if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{user[attr]}}" {% endfor %} >نمایش جواب</a> 
+          {% else %}
           <div>بدون جواب</div>
           {% endif %}
         </td>

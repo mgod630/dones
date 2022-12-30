@@ -195,14 +195,14 @@
     </div>
   </div>
 </div>
-{% if user_quizzes %} {% for quiz in user_quizzes %}
+{% if user_quizzes %} {% for quiz in user_quizzes %} {% if quiz.user_answers !=
+'empty' %}
 <div class="d-flex justify-content-center">
   <div class="titled-frame mx-auto my-3">
     <div class="tf-title">اطلاعات آزمون</div>
     <div class="quiz-stats">
       <div><span>نام آزمون:</span> {{quiz.title}}</div>
       <div><span>تاریخ شرکت در آزمون:</span> {{quiz.date}}</div>
-      {{quiz.user_answers}}
       <!-- <div>
           <span>زمان شرکت در آزمون:</span> {% if quiz.time != '-1'
           %}{{quiz.time}}{% else %}-{% endif %}
@@ -210,7 +210,7 @@
     </div>
   </div>
 </div>
-{% endfor %} {% else %}
+{% endif %} {% endfor %} {% else %}
 <div class="neverTry">شما تاکنون در هیچ آزمونی شرکت نکرده اید</div>
 {% endif %}
 

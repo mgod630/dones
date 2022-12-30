@@ -94,6 +94,39 @@
       </div>
       <div class="modal-body">
         <p>
+          شما درخواست خرید <b>{{course.title}}</b> با قیمت
+          <b>{{ '{0:,}'.format(course.price|int) }}</b> ریال را دارید.
+        </p>
+        <div class="gateways-header">انتخاب درگاه</div>
+        <div class="gateways-container">
+          <div class="gateway active" data-id="parsian-payment-gateway">
+            <img src="../static/template/parsian_bank.png"></img>
+            <div>
+                <i class="cstm-radio"></i>
+                پارسیان
+              </div>
+          </div>
+        </div>
+        <!-- <div class="mt-2">
+          <label>کد تخفیف دارید، وارد کنید:</label>
+          <input class="form-control" type="text" style="width: 165px;display: inline-block;" id="discount_code">
+        </div> -->
+      </div>
+      <div class="modal-footer text-center">
+        <a href="/parsian-payment-gateway?course_id={{course.id}}" data-cid="{{course.id}}" data-base_link="/parsian-payment-gateway?course_id={{course.id}}" id="payment_link" class="btn btn-success" style="width: 151px;">پرداخت</a>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">خرید</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
           {% if course and 'price' in course %}
           شما درخواست خرید <b>{{course.title}}</b> با قیمت
           <b>{{ '{0:,}'.format(course.price|int) }}</b> ریال را دارید.
@@ -112,8 +145,7 @@
       <div class="modal-footer">
         <a href="/parsian-payment-gateway?course_id={{course.id}}" data-cid="{{course.id}}" id="payment_link" class="btn btn-success" style="width: 151px;">پرداخت</a>
       </div>
-    </div>
-  </div>
+    </div> -->
 </div>
 {% endblock %}
 {% block scripts %}
