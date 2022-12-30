@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, url_for, session, jsonify
 from routes import common
-from models_mysql import courses_orm, course_news_orm, flash_messages_orm, emails_orm
+from models_mysql import courses_orm, course_news_orm, emails_orm
 import tools
 
 
@@ -19,15 +19,9 @@ def make_routes(goldis_blueprint):
             course['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(
                 course['unix_end_datetime'])
             courses_jalali_datetime.append(course)
-        flash_messages = []
-        if user:
-            flash_messages = flash_messages_orm.Flash_messages.get_flash_messages_by_user_token(
-                user['g_token'])
-            flash_messages_orm.Flash_messages.delete_flash_message_by_user_token(
-                user['g_token'])
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(
             section_id)
-        return render_template("index.html", user=user, user_account=None, all_courses=courses_jalali_datetime, all_courses_news=all_courses_news, flash_messages=flash_messages, db_number=db_number)
+        return render_template("index.html", user=user, user_account=None, all_courses=courses_jalali_datetime, all_courses_news=all_courses_news, db_number=db_number)
 
     @goldis_blueprint.route("/landing-page")
     def landing_page():

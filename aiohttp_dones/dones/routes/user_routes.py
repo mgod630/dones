@@ -1,7 +1,7 @@
 import secrets, time
 from flask import render_template, request, redirect, session, url_for, flash, current_app as app
 from routes import common
-from models_mysql import users_orm, accounts_orm, flash_messages_orm, user_courses_orm
+from models_mysql import users_orm, accounts_orm, user_courses_orm
 
 def make_routes(goldis_blueprint):
       
@@ -64,6 +64,9 @@ def make_routes(goldis_blueprint):
     @goldis_blueprint.route('/profile')
     def profile():
         user = common.get_user_from_token()
+        if user == None:
+            flash('برای ویرایش پروفایل ابتدا ثبت نام یا ورود نمایید.', 'danger')
+            return redirect('/')
         return render_template('profile.html', user=user)
 
     @goldis_blueprint.route('/profile', methods=['POST'])

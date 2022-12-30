@@ -128,6 +128,10 @@ def make_routes(goldis_blueprint):
         if string_all_answers:
             user_answers = quizzes_orm.Quizzes.update_quiz(id=quiz_id, user_answers=string_all_answers)
             new_user_quiz_id = user_quizzes_orm.User_quizzes.insert_new_user_quiz(user_id=user['id'], quiz_id=quiz_id, unix_datetime=unix_datetime, user_answers=string_all_answers)
+        if all_answers:
+            flash(f'{user["full_name"]} گرامی پاسخ های شما با موفقیت ثبت گردید.', 'success')
+        else:
+            flash(f'{user["full_name"]} گرامی هیچ پاسخی از سمت شما دریافت نشد.', 'danger')
         return redirect(url_for('goldis_blueprint.course_content', course_id=course_id, item_id=item_id))
 
     @goldis_blueprint.route('/my-courses')

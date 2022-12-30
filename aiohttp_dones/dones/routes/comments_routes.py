@@ -3,9 +3,7 @@ from flask import redirect, render_template, request
 from models_mysql import courses_orm, items_orm, course_news_orm, questions_orm, comments_orm
 from routes import common 
 
-flash_messages = []
 def make_routes(goldis_blueprint):
-
     @goldis_blueprint.route('/json-get-comments-and-courses_news-by-section-id/course_info_<course_id>')
     def json_get_comments_and_courses_news_by_section_id(course_id):    
         page_number = request.args.get('page_number', '1')
@@ -72,7 +70,7 @@ def make_routes(goldis_blueprint):
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
         pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
-        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
+        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, section_id=course_id)
 
     @goldis_blueprint.route('/comments/course_overview_<course_id>', methods=['GET','POST'])
     def comments_course_overview(course_id):
@@ -88,7 +86,7 @@ def make_routes(goldis_blueprint):
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
         pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
-        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
+        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, section_id=course_id)
 
     @goldis_blueprint.route('/comments/course_content_<course_id>')
     def comments_course_content(course_id):
@@ -104,7 +102,7 @@ def make_routes(goldis_blueprint):
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
         pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
-        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, flash_messages=flash_messages, section_id=course_id)
+        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, section_id=course_id)
 
     # post comment
     @goldis_blueprint.route('/post-comment',methods=['POST'])
