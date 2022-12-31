@@ -7,7 +7,6 @@ def make_routes(goldis_blueprint):
       
     @goldis_blueprint.route('/login')
     def login():
-        user = get
         return render_template('login.html', user=None)
 
     @goldis_blueprint.route('/login-post', methods=['POST'])
