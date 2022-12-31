@@ -157,6 +157,12 @@
 {% block scripts %}
 <script src="/static/js/mediaelement-and-player.min.js"></script>
 <script>
+  // reloadingTimes = 0
+  // if (reloadingTimes == 0){
+  //   location.reload()
+  //   reloadingTimes += 1
+  //   console.log(reloadingTimes)
+  // }
 $(function(){
   const structure = [
     {template: 'comments_static.html', data: 'all_comments', id: 'all_comments'},

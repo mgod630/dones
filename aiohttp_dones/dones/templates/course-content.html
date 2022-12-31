@@ -110,14 +110,15 @@
           <a
             {%
             if
+            not
             quiz.question_count
             %}
-            disabled
+            style="pointer-events: none"
             {%
             endif
             %}
             id="submitbtn"
-            class="btn btn-warning"
+            class="btn btn-warning {% if not quiz.question_count %} btn-danger {% endif%}"
             href="/quiz/quiz_{{quiz.id}}"
             >ورود به آزمون</a
           >
