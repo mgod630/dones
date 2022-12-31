@@ -1,16 +1,15 @@
-{% extends "layout.html" %}
-{% block styles %}
+{% extends "layout.html" %} {% block styles %}
 <style>
-  .news-list .col-12{
+  .news-list .col-12 {
     padding-top: 35px;
     padding-bottom: 15px;
   }
   .news-card {
-      height: 100%;
-      display: block;
-      color: #212529;
-      border-radius: 5px;
-      transition: transform 0.3s, color 0.3s;
+    height: 100%;
+    display: block;
+    color: #212529;
+    border-radius: 5px;
+    transition: transform 0.3s, color 0.3s;
   }
   .news-card:hover {
     text-decoration: none;
@@ -20,7 +19,7 @@
   .nc-image {
     position: relative;
     top: -35px;
-}
+  }
   .nc-image .nci-main {
     height: 200px;
     position: relative;
@@ -29,8 +28,8 @@
     background-size: cover;
     background-position: center;
   }
-  .nc-image .nci-shadow{
-    transform: scale(.94);
+  .nc-image .nci-shadow {
+    transform: scale(0.94);
     top: 12px;
     filter: blur(12px);
     position: absolute;
@@ -57,21 +56,25 @@
     margin-bottom: 0;
   }
 </style>
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 <div class="striped-header mb-3">
-  <h1>اخبار سماح</h1>
+  <h1>اخبار فول استک</h1>
 </div>
 
 <div class="container news-list">
   <div class="row row-eq-height">
-    {% if news %}
-    {% for single_news in news %}
+    {% if news %} {% for single_news in news %}
     <div class="col-12 col-sm-6 col-lg-4">
       <a href="/news/{{single_news.id}}" class="white-box news-card">
         <div class="nc-image">
-          <div class="nci-main" style="background-image: url({{single_news.image_path}})"></div>
-          <div class="nci-shadow" style="background-image: url({{single_news.image_path}})"></div>
+          <div
+            class="nci-main"
+            style="background-image: url({{single_news.image_path}})"
+          ></div>
+          <div
+            class="nci-shadow"
+            style="background-image: url({{single_news.image_path}})"
+          ></div>
         </div>
         <div class="nc-meta">
           <i class="fal fa-calendar"></i>
@@ -81,10 +84,7 @@
         <p>{{single_news.content|truncate(65, True)}}</p>
       </a>
     </div>
-    {% endfor %}
-    {% endif %}
+    {% endfor %} {% endif %}
   </div>
 </div>
-{% endblock %}
-{% block scripts %}
-{% endblock %}
+{% endblock %} {% block scripts %} {% endblock %}

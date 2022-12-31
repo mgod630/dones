@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/static/css/fontawesome.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/login.css?5" />
     {% block styles %}{% endblock %}
-    <title>سماح - ورود</title>
+    <title>فول استک - ورود</title>
   </head>
   <body>
     {% import 'login-fields-macro.html' as mcr_inputs %}
@@ -64,7 +64,7 @@
           <div class="flash-message fm-info">
             لینک بازنشانی کلمه عبور برای شما ایمیل شد.
           </div>
-          {% elif status == 'verification_code_sent'%}
+          {% elif status == 'registering_code_sent'%}
           <div class="flash-message fm-info">
             پیامک بازنشانی کلمه عبور برای شما ارسال شد.
           </div>
@@ -92,12 +92,12 @@
       <div class="login-panel">
         {% include 'spinner.html' %}
         <div
-          class="login-body {% if status == 'verification_code_sent' or status == 'verification_code_is_incorrect' %}expand2{% endif %}"
+          class="login-body {% if status == 'registering_code_sent' or status == 'verification_code_is_incorrect' %}expand2{% endif %}"
         >
           <div id="mobile_buttons">
             <div
               id="mb_login"
-              class="{% if status != 'verification_code_sent' and status != 'verification_code_is_incorrect'%}active{% endif %}"
+              class="{% if status != 'registering_code_sent' and status != 'verification_code_is_incorrect'%}active{% endif %}"
             >
               ورود
             </div>
@@ -106,7 +106,7 @@
           <form
             id="login_form"
             action="/login-post"
-            class="{% if status == 'verification_code_sent' or status == 'verification_code_is_incorrect' %}collapse{% else %}active{% endif %}"
+            class="{% if status == 'registering_code_sent' or status == 'verification_code_is_incorrect' %}collapse{% else %}active{% endif %}"
             method="post"
           >
             {{ mcr_inputs.input('mobile', section='lg', required=true)}} {{
@@ -122,15 +122,43 @@
           </form>
           <form
             id="signup_form"
-            action="/signup-post"
+            action="/signup-post?step=1"
             class="collapse"
             method="post"
           >
-            {{ mcr_inputs.input('fullname', required=true)}} {{
-            mcr_inputs.input('mobile', required=true)}} {{
-            mcr_inputs.input('password', section='sg', required=true)}}
+            <!-- {{ mcr_inputs.input('fullname', required=true)}}  -->
+            {{ mcr_inputs.input('mobile', required=true)}}
+            <!-- {{mcr_inputs.input('password', section='sg', required=true)}} -->
             <div class="form-footer">
               <button class="button solid-blue" type="button">ارسال کد</button>
+            </div>
+          </form>
+          <form
+            id="signup_form"
+            action="/signup-post?step=2"
+            class="collapse"
+            method="post"
+          >
+            <!-- {{ mcr_inputs.input('fullname', required=true)}}  -->
+            <!-- {{ mcr_inputs.input('mobile', required=true)}} -->
+            <!-- {{mcr_inputs.input('password', section='sg', required=true)}} -->
+            <input type="text" name="registery_code" />
+            <div class="form-footer">
+              <button class="button solid-blue" type="button">تائید کد</button>
+            </div>
+          </form>
+          <form
+            id="signup_form"
+            action="/signup-post?step=3"
+            class="collapse"
+            method="post"
+          >
+            {{ mcr_inputs.input('fullname', required=true)}}
+            {{mcr_inputs.input('password', section='sg', required=true)}}
+            <div class="form-footer">
+              <button class="button solid-blue" type="button">
+                ثبت اطلاعات
+              </button>
             </div>
           </form>
           <form
@@ -157,32 +185,6 @@
             method="post"
           >
             <input name="rp_mobile" />
-          </form>
-          <form
-            id="set_password_form"
-            action="/login"
-            style="{% if not (status == 'verification_code_sent' or status == 'verification_code_is_incorrect') %}display: none;{% endif %}"
-            method="post"
-          >
-            <p class="subtle" style="text-align: right; margin: 0 15px 12px">
-              پین ۴ رقمی دریافت شده و کلمه عبور دلخواه را وارد نماید
-            </p>
-            <p id="resend_code">ارسال مجدد پین (<span>120</span> ثانیه)</p>
-            <input
-              class="collapse"
-              name="rp_mobile"
-              value="{{ user.mobile }}"
-              type="hidden"
-            />
-            {{ mcr_inputs.input('verification_code', section='rp',
-            required=true)}} {{ mcr_inputs.input('new_password', section='rp',
-            required=true)}} {{ mcr_inputs.input('new_password_repeat',
-            section='rp', required=true)}}
-            <div class="form-footer">
-              <button class="button solid-purple" type="button">
-                بازنشانی
-              </button>
-            </div>
           </form>
         </div>
       </div>

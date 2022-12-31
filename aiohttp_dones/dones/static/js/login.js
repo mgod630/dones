@@ -51,7 +51,7 @@
         $("#login_form").fadeOut(500).removeClass("active");
         $("#reset_form").delay(500).fadeIn(500).addClass("active");
         $("#mb_login, #mb_signup").removeClass("active");
-        break;
+      //   break;
       // case "afterSignUp":
       //   $("#login_form, #reset_form, #signup_form")
       //     .fadeOut(500)
