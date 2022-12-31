@@ -34,7 +34,7 @@
           <div class="flash-message fm-danger">
             کاربری با این مشخصات وجود ندارد.
           </div>
-          {% elif status == 'incorrect_password'%}
+          {% elif status == 'incorrect_password' %}
           <div class="flash-message fm-danger">رمز عبور صحیح نمی باشد.</div>
           {% elif status == 'email_already_exist' %}
           <div class="flash-message fm-danger">
@@ -122,7 +122,7 @@
           </form>
           <form
             id="signup_form"
-            action="/signup-post?step=1"
+            action="/signup-post?step=1 "
             class="collapse"
             method="post"
           >
@@ -130,11 +130,16 @@
             {{ mcr_inputs.input('mobile', required=true)}}
             <!-- {{mcr_inputs.input('password', section='sg', required=true)}} -->
             <div class="form-footer">
-              <button class="button solid-blue" type="button">ارسال کد</button>
+              <a
+                ><button class="button solid-blue" type="submit">
+                  ارسال کد
+                </button></a
+              >
             </div>
           </form>
+          {% if status == 'registering_code_sent'%}
           <form
-            id="signup_form"
+            id="signup_form_2"
             action="/signup-post?step=2"
             class="collapse"
             method="post"
@@ -142,13 +147,14 @@
             <!-- {{ mcr_inputs.input('fullname', required=true)}}  -->
             <!-- {{ mcr_inputs.input('mobile', required=true)}} -->
             <!-- {{mcr_inputs.input('password', section='sg', required=true)}} -->
-            <input type="text" name="registery_code" />
+            <input type="text" name="registering_code" />
             <div class="form-footer">
-              <button class="button solid-blue" type="button">تائید کد</button>
+              <button class="button solid-blue" type="submit">تائید کد</button>
             </div>
           </form>
+          {% endif %} {% if status == registering_code_incorrect%}
           <form
-            id="signup_form"
+            id="signup_form_3"
             action="/signup-post?step=3"
             class="collapse"
             method="post"
@@ -156,11 +162,12 @@
             {{ mcr_inputs.input('fullname', required=true)}}
             {{mcr_inputs.input('password', section='sg', required=true)}}
             <div class="form-footer">
-              <button class="button solid-blue" type="button">
+              <button class="button solid-blue" type="submit">
                 ثبت اطلاعات
               </button>
             </div>
           </form>
+          {% endif %}
           <form
             id="reset_form"
             action="/login"

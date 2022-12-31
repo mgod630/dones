@@ -24,9 +24,9 @@
   $(".forgotten-password").click(function () {
     toggleTo("reset");
   });
-  $("#signup_form button").click(function () {
-    toggleTo("afterSignUp");
-  });
+  // $("#signup_form button").click(function () {
+  //   toggleTo("afterSignUp");
+  // });
   function toggleTo(tab) {
     switch (tab) {
       case "login":
