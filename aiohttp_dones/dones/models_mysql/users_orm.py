@@ -104,7 +104,7 @@ class Users:
         return row
 
     @staticmethod
-    def insert_new_user(full_name, mobile, g_token, password, user_type, register_datetime, registering_code=0):
+    def insert_new_user(full_name='empty', mobile='empty', g_token='empty', password='empty', user_type=0, register_datetime=0, registering_code=0):
         password = common.get_hashed_password(password)
         global connection_pool
         if connection_pool == None:
