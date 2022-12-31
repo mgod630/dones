@@ -464,7 +464,6 @@ def make_routes(goldis_blueprint):
             status = 'course_norifications_loaded'
         return render_template("data_management/dm_courses_news.html", user=user, courses_news=course_courses_news, all_courses=all_courses, status=status) 
     
-
     @goldis_blueprint.route("/dm-quiz-users-answers/<quiz_id>")
     @goldis_blueprint.route("/quiz-registered-users/<quiz_id>")
     def quiz_results(quiz_id):
@@ -485,7 +484,5 @@ def make_routes(goldis_blueprint):
         all_answers = user_quizzes_orm.User_quizzes.get_all_user_results_by_ids(
             user_id=user['id'], quiz_id=quiz_id)
         all_answers = json.dumps(all_answers)
-
         questions = questions_orm.Questions.get_all_questions_by_id_quiz_id(quiz_id)
-        print(questions)
         return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=user_quizzes, all_answers=all_answers, registered_users=user_quizzes_jalali_datetime, questions=questions)

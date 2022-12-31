@@ -24,10 +24,10 @@ def make_routes(goldis_blueprint):
                 return redirect(url_for('goldis_blueprint.home'))
             else :
                 status = 'incorrect_password'
-                return render_template('login.html',status=status, user=None)
+                return redirect(url_for('goldis_blueprint.login', status=status))
         except TypeError:
             status = 'user_not_found'
-            return render_template('login.html',status=status, user=None)
+            return redirect(url_for('goldis_blueprint.login', status=status))
       
     @goldis_blueprint.route('/signup')
     def signup():
@@ -49,7 +49,7 @@ def make_routes(goldis_blueprint):
         user = users_orm.Users.get_user_by_mobile(mobile)
         if user:
             status = 'mobile_already_exist'
-            return render_template('login.html',status=status, user=None)
+            return redirect(url_for('goldis_blueprint.login'))
         else :
             new_user_id = users_orm.Users.insert_new_user(full_name, mobile, g_token, password, user_type, time.time(), registering_code)
             new_user_account_id = accounts_orm.Accounts.insert_new_account(new_user_id, accounts_orm.Accounts.Types.A)
@@ -84,13 +84,13 @@ def make_routes(goldis_blueprint):
             else:
                 flash(f'{user_full_name} گرامی، رمز عبور فعلی، صحیح نمی باشد.', 'danger')
             user = common.get_user_from_token()
-            return redirect('/profile')
+            return redirect(url_for('goldis_blueprint.profile'))
         else:
             mobile = request.form.get('sg_mobile', 'None')
             full_name = request.form.get('sg_fullname', 'None')
             update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name)
             flash(f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success')
             user = common.get_user_from_token()
-            return redirect('/profile')
+            return redirect(url_for('goldis_blueprint.profile'))
 
 
