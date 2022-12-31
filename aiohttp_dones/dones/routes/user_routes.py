@@ -45,18 +45,18 @@ def make_routes(goldis_blueprint):
                 return redirect(url_for('goldis_blueprint.login', status=status))
             else:
                 registering_code = random.randint(10000, 99999)
-                response = await sms.send_message_by_313(mobile, str(registering_code))
-                print(response)
+                # response = await sms.send_message_by_313(mobile, str(registering_code))
+                # print(response)
                 user_type = 0
-                new_user_id = users_orm.Users.insert_new_user(mobile=mobile, user_type=user_type, register_datetime=time.time(), registering_code=registering_code)
+                g_token = secrets.token_hex()
+                session['mobile'] = mobile
+                new_user_id = users_orm.Users.insert_new_user(mobile=mobile, user_type=user_type, g_token=g_token, register_datetime=time.time(), registering_code=registering_code)
                 new_user = users_orm.Users.get_user_by_id(new_user_id)
                 status = 'registering_code_sent'
                 return redirect(url_for('goldis_blueprint.login', status=status))
         elif step == '2':
             registering_code = request.form.get('sg_registering_code')
-            mobile = request.form.get('sg_mobile_step_2', None)
-            error, mobile = common.sanitize_user_input(common.User_post_data_types.mobile, mobile)
-            user = users_orm.Users.get_user_by_mobile(mobile)
+            user = users_orm.Users.get_user_by_mobile(session['mobile'])
             if user['registering_code'] == registering_code:
                 status = 'registering_code_correct'
                 return redirect(url_for('goldis_blueprint.login', status=status))
@@ -64,15 +64,17 @@ def make_routes(goldis_blueprint):
                 status = 'registering_code_incorrect'
                 return redirect(url_for('goldis_blueprint.login', status=status))
         elif step == '3':
-            mobile = request.form.get('sg_mobile_step_3', None)
-            error, mobile = common.sanitize_user_input(common.User_post_data_types.mobile, mobile)
+            user = users_orm.Users.get_user_by_mobile(session['mobile'])
             full_name = request.form.get('sg_fullname', None)
             error, full_name = common.sanitize_user_input(common.User_post_data_types.Only_letter, full_name)
             password = request.form.get('sg_password', None)
             error, password = common.sanitize_user_input(common.User_post_data_types.Only_letter, password)
             g_token = secrets.token_hex()
+            user_type = 1
             # user_type = users_orm.Users.Types.new_user
-            new_user_id = users_orm.Users.update_user(id=id, full_name=full_name, g_token=g_token, password=password,register_datetime=time.time())
+            new_user_id = users_orm.Users.update_user(id=user['id'], full_name=full_name, user_type=user_type, g_token=g_token, password=password, register_datetime=time.time())
+            if 'mobile' in session:
+                session.pop('mobile', None)
             session['g_token'] = g_token
             return redirect(url_for('goldis_blueprint.home'))
 
