@@ -45,13 +45,13 @@ def make_routes(goldis_blueprint):
                 return redirect(url_for('goldis_blueprint.login', status=status))
             else:
                 registering_code = random.randint(10000, 99999)
-                # response = await sms.send_message_by_313(mobile, str(registering_code))
-                # print(response)
+                response = await sms.send_message_by_313(mobile, str(registering_code))
+                print(response)
                 user_type = 0
                 new_user_id = users_orm.Users.insert_new_user(mobile=mobile, user_type=user_type, register_datetime=time.time(), registering_code=registering_code)
                 new_user = users_orm.Users.get_user_by_id(new_user_id)
                 status = 'registering_code_sent'
-                return redirect(url_for('goldis_blueprint.login', status=status, user_mobile=new_user['mobile']))
+                return redirect(url_for('goldis_blueprint.login', status=status))
         elif step == '2':
             registering_code = request.form.get('sg_registering_code')
             mobile = request.form.get('sg_mobile_step_2', None)
@@ -59,7 +59,7 @@ def make_routes(goldis_blueprint):
             user = users_orm.Users.get_user_by_mobile(mobile)
             if user['registering_code'] == registering_code:
                 status = 'registering_code_correct'
-                return redirect(url_for('goldis_blueprint.login', status=status, user_mobile=mobile))
+                return redirect(url_for('goldis_blueprint.login', status=status))
             else:
                 status = 'registering_code_incorrect'
                 return redirect(url_for('goldis_blueprint.login', status=status))
