@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, url_for, session
 from routes import common
-import tools
+import date_converter
 import time, secrets, json
 from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, course_news_orm, user_quizzes_orm
 
@@ -84,8 +84,8 @@ def make_routes(goldis_blueprint):
         all_courses = courses_orm.Courses.get_all_courses()
         courses_jalali_datetime = []
         for course in all_courses:
-            course['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
-            course['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
+            course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
+            course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
             courses_jalali_datetime.append(course)
         return render_template("data_management/dm_courses.html", user=user, all_courses=courses_jalali_datetime)
 
@@ -108,8 +108,8 @@ def make_routes(goldis_blueprint):
         institute = request.form.get('institute', None)
         def jalali_to_unix(data_time):
                 datetime = data_time.split('/')
-                gregorian_datetime = tools.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
-                unix_datetime = tools.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
+                gregorian_datetime = date_converter.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
+                unix_datetime = date_converter.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
                 return unix_datetime
         unix_start_datetime = jalali_to_unix(jalali_start_datetime)
         unix_end_datetime = jalali_to_unix(jalali_end_datetime)
@@ -138,8 +138,8 @@ def make_routes(goldis_blueprint):
             institute = request.form.get('institute', None)
             def jalali_to_unix(data_time):
                 datetime = data_time.split('/')
-                gregorian_datetime = tools.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
-                unix_datetime = tools.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
+                gregorian_datetime = date_converter.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
+                unix_datetime = date_converter.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
                 return unix_datetime
             unix_start_datetime = jalali_to_unix(jalali_start_datetime)
             unix_end_datetime = jalali_to_unix(jalali_end_datetime)
@@ -148,13 +148,13 @@ def make_routes(goldis_blueprint):
             return redirect('/dm-courses')
         else: 
             update_course = courses_orm.Courses.get_course_by_id(course_id)
-            update_course['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course['unix_start_datetime'])
-            update_course['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course['unix_end_datetime'])
+            update_course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_course['unix_start_datetime'])
+            update_course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_course['unix_end_datetime'])
             all_courses = courses_orm.Courses.get_all_courses()
             courses_jalali_datetime = []
             for course in all_courses:
-                course['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
-                course['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
+                course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
+                course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
                 courses_jalali_datetime.append(course)
             return render_template("data_management/dm_courses.html", user=user, all_courses=courses_jalali_datetime, update_course=update_course, course_id=course_id)
 
@@ -178,8 +178,8 @@ def make_routes(goldis_blueprint):
         len_course_items = len(course_items) if course_items else None
         items_jalali_datetime = []
         for item in course_items:
-            item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
-            item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
+            item['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
+            item['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
             items_jalali_datetime.append(item)
         return render_template("data_management/dm_course_items.html", user=user, course_items=items_jalali_datetime, course_id=course_id, len=len_course_items)
 
@@ -194,8 +194,8 @@ def make_routes(goldis_blueprint):
         description = request.form.get('description', None)
         def jalali_to_unix(data_time):
                 datetime = data_time.split('/')
-                gregorian_datetime = tools.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
-                unix_datetime = tools.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
+                gregorian_datetime = date_converter.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
+                unix_datetime = date_converter.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
                 return unix_datetime
         unix_start_datetime = jalali_to_unix(jalali_start_datetime)
         unix_end_datetime = jalali_to_unix(jalali_end_datetime)
@@ -217,8 +217,8 @@ def make_routes(goldis_blueprint):
             description = request.form.get('description', None)
             def jalali_to_unix(data_time):
                 datetime = data_time.split('/')
-                gregorian_datetime = tools.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
-                unix_datetime = tools.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
+                gregorian_datetime = date_converter.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
+                unix_datetime = date_converter.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
                 return unix_datetime
             unix_start_datetime = jalali_to_unix(jalali_start_datetime)
             unix_end_datetime = jalali_to_unix(jalali_end_datetime)
@@ -231,13 +231,13 @@ def make_routes(goldis_blueprint):
             course_items = items_orm.Items.get_all_items_by_course_id(
                 course_id)
             update_course_item = items_orm.Items.get_item_by_id(course_item_id)
-            update_course_item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_start_datetime'])
-            update_course_item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_end_datetime'])
+            update_course_item['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_start_datetime'])
+            update_course_item['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_end_datetime'])
             len_course_items = len(course_items) if course_items else None
             items_jalali_datetime = []
             for item in course_items:
-                item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
-                item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
+                item['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
+                item['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
                 items_jalali_datetime.append(item)
             return render_template("data_management/dm_course_items.html", user=user, course_items=course_items, update_course_item=update_course_item, course_id=course_id, len=len_course_items, course_item_id=course_item_id)
 
@@ -259,8 +259,8 @@ def make_routes(goldis_blueprint):
         quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(course_item_id)
         quizzes_jalali_datetime = []
         for quiz in quizzes:
-            quiz['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
-            quiz['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
+            quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
+            quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
             quizzes_jalali_datetime.append(quiz)
         return render_template("data_management/dm_quiz.html", user=user, quizs=quizzes_jalali_datetime, course_item_id= course_item_id)   
 
@@ -279,8 +279,8 @@ def make_routes(goldis_blueprint):
         question_count = request.form.get('question_count', None)
         def jalali_to_unix(data_time):
                 datetime = data_time.split('/')
-                gregorian_datetime = tools.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
-                unix_datetime = tools.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
+                gregorian_datetime = date_converter.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
+                unix_datetime = date_converter.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
                 return unix_datetime
         unix_start_datetime = jalali_to_unix(jalali_start_datetime)
         unix_end_datetime = jalali_to_unix(jalali_end_datetime)
@@ -304,8 +304,8 @@ def make_routes(goldis_blueprint):
             question_count = request.form.get('question_count', None)
             def jalali_to_unix(data_time):
                 datetime = data_time.split('/')
-                gregorian_datetime = tools.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
-                unix_datetime = tools.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
+                gregorian_datetime = date_converter.Date_converter.jalali_to_gregorian(int(datetime[0]), int(datetime[1]), int(datetime[2]))
+                unix_datetime = date_converter.Date_converter.gregorian_to_unix_timestamp(int(gregorian_datetime[0]), int(gregorian_datetime[1]), int(gregorian_datetime[2]))
                 return unix_datetime
             unix_start_datetime = jalali_to_unix(jalali_start_datetime)
             unix_end_datetime = jalali_to_unix(jalali_end_datetime)
@@ -315,13 +315,13 @@ def make_routes(goldis_blueprint):
             return redirect(url_for('goldis_blueprint.dm_quiz', course_item_id=course_item_id))
         else:
             update_quiz = quizzes_orm.Quizzes.get_quiz_by_id(quiz_id)
-            update_quiz['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_quiz['unix_start_datetime'])
-            update_quiz['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(update_quiz['unix_end_datetime'])
+            update_quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_quiz['unix_start_datetime'])
+            update_quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_quiz['unix_end_datetime'])
             quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(course_item_id)
             quizzes_jalali_datetime = []
             for quiz in quizzes:
-                quiz['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
-                quiz['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
+                quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
+                quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
                 quizzes_jalali_datetime.append(quiz)
             return render_template("data_management/dm_quiz.html", user=user, quizs=quizzes_jalali_datetime, course_item_id= course_item_id, update_quiz=update_quiz , quiz_id=quiz_id)
     
@@ -395,7 +395,7 @@ def make_routes(goldis_blueprint):
         all_courses_news = course_news_orm.Courses_news.get_all_courses_news()
         courses_news_jalali_datetime = []
         for course_news in all_courses_news:
-            course_news['jalali_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course_news['unix_datetime'])
+            course_news['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course_news['unix_datetime'])
             courses_news_jalali_datetime.append(course_news)
         return render_template("data_management/dm_courses_news.html", user=user, courses_news=courses_news_jalali_datetime, all_courses=all_courses)   
 
@@ -479,7 +479,7 @@ def make_routes(goldis_blueprint):
         registered_users = user_quizzes_orm.User_quizzes.get_all_registered_users_by_quiz_id(
             quiz_id)
         for user in registered_users:
-                user['jalali_date'] = tools.Date_converter.unix_timestamp_to_jalali(user['unix_datetime'])
+                user['jalali_date'] = date_converter.Date_converter.unix_timestamp_to_jalali(user['unix_datetime'])
                 user_quizzes_jalali_datetime.append(user)
         all_answers = user_quizzes_orm.User_quizzes.get_all_user_results_by_ids(
             user_id=user['id'], quiz_id=quiz_id)

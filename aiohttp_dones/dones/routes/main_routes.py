@@ -1,7 +1,7 @@
 from flask import redirect, render_template, request, url_for, session, jsonify
 from routes import common
 from models_mysql import courses_orm, course_news_orm, emails_orm
-import tools
+import date_converter
 
 
 def make_routes(goldis_blueprint):
@@ -14,9 +14,9 @@ def make_routes(goldis_blueprint):
         all_courses = courses_orm.Courses.get_all_courses()
         courses_jalali_datetime = []
         for course in all_courses:
-            course['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(
+            course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(
                 course['unix_start_datetime'])
-            course['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(
+            course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(
                 course['unix_end_datetime'])
             courses_jalali_datetime.append(course)
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(

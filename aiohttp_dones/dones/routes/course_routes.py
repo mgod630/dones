@@ -1,4 +1,4 @@
-import jdatetime , json, time, tools
+import jdatetime , json, time, date_converter
 from flask import redirect, render_template, request, session, url_for, flash
 from routes import common
 from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, course_news_orm, user_courses_orm ,user_quizzes_orm, user_items_orm
@@ -13,8 +13,8 @@ def make_routes(goldis_blueprint):
         for crs in all_courses:
             if str(crs['id']) == str(course_id):
                 course = crs
-                course['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
-                course['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
+                course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
+                course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
                 break
         if course == None:
             return redirect('/404-not-found') 
@@ -35,16 +35,16 @@ def make_routes(goldis_blueprint):
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         items_jalali_datetime = []
         for item in course_items:
-            item['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
-            item['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
+            item['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
+            item['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
             items_jalali_datetime.append(item)
         all_courses = courses_orm.Courses.get_all_courses()
         course = None
         for crs in all_courses:
             if str(crs['id']) == str(course_id):
                 course = crs
-                course['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
-                course['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
+                course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
+                course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
                 break
 
         user_course = user_courses_orm.User_courses.get_user_course_by_ids(user_id = user['id'], course_id = course_id)
@@ -84,13 +84,11 @@ def make_routes(goldis_blueprint):
             if str(crs_item['id']) == str(item_id):
                 course_item = crs_item
                 break
-        # quizzes = quizzes_orm.Quizzes.get_all_quizzes_with_questions(item_id)
-        # if quizzes == []:
         quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(item_id)
         quizzes_jalali_datetime = []
         for quiz in quizzes:
-            quiz['jalali_start_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
-            quiz['jalali_end_datetime'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
+            quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
+            quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
             quizzes_jalali_datetime.append(quiz)
 
         all_comments = comments_orm.Comments.get_comments_by_section_id(
@@ -174,7 +172,7 @@ def make_routes(goldis_blueprint):
         user_quizzes = user_quizzes_orm.User_quizzes.get_all_user_quizzes_by_ids(user['id'], item_id)
         user_quizzes_jalali_datetime = []
         for quiz in user_quizzes:
-            quiz['date'] = tools.Date_converter.unix_timestamp_to_jalali(quiz['unix_datetime'])
+            quiz['date'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_datetime'])
             user_quizzes_jalali_datetime.append(quiz)
         return render_template('quiz_results.html', user=user, attender=user, user_quizzes=user_quizzes_jalali_datetime)
 

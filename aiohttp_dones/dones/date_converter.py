@@ -1,47 +1,5 @@
 import datetime, time, json
 
-# def send_sms(mobile, sms_text):
-#     url = "http://ws.smartsms.ir/sms.asmx?WSDL"
-#     client = Client(url, timeout=240)
-#     originator = '50002237167'  # 500059962
-#     message = '''
-#     <xmsrequest>
-#     <userid>53741</userid>
-#     <password>Salam159!</password>
-#     <action>smssend</action>
-#     <body>
-#     <type>oto</type>
-#     ''' +\
-#         '<recipient mobile="{}" originator="{}" >{}</recipient>'.format(mobile, originator, sms_text) +\
-#         '''
-#     </body>
-#     </xmsrequest>
-#     '''
-#     response = client.service.XmsRequest(requestData=message)
-#     result = False
-#     if '<code id="0">ok</code>' in response:
-#         result = True
-#     return result
-
-# class sms_pattern_code():
-# 	forget_password = 'oiamrcnhwfr8l95'
-
-# def send_sms_with_smah_panel(recipient, verification_code):
-# 	from ippanel import Client
-# 	pattern_code = sms_pattern_code.forget_password
-# 	api_key = "tTFV9MpRbnY_585ZeppoXXyNC_Yjd-E4hvPipNwSKSQ="
-# 	sms = Client(api_key)
-# 	pattern_values = {
-# 		"code": str(verification_code),
-# 	}
-# 	bulk_id = sms.send_pattern(
-# 		pattern_code,    # pattern code
-# 		"+983000505",      # originator
-# 		recipient,  # recipient
-# 		pattern_values,  # pattern values
-# 	)
-# 	return True
-
 class Date_converter():
 	@staticmethod
 	def jalali_to_gregorian(jy,jm,jd):
@@ -138,16 +96,4 @@ class Date_converter():
 
 	
 
-def is_valid_json(str_json, convert_to_json = False):
-	try:
-		json_result = json.loads(str_json)
-	except ValueError:
-		is_valid = False if convert_to_json == False else None
-	else:
-		is_valid = True if convert_to_json == False else json_result
-	return is_valid
-
-if __name__ == "__main__":
-	send_sms_with_smah_panel('09196410501', 55564)
-	print('unix from jalali', Date_converter.jalali_to_unix_timestamp(1399, 4, 23, 5, 30, 0))
 
