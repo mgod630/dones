@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#2e8640" />
     <meta name="apple-mobile-web-app-status-bar-style" content="#2e8640" />
     <meta name="apple-mobile-web-app-status-bar" content="#2e8640" />
-    <link
+    <!-- <link
       rel="apple-touch-icon"
       href="/static/pwa_files/images/icons/icon-96x96.png"
     />
@@ -17,7 +17,7 @@
       rel="shortcut icon"
       href="/static/template/favicon.ico"
       type="image/x-icon"
-    />
+    /> -->
     <link rel="stylesheet" href="/static/css/fontawesome.min.css" />
     <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/static/css/layout.css?7" />
@@ -142,8 +142,8 @@
         </div>
       </div>
     </nav>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
     <div class="pt-3" style="background-color: #fff">
       <div class="container">
         {% for category, message in messages %}
@@ -164,9 +164,8 @@
         {% endfor %}
       </div>
     </div>
-    {% endif %} 
-    {% endwith %}
-    {% block content %}{% endblock %} {% if db_number == 0 %}
+    {% endif %} {% endwith %} {% block content %}{% endblock %} {% if db_number
+    == 0 %}
     <div class="beta_ribbon">تستی</div>
     {% endif %}
     <footer class="footer">
