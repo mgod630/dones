@@ -1,7 +1,7 @@
 import secrets, time, random, sms
 from flask import render_template, request, redirect, session, url_for, flash, current_app as app
 from routes import common
-from models_mysql import users_orm, accounts_orm, user_courses_orm
+from models_mysql import users_orm
 
 def make_routes(goldis_blueprint):
       
@@ -13,9 +13,9 @@ def make_routes(goldis_blueprint):
     def login_post():
         status = ''
         mobile = request.form.get('lg_mobile', None)
-        error, mobile = common.sanitize_user_input(common.User_post_data_types.mobile, mobile)
+        mobile = common.sanitize_user_input(common.User_post_data_types.mobile, mobile)
         password = request.form.get('lg_password', None)
-        error, password = common.sanitize_user_input(common.User_post_data_types.Only_letter, password)
+        password = common.sanitize_user_input(common.User_post_data_types.Only_letter, password)
         user = users_orm.Users.get_user_by_mobile(mobile)
         if user != None:
             user = users_orm.Users.get_user_by_mobile_and_password(mobile, password)
@@ -38,7 +38,7 @@ def make_routes(goldis_blueprint):
         step = request.args.get('step')
         if step == '1':
             mobile = request.form.get('sg_mobile', None)
-            error, mobile = common.sanitize_user_input(common.User_post_data_types.mobile, mobile)
+            mobile = common.sanitize_user_input(common.User_post_data_types.mobile, mobile)
             user = users_orm.Users.get_user_by_mobile(mobile)
             if user:
                 status = 'mobile_already_exist'
@@ -64,15 +64,14 @@ def make_routes(goldis_blueprint):
                 status = 'registering_code_incorrect'
                 return redirect(url_for('goldis_blueprint.login', status=status))
         elif step == '3':
-            user = users_orm.Users.get_user_by_mobile(session['mobile'])
             full_name = request.form.get('sg_fullname', None)
-            error, full_name = common.sanitize_user_input(common.User_post_data_types.Only_letter, full_name)
+            full_name = common.sanitize_user_input(common.User_post_data_types.Only_letter, full_name)
             password = request.form.get('sg_password', None)
-            error, password = common.sanitize_user_input(common.User_post_data_types.Only_letter, password)
+            password = common.sanitize_user_input(common.User_post_data_types.Only_letter, password)
             g_token = secrets.token_hex()
-            user_type = 1
-            # user_type = users_orm.Users.Types.new_user
-            new_user_id = users_orm.Users.update_user(id=user['id'], full_name=full_name, user_type=user_type, g_token=g_token, password=password, register_datetime=time.time())
+            # user_type = 1
+            user_type = users_orm.Users.Types.new_user.value
+            new_user_id = users_orm.Users.update_user_by_mobile(mobile=session['mobile'], full_name=full_name, user_type=user_type, g_token=g_token, password=password, register_datetime=time.time())
             if 'mobile' in session:
                 session.pop('mobile', None)
             session['g_token'] = g_token

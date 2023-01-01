@@ -147,7 +147,7 @@ class Users:
         if password:
             update_string += f'password=%(password)s,'
         if user_type:
-            update_string += f'user_type=%(user_type)s,'
+            update_string += f'user_type=%(user_type)s'
         update_string = update_string.rstrip(',')
         add_user = f"UPDATE tbl_users SET {update_string} WHERE id='{id}'"
         update_query_string = {
@@ -155,6 +155,40 @@ class Users:
             'mobile': mobile,
             'password': password,
             'user_type': user_type,
+        }
+        cursor.execute(add_user, update_query_string)
+        cnx.commit()
+        cnx.close()
+        return True
+
+    @staticmethod
+    def update_user_by_mobile(mobile, full_name=None, password=None, user_type=None, g_token=None, register_datetime=None):
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor()
+        if password:
+            password = common.get_hashed_password(password)
+        update_string = ''
+        if full_name:
+            update_string += f'full_name = %(full_name)s,'
+        if g_token:
+            update_string += f'g_token=%(g_token)s,'
+        if password:
+            update_string += f'password=%(password)s,'
+        if user_type:
+            update_string += f'user_type=%(user_type)s,'
+        if register_datetime:
+            update_string += f'register_datetime=%(register_datetime)s'
+        update_string = update_string.rstrip(',')
+        add_user = f"UPDATE tbl_users SET {update_string} WHERE mobile='{mobile}'"
+        update_query_string = {
+            'full_name': full_name,
+            'g_token': g_token,
+            'password': password,
+            'user_type': user_type,
+            'register_datetime': register_datetime
         }
         cursor.execute(add_user, update_query_string)
         cnx.commit()
@@ -189,10 +223,10 @@ class Users:
 
     class Types(enum.Enum):
         blocked_user = enum.auto()
-        new_user = 0
+        new_user = enum.auto()
         verified_customer = enum.auto()
         system_user = enum.auto()
-        admin = enum.auto()
+        admin = -2
         super_admin = enum.auto()
 
 def users_orm_functions_test():
