@@ -116,6 +116,7 @@ ul.nav-tabs {
   overflow: hidden;
   border: 1px solid #ececec;
   margin: 1%;
+  border-radius: 10px;
 }
 .cc-quiz-row {
   display: flex;

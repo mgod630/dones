@@ -48,7 +48,7 @@
         $("#mb_signup").addClass("active");
         break;
       case "reset":
-        $("#login_form").fadeOut(500).removeClass("active");
+        $("#login_form, #signup_form").fadeOut(500).removeClass("active");
         $("#reset_form").delay(500).fadeIn(500).addClass("active");
         $("#mb_login, #mb_signup").removeClass("active");
       //   break;
