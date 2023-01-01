@@ -107,7 +107,7 @@
           <div id="mobile_buttons">
             <div
               id="mb_login"
-              class="{% if request.args.get('status') != 'registering_code_sent' and request.args.get('status') != 'registering_code_incorrect'%}active{% endif %}"
+              class="{% if request.args.get('status') != 'registering_code_sent' and request.args.get('status') != 'registering_code_incorrect' and request.args.get('status') != 'registering_code_correct'%}active{% endif %}"
             >
               ورود
             </div>
