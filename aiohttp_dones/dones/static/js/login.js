@@ -33,7 +33,7 @@
         $("#signup_form, #reset_form, #set_password_form")
           .fadeOut(500)
           .removeClass("active");
-        $(".login-body").removeClass("expand");
+        // $(".login-body").removeClass("expand");
         $("#login_form").delay(500).fadeIn(500).addClass("active");
         $("#mb_signup").removeClass("active");
         $("#mb_login").addClass("active");
@@ -42,7 +42,7 @@
         $("#login_form, #reset_form, #set_password_form")
           .fadeOut(500)
           .removeClass("active");
-        $(".login-body").addClass("expand");
+        // $(".login-body").addClass("expand");
         $("#signup_form").delay(500).fadeIn(500).addClass("active");
         $("#mb_login").removeClass("active");
         $("#mb_signup").addClass("active");

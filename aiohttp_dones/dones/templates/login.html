@@ -70,6 +70,8 @@
           </div>
           {% elif request.args.get('status') == 'registering_code_incorrect'%}
           <div class="flash-message fm-danger">پین وارد شده صحیح نمی باشد.</div>
+          {% elif request.args.get('status') == 'registering_code_correct'%}
+          <div class="flash-message fm-info">اطلاعات خود را تکمیل کنید</div>
           {% elif request.args.get('status') == 'flash' %}
           <div class="flash-message fm-info">{{ message|safe }}</div>
           {% endif %}
@@ -175,7 +177,7 @@
             style="margin-top: 20px"
             id="signup_form_3"
             action="/signup-post?step=3"
-            class="{% if request.args.get('status') == 'registering_code_correct'%} expand3 {% endif %}"
+            class="{% if request.args.get('status') == 'registering_code_correct'%} active {% endif %}"
             method="post"
           >
             {{ mcr_inputs.input('fullname', required=true)}}

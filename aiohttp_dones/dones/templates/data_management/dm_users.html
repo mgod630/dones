@@ -135,7 +135,7 @@
       <div class="form-group col-md-3 mt-4">
         <label><span style="color: red"> * </span>نوع کاربر</label>
 
-        <select id="f5" onselect="success()" name="user_type">
+        <select id="f5" oninput="success()" name="user_type">
           <option value="2">عادی</option>
           <option value="-2">ادمین</option>
           <option value="-1">سازمان/گروه</option>
@@ -243,7 +243,7 @@
     {% endfor %} {% endif %}
   </table>
   {% if page_count > 0 %}
-  <nav class="page" aria-label="Page navigation">
+  <nav class="page d-flex justify-content-center" aria-label="Page navigation">
     <ul class="pagination">
       {% set number = page_count %} {% set page_number = page_number %} {% set
       min_page = page_number - 2 %} {% set max_page = page_number + 2 %} {% if
@@ -251,11 +251,11 @@
       3 %} {% if max_page>number %}{% set max_page = number %}{% endif %} {% set
       min_page = max_page - 3 %} {% if min_page < 1 %}{% set min_page=1 %}{%
       endif %}
-      <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
+      <!-- <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
         <a class="page-link" href="/dm-users?page_number=1" aria-label="first"
           >اولین</a
         >
-      </li>
+      </li> -->
       <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
         <a
           class="page-link"
@@ -277,14 +277,14 @@
           >بعدی</a
         >
       </li>
-      <li class="page-item {% if page_number == number %}disabled{% endif %}">
+      <!-- <li class="page-item {% if page_number == number %}disabled{% endif %}">
         <a
           class="page-link"
           href="/dm-users?page_number={{number}}"
           aria-label="last"
           >آخرین</a
         >
-      </li>
+      </li> -->
     </ul>
   </nav>
   {% endif %}
