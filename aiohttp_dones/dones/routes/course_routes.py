@@ -90,7 +90,6 @@ def make_routes(fullstack_blueprint):
             quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
             quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
             quizzes_jalali_datetime.append(quiz)
-
         all_comments = comments_orm.Comments.get_comments_by_section_id(
             f'course_content_{item_id}')
         last_comments = all_comments[0:19]
