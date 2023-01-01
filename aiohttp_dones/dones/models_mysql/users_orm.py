@@ -1,4 +1,5 @@
-import enum
+
+from enum import Enum
 import time
 from flask import current_app as app
 import mysql.connector.pooling
@@ -221,13 +222,12 @@ class Users:
         cnx.close()
         return True
 
-    class Types(enum.Enum):
-        blocked_user = enum.auto()
-        new_user = enum.auto()
-        verified_customer = enum.auto()
-        system_user = enum.auto()
-        admin = -2
-        super_admin = enum.auto()
+    class Types(Enum):       
+        new_user = 2
+        unregistered_user = 1
+        blocked_user = 0
+        admin = -1
+        super_admin = -2
 
 def users_orm_functions_test():
     import random

@@ -13,9 +13,7 @@ def make_routes(goldis_blueprint):
     def login_post():
         status = ''
         mobile = request.form.get('lg_mobile', None)
-        mobile = common.sanitize_user_input(common.User_post_data_types.mobile, mobile)
         password = request.form.get('lg_password', None)
-        password = common.sanitize_user_input(common.User_post_data_types.Only_letter, password)
         user = users_orm.Users.get_user_by_mobile(mobile)
         if user != None:
             user = users_orm.Users.get_user_by_mobile_and_password(mobile, password)
@@ -38,7 +36,6 @@ def make_routes(goldis_blueprint):
         step = request.args.get('step')
         if step == '1':
             mobile = request.form.get('sg_mobile', None)
-            mobile = common.sanitize_user_input(common.User_post_data_types.mobile, mobile)
             user = users_orm.Users.get_user_by_mobile(mobile)
             if user:
                 status = 'mobile_already_exist'
@@ -47,7 +44,7 @@ def make_routes(goldis_blueprint):
                 registering_code = random.randint(10000, 99999)
                 # response = await sms.send_message_by_313(mobile, str(registering_code))
                 # print(response)
-                user_type = 0
+                user_type = users_orm.Users.Types.unregistered_user.value
                 g_token = secrets.token_hex()
                 session['mobile'] = mobile
                 new_user_id = users_orm.Users.insert_new_user(mobile=mobile, user_type=user_type, g_token=g_token, register_datetime=time.time(), registering_code=registering_code)
@@ -65,9 +62,7 @@ def make_routes(goldis_blueprint):
                 return redirect(url_for('goldis_blueprint.login', status=status))
         elif step == '3':
             full_name = request.form.get('sg_fullname', None)
-            full_name = common.sanitize_user_input(common.User_post_data_types.Only_letter, full_name)
             password = request.form.get('sg_password', None)
-            password = common.sanitize_user_input(common.User_post_data_types.Only_letter, password)
             g_token = secrets.token_hex()
             # user_type = 1
             user_type = users_orm.Users.Types.new_user.value
