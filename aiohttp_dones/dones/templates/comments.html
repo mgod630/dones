@@ -5,7 +5,7 @@
         <div class="wb-header wbh-purple">
           <div class="wb-icon"><i class="fal fa-comments"></i></div>
           <h2>{{comments_title}}</h2>
-          <a href="javascript:history.back()" onclick="backButt()"  class="btn btn-outline-light">بازگشت <i class="fas fa-chevron-left"></i></a>
+          <a href="javascript:history.go(-1)" onclick="backButt()"  class="btn btn-outline-light">بازگشت <i class="fas fa-chevron-left"></i></a>
         </div>
         <div class="comments-wrapper">
           <div id="reply_container">
@@ -74,8 +74,9 @@ function GoBackWithRefresh() {
     }
 }
 function backButt(){
-  window.history.back();
-  location.reload();
+  // window.history.back();
+  
+  setInterval(function(){window.location = document.referrer;},2000)
  }
 function success() {
     if (

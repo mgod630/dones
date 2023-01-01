@@ -145,7 +145,6 @@
     if (passField.attr("type") == "password") {
       passField.attr("type", "text");
     } else {
-      console.log("sss");
       passField.attr("type", "password");
     }
   });
