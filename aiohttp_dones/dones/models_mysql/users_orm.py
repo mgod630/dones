@@ -226,7 +226,8 @@ class Users:
         return True
 
     class Types(Enum):       
-        new_user = 2
+        system_user = 3
+        registered_user = 2
         unregistered_user = 1
         blocked_user = 0
         admin = -1
