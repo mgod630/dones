@@ -37,7 +37,7 @@ def make_routes(goldis_blueprint):
         if step == '1':
             mobile = request.form.get('sg_mobile', None)
             user = users_orm.Users.get_user_by_mobile(mobile)
-            if user:
+            if user and user['user_type'] == 2:
                 status = 'mobile_already_exist'
                 return redirect(url_for('goldis_blueprint.login', status=status))
             else:
