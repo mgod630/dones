@@ -10,9 +10,9 @@
         white-space: nowrap;
         width: 1%;
     }
-    .courses-list td:last-child i{
+    /* .courses-list td:last-child i{
         vertical-align: sub;
-    }
+    } */
     .course-media {
         display: flex;
     }
@@ -179,7 +179,7 @@
                                 <i class="far fa-copy"></i>
                                 کپی
                             </a> -->
-                            <a class="delNotif btn btn-outline-danger" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}" {% endfor %} >
+                            <a class="delNotif dlbtn btn btn-outline-danger" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}" {% endfor %} >
                                 <i style="display: inline-block;" class="far fa-trash-alt"></i>
                                 حذف
                             </a>
@@ -328,6 +328,10 @@
 $(function(){
     $(".show-settings").click(function(){
         var course_data = $(this).data();
+        // if (course_data.id){
+        //     $(this).attr("href",$(this).attr("hf") + course_data.id)
+        //     $('#new_course').modal('show');
+        // }
         $("#course_settings .modal-header img").attr("src", course_data.logo_path);
         $("#course_settings .modal-title").text(course_data.title);
 

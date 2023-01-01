@@ -131,8 +131,8 @@
             </div>
           </form>
           {% if request.args.get('status') != 'registering_code_correct' or
-          request.args.get('status') != 'registering_code_incorrect' or
           request.args.get('status') == 'mobile_is_not_entered' or
+          request.args.get('status') != 'registering_code_incorrect' or
           request.args.get('status') == 'user_is_not_registered' %}
           <form
             id="signup_form"

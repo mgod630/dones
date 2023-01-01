@@ -57,3 +57,12 @@
   font-size: 20px;
   font-weight: 800;
 }
+.dlbtn {
+  color: red !important;
+}
+.dlbtn:hover {
+  color: white !important;
+}
+i {
+  padding-top: 3px;
+}
