@@ -39,10 +39,13 @@
         $("#mb_login").addClass("active");
         break;
       case "signup":
-        $("#login_form, #reset_form, #set_password_form")
+        $(
+          "#login_form, #reset_form, #set_password_form, #signup_form_2,#signup_form_3"
+        )
           .fadeOut(500)
           .removeClass("active");
         // $(".login-body").addClass("expand");
+
         $("#signup_form").delay(500).fadeIn(500).addClass("active");
         $("#mb_login").removeClass("active");
         $("#mb_signup").addClass("active");

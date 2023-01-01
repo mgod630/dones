@@ -48,6 +48,14 @@
           </div>
           {% elif request.args.get('status') == 'mobile_isnt_valid' %}
           <div class="flash-message fm-danger">شماره موبایل صحیح نمی‌باشد.</div>
+          {% elif request.args.get('status') == 'mobile_is_not_entered' %}
+          <div class="flash-message fm-danger">
+            ابتدا شماره تلفن خود را وارد نمائید.
+          </div>
+          {% elif request.args.get('status') == 'user_is_not_registered' %}
+          <div class="flash-message fm-danger">
+            برای ثبت نام ابتدا شماره تلفن خود را وارد نمائید.
+          </div>
           {% elif request.args.get('status') == 'password_isnt_valid' %}
           <div class="flash-message fm-danger">
             کلمه عبور قابل قبول نمی‌باشد.
@@ -96,9 +104,6 @@
         <div
           class="login-body {% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_incorrect' %}expand3{% endif %}"
         >
-          {% if request.args.get('status') != 'registering_code_sent' and
-          request.args.get('status') != 'registering_code_correct' and
-          request.args.get('status') != 'registering_code_incorrect' %}
           <div id="mobile_buttons">
             <div
               id="mb_login"
@@ -108,7 +113,6 @@
             </div>
             <div id="mb_signup">ثبت نام</div>
           </div>
-          {% endif%}
           <form
             id="login_form"
             action="/login-post"
@@ -127,7 +131,9 @@
             </div>
           </form>
           {% if request.args.get('status') != 'registering_code_correct' or
-          request.args.get('status') != 'registering_code_incorrect' %}
+          request.args.get('status') != 'registering_code_incorrect' or
+          request.args.get('status') == 'mobile_is_not_entered' or
+          request.args.get('status') == 'user_is_not_registered' %}
           <form
             id="signup_form"
             action="/signup-post?step=1"
@@ -166,6 +172,7 @@
               required="true"
               placeholder="پین ارسالی وارد نمائید"
               maxlength="5"
+              minlength="5"
             />
             <div class="form-footer">
               <button class="button solid-blue" type="submit">تائید کد</button>
