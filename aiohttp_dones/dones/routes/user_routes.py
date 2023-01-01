@@ -3,13 +3,16 @@ from flask import render_template, request, redirect, session, url_for, flash, c
 from routes import common
 from models_mysql import users_orm
 
-def make_routes(goldis_blueprint):
-      
-    @goldis_blueprint.route('/login')
+def make_routes(fullstack_blueprint):
+    async def send_sms(mobile):
+        registering_code = random.randint(10000, 99999)
+        await sms.send_message_by_313(mobile, str(registering_code))
+        
+    @fullstack_blueprint.route('/login')
     def login():
         return render_template('login.html', user=None)
 
-    @goldis_blueprint.route('/login-post', methods=['POST'])
+    @fullstack_blueprint.route('/login-post', methods=['POST'])
     def login_post():
         status = ''
         mobile = request.form.get('lg_mobile', None)
@@ -19,22 +22,21 @@ def make_routes(goldis_blueprint):
             user = users_orm.Users.get_user_by_mobile_and_password(mobile, password)
             if user != None:
                 session['g_token'] = user['g_token']
-                return redirect(url_for('goldis_blueprint.home'))
+                return redirect(url_for('fullstack_blueprint.home'))
             else :
                 status = 'incorrect_password'
-                return redirect(url_for('goldis_blueprint.login', status=status))
+                return redirect(url_for('fullstack_blueprint.login', status=status))
         else:
             status = 'user_not_found'
-            return redirect(url_for('goldis_blueprint.login', status=status))
+            return redirect(url_for('fullstack_blueprint.login', status=status))
       
-    @goldis_blueprint.route('/signup')
+    @fullstack_blueprint.route('/signup')
     def signup():
         return render_template('login.html', user=None)
 
-    @goldis_blueprint.route('/signup-post', methods=['POST'])
-    async def signup_post():
+    @fullstack_blueprint.route('/signup-post', methods=['POST'])
+    def signup_post():
         step = request.args.get('step')
-        status = request.args.get('status')
         if step == '1':
             if 'mobile' in session:
                 session.pop('mobile', None)
@@ -42,83 +44,75 @@ def make_routes(goldis_blueprint):
             user = users_orm.Users.get_user_by_mobile(mobile)
             if user and (user['user_type'] == users_orm.Users.Types.system_user.value or user['user_type'] == users_orm.Users.Types.admin.value or user['user_type'] == users_orm.Users.Types.super_admin.value):
                 status = 'mobile_already_exist'
-                return redirect(url_for('goldis_blueprint.login', status=status))
+                return redirect(url_for('fullstack_blueprint.login', status=status))
             elif user and user['user_type'] == users_orm.Users.Types.unregistered_user.value :
-                registering_code = random.randint(10000, 99999)
-                response = await sms.send_message_by_313(mobile, str(registering_code))
-                # print(response)
+                send_sms(mobile)
                 session['mobile'] = mobile
                 update_unregistered_user = users_orm.Users.update_user_by_mobile(mobile=mobile, register_datetime=time.time(), registering_code=registering_code)
                 status = 'registering_code_sent'
-                return redirect(url_for('goldis_blueprint.login', status=status))
+                return redirect(url_for('fullstack_blueprint.login', status=status))
             elif user and user['user_type'] == users_orm.Users.Types.registered_user.value :
                 if user['register_datetime'] - time.time() > 86400 : # after one day
-                    registering_code = random.randint(10000, 99999)
-                    response = await sms.send_message_by_313(mobile, str(registering_code))
-                    # print(response)
+                    send_sms(mobile)
                     session['mobile'] = mobile
-                    update_unregistered_user = users_orm.Users.update_user_by_mobile(mobile=mobile, register_datetime=time.time(), registering_code=registering_code)
+                    update_registered_user = users_orm.Users.update_user_by_mobile(mobile=mobile, register_datetime=time.time(), registering_code=registering_code)
                     status = 'registering_code_sent'
-                    return redirect(url_for('goldis_blueprint.login', status=status))
+                    return redirect(url_for('fullstack_blueprint.login', status=status))
                 else:
                     status = 'registering_code_correct'
-                    return redirect(url_for('goldis_blueprint.login', status=status))
+                    return redirect(url_for('fullstack_blueprint.login', status=status))
             else:
-                registering_code = random.randint(10000, 99999)
-                response = await sms.send_message_by_313(mobile, str(registering_code))
-                # print(response)
+                send_sms(mobile)
                 user_type = users_orm.Users.Types.unregistered_user.value
                 g_token = secrets.token_hex()
                 session['mobile'] = mobile
                 unregistered_user = users_orm.Users.insert_new_user(mobile=mobile, user_type=user_type, g_token=g_token, register_datetime=time.time(), registering_code=registering_code)
                 status = 'registering_code_sent'
-                return redirect(url_for('goldis_blueprint.login', status=status))
+                return redirect(url_for('fullstack_blueprint.login', status=status))
         elif step == '2' :
             if 'mobile' not in session:
                 status = 'mobile_is_not_entered'
-                return redirect(url_for('goldis_blueprint.login', status=status))
+                return redirect(url_for('fullstack_blueprint.login', status=status))
             registering_code = request.form.get('registering_code')
             user = users_orm.Users.get_user_by_mobile(session['mobile'])
             if str(user['registering_code']) == registering_code:
                 user_type = user_type = users_orm.Users.Types.registered_user.value
                 registered_user = users_orm.Users.update_user_by_mobile(mobile=session['mobile'], user_type=user_type)
                 status = 'registering_code_correct'
-                return redirect(url_for('goldis_blueprint.login', status=status))
+                return redirect(url_for('fullstack_blueprint.login', status=status))
             else:
                 status = 'registering_code_incorrect'
-                return redirect(url_for('goldis_blueprint.login', status=status))
+                return redirect(url_for('fullstack_blueprint.login', status=status))
         elif step == '3':
             if 'mobile' not in session:
                 status = 'mobile_is_not_entered'
-                return redirect(url_for('goldis_blueprint.login', status=status))
+                return redirect(url_for('fullstack_blueprint.login', status=status))
             else:
                 user = users_orm.Users.get_user_by_mobile(session['mobile'])
                 if user and  user['user_type'] == users_orm.Users.Types.registered_user.value:
                     full_name = request.form.get('sg_fullname', None)
                     password = request.form.get('sg_password', None)
                     g_token = secrets.token_hex()
-                    # user_type = 1
                     user_type = users_orm.Users.Types.system_user.value
                     new_user_id = users_orm.Users.update_user_by_mobile(mobile=session['mobile'], full_name=full_name, user_type=user_type, g_token=g_token, password=password, register_datetime=time.time())
                     if 'mobile' in session:
                         session.pop('mobile', None)
                     session['g_token'] = g_token
-                    return redirect(url_for('goldis_blueprint.home'))
+                    return redirect(url_for('fullstack_blueprint.home'))
                 else :
                     status = 'user_is_not_registered'
-                    return redirect(url_for('goldis_blueprint.login', status=status))
+                    return redirect(url_for('fullstack_blueprint.login', status=status))
         if 'mobile' not in session:
             status = 'mobile_is_not_entered'
-            return redirect(url_for('goldis_blueprint.login', status=status))
-        return redirect(url_for('goldis_blueprint.login'))
+            return redirect(url_for('fullstack_blueprint.login', status=status))
+        return redirect(url_for('fullstack_blueprint.login'))
     
-
-    @goldis_blueprint.route('/logout')
+    @fullstack_blueprint.route('/logout')
     def logout():
         session.pop('g_token')
-        return redirect(url_for('goldis_blueprint.home'))
+        return redirect(url_for('fullstack_blueprint.home'))
 
-    @goldis_blueprint.route('/profile')
+    @fullstack_blueprint.route('/profile')
     def profile():
         user = common.get_user_from_token()
         if user == None:
@@ -126,7 +120,7 @@ def make_routes(goldis_blueprint):
             return redirect('/')
         return render_template('profile.html', user=user)
 
-    @goldis_blueprint.route('/profile', methods=['POST'])
+    @fullstack_blueprint.route('/profile', methods=['POST'])
     def profile_post():
         user = common.get_user_from_token()
         user_full_name = user['full_name']
@@ -141,13 +135,13 @@ def make_routes(goldis_blueprint):
             else:
                 flash(f'{user_full_name} گرامی، رمز عبور فعلی، صحیح نمی باشد.', 'danger')
             user = common.get_user_from_token()
-            return redirect(url_for('goldis_blueprint.profile'))
+            return redirect(url_for('fullstack_blueprint.profile'))
         else:
             mobile = request.form.get('sg_mobile', 'None')
             full_name = request.form.get('sg_fullname', 'None')
             update_user = users_orm.Users.update_user(id=user['id'], mobile=mobile, full_name=full_name)
             flash(f'{user_full_name} گرامی پروفایل شما با موفقیت ویرایش گردید.', 'success')
             user = common.get_user_from_token()
-            return redirect(url_for('goldis_blueprint.profile'))
+            return redirect(url_for('fullstack_blueprint.profile'))
 
 

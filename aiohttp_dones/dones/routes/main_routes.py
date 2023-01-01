@@ -4,9 +4,9 @@ from models_mysql import courses_orm, course_news_orm, emails_orm
 import date_converter
 
 
-def make_routes(goldis_blueprint):
-    @goldis_blueprint.route("/")
-    @goldis_blueprint.route("/home")
+def make_routes(fullstack_blueprint):
+    @fullstack_blueprint.route("/")
+    @fullstack_blueprint.route("/home")
     def home():
         section_id = '0'
         db_number = 1
@@ -23,12 +23,12 @@ def make_routes(goldis_blueprint):
             section_id)
         return render_template("index.html", user=user, user_account=None, all_courses=courses_jalali_datetime, all_courses_news=all_courses_news, db_number=db_number)
 
-    @goldis_blueprint.route("/landing-page")
+    @fullstack_blueprint.route("/landing-page")
     def landing_page():
         user = common.get_user_from_token()
         return render_template('landing_page.html', user=user)
 
-    @goldis_blueprint.route("/landing-page-post", methods=['POST'])
+    @fullstack_blueprint.route("/landing-page-post", methods=['POST'])
     def landing_page_post():
         user = common.get_user_from_token()
         email = request.form.get('email')
@@ -36,7 +36,7 @@ def make_routes(goldis_blueprint):
         for eml in all_emails:
             if eml['email'] == email:
                 result = 'email_already_exists'
-                # return redirect(url_for('goldis_blueprint.landing_page', result=result))
+                # return redirect(url_for('fullstack_blueprint.landing_page', result=result))
                 # return jsonify({'result': result})
                 # return render_template('landing_page.html', result=result)
                 return {'result': result}
@@ -45,12 +45,12 @@ def make_routes(goldis_blueprint):
             result = 'email_successfully_stored'
         except:
             result = 'something_went_wrong'
-        # return redirect(url_for('goldis_blueprint.landing_page', result=result))
+        # return redirect(url_for('fullstack_blueprint.landing_page', result=result))
         # return jsonify({'result': result})
         # return render_template('/landing_page.html', result=result)
         return {'result': result}
 
-    @goldis_blueprint.route("/404-not-found")
+    @fullstack_blueprint.route("/404-not-found")
     def not_found():
         user = common.get_user_from_token()
         return render_template('404_not_found.html')

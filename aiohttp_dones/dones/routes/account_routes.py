@@ -4,14 +4,14 @@ from routes import common
 from models_mysql import assets_orm, transactions_orm, accounts_orm
 
 
-def make_routes(goldis_blueprint):
-    @goldis_blueprint.route("/trade-gold")
+def make_routes(fullstack_blueprint):
+    @fullstack_blueprint.route("/trade-gold")
     def trade_gold():
         user = common.get_user_from_token()
         gold_asset = assets_orm.Assets.get_asset_by_code('GOLD')
         return render_template("trade_gold.html", user=user, gold_asset=gold_asset)
 
-    @goldis_blueprint.route('/buy-gold-post', methods=['POST'])
+    @fullstack_blueprint.route('/buy-gold-post', methods=['POST'])
     def buy_gold_post():
         redirect_address = '/trade-gold'
         gold_amount = request.form.get('gold_amount', 'None')
@@ -36,7 +36,7 @@ def make_routes(goldis_blueprint):
             redirect_address = f'/invoice?transaction_id={new_transaction_id}'
         return redirect(redirect_address)
 
-    @goldis_blueprint.route('/sell-gold-post', methods=['POST'])
+    @fullstack_blueprint.route('/sell-gold-post', methods=['POST'])
     def sell_gold_post():
         redirect_address = '/trade-gold'
         gold_amount = request.form.get('gold_amount', 'None')
@@ -54,7 +54,7 @@ def make_routes(goldis_blueprint):
             redirect_address = f'/invoice?transaction_id={new_transaction_id}'
         return redirect(redirect_address)
 
-    @goldis_blueprint.route("/invoice")
+    @fullstack_blueprint.route("/invoice")
     def invoice():
         transaction_id = request.args.get('transaction_id', None)
         error, transaction_id = common.sanitize_user_input(
@@ -66,7 +66,7 @@ def make_routes(goldis_blueprint):
         user_account = accounts_orm.Accounts.get_account_by_user_id(user['id'])
         return render_template("invoice.html", user=user, user_account=user_account, gold_asset=gold_asset, transaction=transaction)
 
-    @goldis_blueprint.route('/invoice-post', methods=['POST'])
+    @fullstack_blueprint.route('/invoice-post', methods=['POST'])
     def invoice_post():
         transaction_id = request.args.get('transaction_id', None)
         error, transaction_id = common.sanitize_user_input(

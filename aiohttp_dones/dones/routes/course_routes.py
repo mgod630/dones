@@ -3,8 +3,8 @@ from flask import redirect, render_template, request, session, url_for, flash
 from routes import common
 from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, course_news_orm, user_courses_orm ,user_quizzes_orm, user_items_orm
 
-def make_routes(goldis_blueprint):
-    @goldis_blueprint.route("/course-info/course_<course_id>")
+def make_routes(fullstack_blueprint):
+    @fullstack_blueprint.route("/course-info/course_<course_id>")
     def course_info(course_id):
         user = common.get_user_from_token()
         all_courses = courses_orm.Courses.get_all_courses()
@@ -23,7 +23,7 @@ def make_routes(goldis_blueprint):
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
         return render_template("course-info.html", course=course, all_courses_news=all_courses_news, user=user, all_comments=all_comments)
 
-    @goldis_blueprint.route('/course-overview/course_<course_id>')
+    @fullstack_blueprint.route('/course-overview/course_<course_id>')
     def course_overview(course_id):
         user = common.get_user_from_token()
         if user == None:
@@ -62,7 +62,7 @@ def make_routes(goldis_blueprint):
             f'course_overview_{course_id}')
         return render_template("course-overview.html", course=course, course_items=items_jalali_datetime,user=user, all_comments=all_comments)
 
-    @goldis_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
+    @fullstack_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
     def course_content(course_id, item_id):
         user = common.get_user_from_token()
         if user == None:
@@ -96,7 +96,7 @@ def make_routes(goldis_blueprint):
         last_comments = all_comments[0:19]
         return render_template("course-content.html", course=course, course_item=course_item, user=user, all_comments=last_comments, quizzes=quizzes_jalali_datetime)
 
-    @goldis_blueprint.route("/quiz/quiz_<quiz_id>")
+    @fullstack_blueprint.route("/quiz/quiz_<quiz_id>")
     def quiz_content(quiz_id):
         user = common.get_user_from_token()
         if user == None:
@@ -113,7 +113,7 @@ def make_routes(goldis_blueprint):
         course_id = item['course_id']
         return render_template("quiz-content.html", user=user, quiz=quiz, questions=questions, last_user_answers=last_user_answers, course_id=course_id, item_id=item_id, quiz_id=quiz_id)
 
-    @goldis_blueprint.route('/set-user-answers', methods=['POST'])
+    @fullstack_blueprint.route('/set-user-answers', methods=['POST'])
     def send_user_answers():
         user = common.get_user_from_token()
         course_id = request.args.get('course_id')
@@ -130,9 +130,9 @@ def make_routes(goldis_blueprint):
             flash(f'{user["full_name"]} گرامی پاسخ های شما با موفقیت ثبت گردید.', 'success')
         else:
             flash(f'{user["full_name"]} گرامی هیچ پاسخی از سمت شما دریافت نشد.', 'danger')
-        return redirect(url_for('goldis_blueprint.course_content', course_id=course_id, item_id=item_id))
+        return redirect(url_for('fullstack_blueprint.course_content', course_id=course_id, item_id=item_id))
 
-    @goldis_blueprint.route('/my-courses')
+    @fullstack_blueprint.route('/my-courses')
     def my_courses():
         user = common.get_user_from_token()
         if user == None:
@@ -148,7 +148,7 @@ def make_routes(goldis_blueprint):
                 user_courses_with_title.append(crs)
         return render_template('my-courses.html', user=user, courses = user_courses_with_title)
     
-    @goldis_blueprint.route('/my-items')
+    @fullstack_blueprint.route('/my-items')
     def my_items():
         user = common.get_user_from_token()
         if user == None:
@@ -163,7 +163,7 @@ def make_routes(goldis_blueprint):
             user_items_with_title.append(it)
         return render_template('my-items.html', user=user, items = user_items_with_title, course_id=course_id)
 
-    @goldis_blueprint.route("/quiz-results/item_<item_id>")
+    @fullstack_blueprint.route("/quiz-results/item_<item_id>")
     def user_quizzes(item_id):
         user = common.get_user_from_token()
         if user == None:

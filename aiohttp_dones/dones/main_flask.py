@@ -14,8 +14,8 @@ def init(config_file="settings.py"):
     app.config['mysql_connection_pool'] = mysql.connector.pooling.MySQLConnectionPool(
         user="root", password="", database='goldis', use_pure=True, pool_name="my_pool", pool_size=32, buffered=True)
     no_login_need_urls = ["/login", "/login-post", "/signup", "/signup-post"]
-    goldis_blueprint = make_routes()
-    app.register_blueprint(goldis_blueprint)
+    fullstack_blueprint = make_routes()
+    app.register_blueprint(fullstack_blueprint)
 
     @app.before_request
     def before_request_func():
