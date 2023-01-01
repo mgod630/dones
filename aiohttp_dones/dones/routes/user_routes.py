@@ -37,8 +37,17 @@ def make_routes(goldis_blueprint):
         if step == '1':
             mobile = request.form.get('sg_mobile', None)
             user = users_orm.Users.get_user_by_mobile(mobile)
-            if user:
+            if user and user['user_type'] == users_orm.Users.Types.new_user.value :
                 status = 'mobile_already_exist'
+                return redirect(url_for('goldis_blueprint.login', status=status))
+            elif user and user['user_type'] == users_orm.Users.Types.unregistered_user.value :
+                registering_code = random.randint(10000, 99999)
+                response = await sms.send_message_by_313(mobile, str(registering_code))
+                # print(response)
+                session['mobile'] = mobile
+                new_user_id = users_orm.Users.update_user_by_mobile(mobile=mobile, register_datetime=time.time(), registering_code=registering_code)
+                new_user = users_orm.Users.get_user_by_id(new_user_id)
+                status = 'registering_code_sent'
                 return redirect(url_for('goldis_blueprint.login', status=status))
             else:
                 registering_code = random.randint(10000, 99999)
