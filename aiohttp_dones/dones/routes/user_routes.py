@@ -51,7 +51,7 @@ def make_routes(goldis_blueprint):
                 return redirect(url_for('goldis_blueprint.login', status=status))
             else:
                 registering_code = random.randint(10000, 99999)
-                # response = await sms.send_message_by_313(mobile, str(registering_code))
+                response = await sms.send_message_by_313(mobile, str(registering_code))
                 # print(response)
                 user_type = users_orm.Users.Types.unregistered_user.value
                 g_token = secrets.token_hex()
