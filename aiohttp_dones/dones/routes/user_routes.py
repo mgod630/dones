@@ -61,9 +61,9 @@ def make_routes(goldis_blueprint):
                 status = 'registering_code_sent'
                 return redirect(url_for('goldis_blueprint.login', status=status))
         elif step == '2':
-            registering_code = request.form.get('sg_registering_code')
+            registering_code = request.form.get('registering_code')
             user = users_orm.Users.get_user_by_mobile(session['mobile'])
-            if user['registering_code'] == registering_code:
+            if str(user['registering_code']) == registering_code:
                 status = 'registering_code_correct'
                 return redirect(url_for('goldis_blueprint.login', status=status))
             else:
