@@ -163,7 +163,7 @@ class Users:
         return True
 
     @staticmethod
-    def update_user_by_mobile(mobile, full_name=None, password=None, user_type=None, g_token=None, register_datetime=None):
+    def update_user_by_mobile(mobile, full_name=None, password=None, user_type=None, g_token=None, register_datetime=None, registering_code=None):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -181,7 +181,9 @@ class Users:
         if user_type:
             update_string += f'user_type=%(user_type)s,'
         if register_datetime:
-            update_string += f'register_datetime=%(register_datetime)s'
+            update_string += f'register_datetime=%(register_datetime)s,'
+        if registering_code:
+            update_string += f'registering_code=%(registering_code)s'
         update_string = update_string.rstrip(',')
         add_user = f"UPDATE tbl_users SET {update_string} WHERE mobile='{mobile}'"
         update_query_string = {
@@ -189,7 +191,8 @@ class Users:
             'g_token': g_token,
             'password': password,
             'user_type': user_type,
-            'register_datetime': register_datetime
+            'register_datetime': register_datetime,
+            'registering_code': registering_code
         }
         cursor.execute(add_user, update_query_string)
         cnx.commit()
