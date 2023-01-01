@@ -95,7 +95,8 @@
           class="login-body {% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_incorrect' %}expand3{% endif %}"
         >
           {% if request.args.get('status') != 'registering_code_sent' and
-          request.args.get('status') != registering_code_correct %}
+          request.args.get('status') != 'registering_code_correct' and
+          request.args.get('status') != 'registering_code_incorrect' %}
           <div id="mobile_buttons">
             <div
               id="mb_login"
@@ -109,7 +110,7 @@
           <form
             id="login_form"
             action="/login-post"
-            class="{% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_incorrect' %}collapse{% else %}active{% endif %}"
+            class="{% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_correct' or request.args.get('status') == 'registering_code_incorrect' %}collapse{% else %}active{% endif %}"
             method="post"
           >
             {{ mcr_inputs.input('mobile', section='lg', required=true)}} {{
@@ -123,10 +124,12 @@
               </div>
             </div>
           </form>
+          {% if request.args.get('status') != 'registering_code_correct' or
+          request.args.get('status') != 'registering_code_incorrect' %}
           <form
             id="signup_form"
             action="/signup-post?step=1"
-            class="{% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == registering_code_correct %}collapse{% else %}active{% endif %}"
+            class="{% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_correct' or request.args.get('status') == 'registering_code_incorrect' %}collapse{% else %}active{% endif %}"
             method="post"
           >
             <!-- {{ mcr_inputs.input('fullname', required=true)}}  -->
@@ -140,26 +143,41 @@
               >
             </div>
           </form>
-          {% if request.args.get('status') == 'registering_code_sent' or
-          request.args.get('status') == 'registering_code_incorrect'%}
+          {% endif %} {% if request.args.get('status') ==
+          'registering_code_sent' or request.args.get('status') ==
+          'registering_code_incorrect'%}
           <form
-            style="margin-top: 120px"
+            style="margin-top: 20px"
             id="signup_form_2"
             action="/signup-post?step=2"
+            class="{% if request.args.get('status') == 'registering_code_correct' %}collapse{% else %}active{% endif %}"
             method="post"
           >
             <!-- {{ mcr_inputs.input('fullname', required=true)}}  -->
             <!-- {{ mcr_inputs.input('mobile', required=true)}} -->
             <!-- {{mcr_inputs.input('password', section='sg', required=true)}} -->
             <!-- {{ mcr_inputs.input('registering_code', required=true)}} -->
-            <input type="text" name="registering_code" />
+            <input
+              class="rcInput"
+              type="text"
+              name="registering_code"
+              required="true"
+              placeholder="پین ارسالی وارد نمائید"
+              maxlength="5"
+            />
             <div class="form-footer">
               <button class="button solid-blue" type="submit">تائید کد</button>
             </div>
           </form>
           {% endif %} {% if request.args.get('status') ==
-          registering_code_correct%}
-          <form id="signup_form_3" action="/signup-post?step=3" method="post">
+          'registering_code_correct'%}
+          <form
+            style="margin-top: 20px"
+            id="signup_form_3"
+            action="/signup-post?step=3"
+            class="{% if request.args.get('status') == 'registering_code_correct'%} expand3 {% endif %}"
+            method="post"
+          >
             {{ mcr_inputs.input('fullname', required=true)}}
             {{mcr_inputs.input('password', section='sg', required=true)}}
             <div class="form-footer">

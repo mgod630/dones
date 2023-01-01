@@ -67,7 +67,7 @@ p {
 .counter {
   position: absolute;
   top: 100px;
-  right: 66%;
+  right: 65%;
   display: flex;
   text-align: center;
   padding: 10px;
@@ -355,7 +355,8 @@ p {
   }
   .counter {
     top: 380px;
-    right: 45%;
+    right: 43%;
+    font-size: 14px;
   }
   .counter .countdown p,
   .counter .countdown span {

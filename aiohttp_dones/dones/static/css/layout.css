@@ -62,6 +62,7 @@ body {
 .btn {
   font-size: 14px;
   border-radius: 8px;
+  border-radius: 15px;
 }
 .cs-nav {
   padding: 4px;
@@ -223,6 +224,7 @@ a.dropdown-item .far {
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
   padding: 15px;
   position: relative;
+  border-radius: 10px;
 }
 .wb-header {
   display: flex;
@@ -266,6 +268,8 @@ a.dropdown-item .far {
 .wb-header.wbh-yellow {
   background-color: #ffc107;
   background: linear-gradient(45deg, #f3b000 0, #ffc107 40%, #ffcb2e 100%);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 .wb-header.wbh-grey {
   background-color: #e8e8e8;
