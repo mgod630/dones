@@ -9,7 +9,7 @@
     'password':         { 'icon': 'key',         'type': 'password', 'placeholder': 'کلمه عبور',                   'length': 40, 'validation': 'min_length', 'validation_error': 'یک عبارت حداقل ۶ حرفی وارد نمایید' },
     'new_password':     { 'icon': 'key',         'type': 'password', 'placeholder': 'کلمه عبور جدید',              'length': 40, 'validation': 'min_length', 'validation_error': 'یک عبارت حداقل ۶ حرفی وارد نمایید' },
     'new_password_repeat':{ 'icon': 'key',       'type': 'password', 'placeholder': 'تکرار کلمه عبور جدید',        'length': 40, 'validation': 'repeat',     'validation_error': 'تکرار کلمه عبور صحیح نمی‌باشد' },
-    'verification_code':{ 'icon': 'lock',        'type': 'text',     'placeholder': 'پین ۴ رقمی',                  'length': 4,  'validation': 'min_length4','validation_error': 'پین ۴ رقمی را وارد نمایید' }
+    'verification_code':{ 'icon': 'lock',        'type': 'text',     'placeholder': 'پین 5 رقمی',                  'length': 5,  'validation': 'min_length5','validation_error': 'پین ۴ رقمی را وارد نمایید' }
 } %}
 
 {% macro input(inp_type, value='', section='sg', required=false, label='', name='', size='normal', icon='') %}

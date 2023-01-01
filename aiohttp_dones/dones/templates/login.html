@@ -68,7 +68,7 @@
           <div class="flash-message fm-info">
             پیامک بازنشانی کلمه عبور برای شما ارسال شد.
           </div>
-          {% elif status == 'verification_code_is_incorrect'%}
+          {% elif status == 'registering_code_incorrect'%}
           <div class="flash-message fm-danger">پین وارد شده صحیح نمی باشد.</div>
           {% elif status == 'flash' %}
           <div class="flash-message fm-info">{{ message|safe }}</div>
@@ -92,21 +92,24 @@
       <div class="login-panel">
         {% include 'spinner.html' %}
         <div
-          class="login-body {% if status == 'registering_code_sent' or status == 'verification_code_is_incorrect' %}expand2{% endif %}"
+          class="login-body {% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_incorrect' %}expand2{% endif %}"
         >
+          {% if request.args.get('status') != 'registering_code_sent' and
+          request.args.get('status') != registering_code_correct %}
           <div id="mobile_buttons">
             <div
               id="mb_login"
-              class="{% if status != 'registering_code_sent' and status != 'verification_code_is_incorrect'%}active{% endif %}"
+              class="{% if request.args.get('status') != 'registering_code_sent' and request.args.get('status') != 'registering_code_incorrect'%}active{% endif %}"
             >
               ورود
             </div>
             <div id="mb_signup">ثبت نام</div>
           </div>
+          {% endif%}
           <form
             id="login_form"
             action="/login-post"
-            class="{% if status == 'registering_code_sent' or status == 'verification_code_is_incorrect' %}collapse{% else %}active{% endif %}"
+            class="{% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_incorrect' %}collapse{% else %}active{% endif %}"
             method="post"
           >
             {{ mcr_inputs.input('mobile', section='lg', required=true)}} {{
@@ -123,7 +126,7 @@
           <form
             id="signup_form"
             action="/signup-post?step=1 "
-            class="collapse"
+            class="{% if request.args.get('status') == 'registering_code_sent' and request.args.get('status') == registering_code_correct %}active{% else %}collapse{% endif %}"
             method="post"
           >
             <!-- {{ mcr_inputs.input('fullname', required=true)}}  -->
@@ -137,26 +140,28 @@
               >
             </div>
           </form>
-          {% if status == 'registering_code_sent'%}
+          {% if request.args.get('status') == 'registering_code_sent'%}
           <form
+            style="margin-top: 120px"
             id="signup_form_2"
             action="/signup-post?step=2"
-            class="collapse"
+            class="active"
             method="post"
           >
             <!-- {{ mcr_inputs.input('fullname', required=true)}}  -->
             <!-- {{ mcr_inputs.input('mobile', required=true)}} -->
             <!-- {{mcr_inputs.input('password', section='sg', required=true)}} -->
-            <input type="text" name="registering_code" />
+            {{ mcr_inputs.input('verification_code', required=true)}}
             <div class="form-footer">
               <button class="button solid-blue" type="submit">تائید کد</button>
             </div>
           </form>
-          {% endif %} {% if status == registering_code_incorrect%}
+          {% endif %} {% if request.args.get('status') ==
+          registering_code_correct%}
           <form
             id="signup_form_3"
             action="/signup-post?step=3"
-            class="collapse"
+            class="{% if request.args.get('status') == 'registering_code_sent' and request.args.get('status') != registering_code_correct %}collapse{% else %}active{% endif %}"
             method="post"
           >
             {{ mcr_inputs.input('fullname', required=true)}}
