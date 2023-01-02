@@ -91,7 +91,7 @@
     </style>
 </head>
 <body>
-    {% if invoice_result %}
+    {% if invoice_result and invoice_result.status == 2 %}
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
@@ -100,14 +100,14 @@
                     <div class="content-success">
                         <h3><i class="fa fa-check icon icon-success"></i>عملیات پرداخت موفقیت آمیز بود</h3>
                         <p>با تشکر از شما</p>
-                        <p>شماره پیگیری : <span class="bold">{{ invoiceNumber }}</span></p>
+                        <p>شماره پیگیری : <span class="bold">{{ invoice_result.ipg_ref_id }}</span></p>
                         <a href="/"><input type="submit" class="btn btn-primary btn-cost" name="submit" value="بازگشت به برنامه"></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {% else %}
+    {% elif invoice_result and invoice_result.status != 2 %}
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">

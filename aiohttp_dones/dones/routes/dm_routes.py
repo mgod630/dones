@@ -32,11 +32,14 @@ def make_routes(fullstack_blueprint):
     def json_get_dm_users():
         page_number = request.args.get('page_number', '1')
         page_number = int(page_number) if str.isdigit(str(page_number)) else 1
-        number_item_per_page = 20
+        number_users_per_page = 20
         users_count = users_orm.Users.get_users_count()
-        page_count = (users_count[0] // number_item_per_page) + 1
-        start_index = users_count[0] - ((page_number - 1) * number_item_per_page) + 1
-        return {'page_number':page_number, 'page_count':page_count, 'start_index':start_index}
+        page_count = (users_count[0] // number_users_per_page) + 1
+        start = users_count[0] - ((page_number - 1) * number_users_per_page) + 1
+        end = start + number_users_per_page 
+        a_page_users = users_orm.Users.get_all_users_reverse()
+        a_page_users = a_page_users[start:end]
+        return {'page_number':page_number, 'current_page':page_count, 'all_users':a_page_users}
 
     @fullstack_blueprint.route("/dm-users", methods=['POST'])
     def dm_users_post():
@@ -58,25 +61,18 @@ def make_routes(fullstack_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
-        page_number = request.args.get('page_number', '1')
-        page_number = int(page_number) if str.isdigit(str(page_number)) else 1
-        number_item_per_page = 20
         users_count = users_orm.Users.get_users_count()
-        page_count = (users_count[0] // number_item_per_page) + 1
-        start_index = users_count[0] - \
-            ((page_number - 1) * number_item_per_page) + 1
         update_user = users_orm.Users.get_user_by_id(user_id)
         if request.method == 'POST':
             full_name = request.form.get('full_name', None)
             mobile = request.form.get('mobile', None)
             user_type = request.form.get('user_type', None)
-
             edit_user = users_orm.Users.update_user(id=user_id, full_name=full_name, mobile=mobile, user_type=user_type)
             users = users_orm.Users.get_all_users_reverse()
             return redirect('/dm-users')
         else:
             users = users_orm.Users.get_all_users_reverse()
-            return render_template("data_management/dm_users.html", user=user, users=users, update_user=update_user, page_number=page_number, page_count=page_count, start_index=start_index, user_id=user_id)
+            return render_template("data_management/dm_users.html", user=user, users=users, update_user=update_user, user_id=user_id)
 
     # dm courses
     @fullstack_blueprint.route("/dm-courses")
@@ -408,13 +404,11 @@ def make_routes(fullstack_blueprint):
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
         all_courses = courses_orm.Courses.get_all_courses()
-
         section_id = request.form.get('section_options', None)
         if section_id != 'home_page':
             for course in all_courses:
                 if str(course['id']) == section_id:
                     section_id = f'course_info_{course["id"]}'
-
         unix_datetime = time.time()
         course_news_text = request.form.get('course_news_text', None)
         new_course_news = course_news_orm.Courses_news.insert_new_course_news(section_id=section_id, unix_datetime=unix_datetime, course_news_text=course_news_text)
@@ -457,7 +451,7 @@ def make_routes(fullstack_blueprint):
         course_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
         course_id = section_id.split('_')[2]
         course = courses_orm.Courses.get_course_by_id(course_id)
-        return render_template("data_management/dm_courses_news.html", user=user, course_news=course_news, all_courses=all_courses, course=course) 
+        return render_template("data_management/dm_courses_news.html", user=user, course_news=course_news, all_courses=all_courses, course=course)
     
     @fullstack_blueprint.route("/dm-quiz-users-answers/<quiz_id>")
     @fullstack_blueprint.route("/quiz-registered-users/<quiz_id>")

@@ -60,14 +60,14 @@ class Transactions:
         return row
 
     @staticmethod
-    def insert_new_transaction(user_id, course_id, amount, create_datetime, transaction_type, status, ipg_ref_id, description):
+    def insert_new_transaction(user_id, course_id, amount, create_datetime, transaction_type, status, ipg_ref_id, ipg_payment_id, description):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_transaction = ("INSERT INTO `tbl_transactions` (`user_id`, `course_id`, `amount`, `create_datetime`, `transaction_type`, `status`, `ipg_ref_id`, `description`) VALUES" +
-                           "( %(user_id)s, %(course_id)s, %(amount)s, %(create_datetime)s, %(transaction_type)s, %(status)s, %(ipg_ref_id)s, %(description)s)")
+        add_transaction = ("INSERT INTO `tbl_transactions` (`user_id`, `course_id`, `amount`, `create_datetime`, `transaction_type`, `status`, `ipg_ref_id`, `description`, `ipg_payment_id`) VALUES" +
+                           "( %(user_id)s, %(course_id)s, %(amount)s, %(create_datetime)s, %(transaction_type)s, %(status)s, %(ipg_ref_id)s, %(description)s, %(ipg_payment_id)s)")
         data_transaction = {
             'user_id': user_id,
             'course_id': course_id,
@@ -77,6 +77,7 @@ class Transactions:
             'status': status,
             'ipg_ref_id': ipg_ref_id,
             'description': description,
+            'ipg_payment_id': ipg_payment_id
         }
         cursor.execute(add_transaction, data_transaction)
         inserted_record_id = cursor.lastrowid
