@@ -215,33 +215,21 @@
     </thead>
     {% if users %} {% for user in users %}
     <ul id="paginated-list" data-current-page="1" aria-live="polite">
-    <tr class="paginated-cases">
-      <td>{{(start_index) - (loop.index)}}</td>
-      <td>
-        {% if user.user_type == -2 %}ادمین{% elif user.user_type == -1
-        %}سازمان/گروه{% else %}عادی{% endif %}
-      </td>
-      <td>{{user.full_name}}</td>
-      <td>{{user.mobile}}</td>
-      <!-- <td>
-          {% if user.gender %}{% if user.gender == 'male'%}مرد{% elif user.gender
-          == 'female' %}زن{% endif %}{% endif %}
-        </td>
-        <td>{% if user.age %}{{user.age}}{% endif %}</td>
-        <td>{% if user.grade %}{{user.grade}}{% endif %}</td>
-        <td>{% if user.job %}{{user.job}}{% endif %}</td>
+      <tr class="paginated-cases">
+        <td>{{(start_index) - (loop.index)}}</td>
         <td>
-          {% if user.marital_status %}{% if user.marital_status ==
-          'single'%}مجرد{% elif user.marital_status == 'married' %}متاهل{% endif
-          %}{% endif %}
-        </td> -->
-      <td>
-        <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
-          ><i class="far fa-cog"></i
-        ></a>
-      </td>
-    </tr>
-
+          {% if user.user_type == -2 %}ادمین{% elif user.user_type == -1
+          %}سازمان/گروه{% else %}عادی{% endif %}
+        </td>
+        <td>{{user.full_name}}</td>
+        <td>{{user.mobile}}</td>
+        <td>
+          <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
+            ><i class="far fa-cog"></i
+          ></a>
+        </td>
+      </tr>
+    </ul>
     <!-- <div id="comments_container" class="relative-wrapper" data-id="{{user}}">
       {% include 'spinner.html' %}
     </div>
@@ -316,7 +304,7 @@
       </li>
     </ul>
   </nav> -->
-  
+
   {% endif %}
 </div>
 {% endblock %} {% block scripts %}
@@ -385,7 +373,6 @@
     loadComments(1);
   });
 
-  
   const paginationNumbers = document.getElementById("pagination-numbers");
   const paginatedList = document.getElementById("paginated-list");
   const listItems = paginatedList.getElementsByClassName("paginated-cases");
