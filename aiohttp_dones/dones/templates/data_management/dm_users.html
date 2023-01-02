@@ -249,7 +249,8 @@
     {% endfor %} {% endif %}
   </table>
   {% if page_count > 0 %}
-  <nav class="pagination-container">
+
+  <!-- <nav class="pagination-container">
     <button
       style="outline: none"
       class="pagination-button"
@@ -269,7 +270,7 @@
     >
       &gt;
     </button>
-  </nav>
+  </nav> -->
 
   <!-- <nav class="page d-flex justify-content-center" aria-label="Page navigation">
     <ul class="pagination">
@@ -315,169 +316,169 @@
       </li>
     </ul>
   </nav> -->
+  
   {% endif %}
 </div>
 {% endblock %} {% block scripts %}
 
 <script>
-  // $(function () {
-  //   let pageNumber = 1;
-  //   $("#pagination").on("click", ".page-item", function () {
-  //     if ($(this).hasClass("active") || $(this).hasClass("disabled")) return;
-  //     $("#comments_container")
-  //       .empty()
-  //       .append(
-  //         $.parseHTML(
-  //           '<div class="busy-overlay"><div class="spinner"></div></div>'
-  //         )
-  //       );
-  //     const clickedData = $(this).data("page");
-  //     targetPage =
-  //       clickedData !== "prev" && clickedData !== "next"
-  //         ? clickedData
-  //         : clickedData === "prev"
-  //         ? pageNumber - 1
-  //         : pageNumber + 1;
-  //     loadComments(targetPage);
-  //   });
-  //   const sectionId = $("#comments_container").data("id");
-  //   const structure = [
-  //     {
-  //       template: "comments_dynamic.html",
-  //       data: "all_comments",
-  //       id: "comments_container",
-  //     },
-  //   ];
-  //   const loadComments = function (targetPage) {
-  //     loadJson(
-  //       `/json-get-comments-and-courses_news-by-section-id/${sectionId}?page_number=${targetPage}`,
-  //       structure,
-  //       function (pageStatus) {
-  //         current_page = pageStatus.current_page;
-  //         pageNumber = current_page;
-  //         pages_count = pageStatus.pages_count;
-  //         $("#pagination").empty().addClass("collapse");
-  //         if (pages_count > 1) {
-  //           let pagination = '<ul class="pagination justify-content-center">';
-  //           pagination += `<li class="page-item ${
-  //             current_page === 1 ? "disabled" : ""
-  //           }" data-page="prev"><span class="page-link">قبلی</span></li>`;
-  //           const dummy = [...Array(pages_count).keys()].map(
-  //             (item) =>
-  //               (pagination += `<li class="page-item ${
-  //                 current_page === item + 1 ? "active" : ""
-  //               }" data-page="${item + 1}"><span class="page-link">${
-  //                 item + 1
-  //               }</span></li>`)
-  //           );
-  //           pagination += `<li class="page-item ${
-  //             current_page === pages_count ? "disabled" : ""
-  //           }" data-page="next"><span class="page-link">بعدی</span></li>`;
-  //           $("#pagination")
-  //             .append($.parseHTML(pagination))
-  //             .removeClass("collapse");
-  //         }
-  //       }
-  //     );
-  //   };
-  //   loadComments(1);
-  // });
+  $(function () {
+    let pageNumber = 1;
+    $("#pagination").on("click", ".page-item", function () {
+      if ($(this).hasClass("active") || $(this).hasClass("disabled")) return;
+      $("#comments_container")
+        .empty()
+        .append(
+          $.parseHTML(
+            '<div class="busy-overlay"><div class="spinner"></div></div>'
+          )
+        );
+      const clickedData = $(this).data("page");
+      targetPage =
+        clickedData !== "prev" && clickedData !== "next"
+          ? clickedData
+          : clickedData === "prev"
+          ? pageNumber - 1
+          : pageNumber + 1;
+      loadComments(targetPage);
+    });
+    const sectionId = $("#comments_container").data("id");
+    const structure = [
+      {
+        template: "comments_dynamic.html",
+        data: "all_comments",
+        id: "comments_container",
+      },
+    ];
+    const loadComments = function (targetPage) {
+      loadJson(
+        `/json-get-comments-and-courses_news-by-section-id/${sectionId}?page_number=${targetPage}`,
+        structure,
+        function (pageStatus) {
+          current_page = pageStatus.current_page;
+          pageNumber = current_page;
+          pages_count = pageStatus.pages_count;
+          $("#pagination").empty().addClass("collapse");
+          if (pages_count > 1) {
+            let pagination = '<ul class="pagination justify-content-center">';
+            pagination += `<li class="page-item ${
+              current_page === 1 ? "disabled" : ""
+            }" data-page="prev"><span class="page-link">قبلی</span></li>`;
+            const dummy = [...Array(pages_count).keys()].map(
+              (item) =>
+                (pagination += `<li class="page-item ${
+                  current_page === item + 1 ? "active" : ""
+                }" data-page="${item + 1}"><span class="page-link">${
+                  item + 1
+                }</span></li>`)
+            );
+            pagination += `<li class="page-item ${
+              current_page === pages_count ? "disabled" : ""
+            }" data-page="next"><span class="page-link">بعدی</span></li>`;
+            $("#pagination")
+              .append($.parseHTML(pagination))
+              .removeClass("collapse");
+          }
+        }
+      );
+    };
+    loadComments(1);
+  });
 
-// ------------------------------------------------
   
-  // const paginationNumbers = document.getElementById("pagination-numbers");
-  // const paginatedList = document.getElementById("paginated-list");
-  // const listItems = paginatedList.getElementsByClassName("paginated-cases");
-  // const nextButton = document.getElementById("next-button");
-  // const prevButton = document.getElementById("prev-button");
-  // const paginationLimit = 2;
-  // const pageCount = Math.ceil(listItems.length / paginationLimit);
-  // let currentPage;
-  // const appendPageNumber = (index) => {
-  //   const pageNumber = document.createElement("button");
-  //   pageNumber.className = "pagination-number";
-  //   pageNumber.innerHTML = index;
-  //   pageNumber.setAttribute("page-index", index);
-  //   pageNumber.setAttribute("aria-label", "Page " + index);
-  //   paginationNumbers.appendChild(pageNumber);
-  // };
+  const paginationNumbers = document.getElementById("pagination-numbers");
+  const paginatedList = document.getElementById("paginated-list");
+  const listItems = paginatedList.getElementsByClassName("paginated-cases");
+  const nextButton = document.getElementById("next-button");
+  const prevButton = document.getElementById("prev-button");
+  const paginationLimit = 2;
+  const pageCount = Math.ceil(listItems.length / paginationLimit);
+  let currentPage;
+  const appendPageNumber = (index) => {
+    const pageNumber = document.createElement("button");
+    pageNumber.className = "pagination-number";
+    pageNumber.innerHTML = index;
+    pageNumber.setAttribute("page-index", index);
+    pageNumber.setAttribute("aria-label", "Page " + index);
+    paginationNumbers.appendChild(pageNumber);
+  };
 
-  // const getPaginationNumbers = () => {
-  //   for (let i = 1; i <= pageCount; i++) {
-  //     appendPageNumber(i);
-  //   }
-  // };
-  // window.addEventListener("load", () => {
-  //   getPaginationNumbers();
-  //   setCurrentPage(1);
+  const getPaginationNumbers = () => {
+    for (let i = 1; i <= pageCount; i++) {
+      appendPageNumber(i);
+    }
+  };
+  window.addEventListener("load", () => {
+    getPaginationNumbers();
+    setCurrentPage(1);
 
-  //   prevButton.addEventListener("click", () => {
-  //     setCurrentPage(currentPage - 1);
-  //   });
+    prevButton.addEventListener("click", () => {
+      setCurrentPage(currentPage - 1);
+    });
 
-  //   nextButton.addEventListener("click", () => {
-  //     setCurrentPage(currentPage + 1);
-  //   });
+    nextButton.addEventListener("click", () => {
+      setCurrentPage(currentPage + 1);
+    });
 
-  //   document.querySelectorAll(".pagination-number").forEach((button) => {
-  //     const pageIndex = Number(button.getAttribute("page-index"));
+    document.querySelectorAll(".pagination-number").forEach((button) => {
+      const pageIndex = Number(button.getAttribute("page-index"));
 
-  //     if (pageIndex) {
-  //       button.addEventListener("click", () => {
-  //         setCurrentPage(pageIndex);
-  //       });
-  //     }
-  //   });
-  // });
-  // const setCurrentPage = (pageNum) => {
-  //   currentPage = pageNum;
+      if (pageIndex) {
+        button.addEventListener("click", () => {
+          setCurrentPage(pageIndex);
+        });
+      }
+    });
+  });
+  const setCurrentPage = (pageNum) => {
+    currentPage = pageNum;
 
-  //   handleActivePageNumber();
-  //   handlePageButtonsStatus();
+    handleActivePageNumber();
+    handlePageButtonsStatus();
 
-  //   const prevRange = (pageNum - 1) * paginationLimit;
-  //   const currRange = pageNum * paginationLimit;
+    const prevRange = (pageNum - 1) * paginationLimit;
+    const currRange = pageNum * paginationLimit;
 
-  //   listItems.forEach((item, index) => {
-  //     item.classList.add("hidden");
-  //     if (index >= prevRange && index < currRange) {
-  //       item.classList.remove("hidden");
-  //     }
-  //   });
-  // };
-  // const handleActivePageNumber = () => {
-  //   document.querySelectorAll(".pagination-number").forEach((button) => {
-  //     button.classList.remove("active");
+    listItems.forEach((item, index) => {
+      item.classList.add("hidden");
+      if (index >= prevRange && index < currRange) {
+        item.classList.remove("hidden");
+      }
+    });
+  };
+  const handleActivePageNumber = () => {
+    document.querySelectorAll(".pagination-number").forEach((button) => {
+      button.classList.remove("active");
 
-  //     const pageIndex = Number(button.getAttribute("page-index"));
-  //     if (pageIndex == currentPage) {
-  //       button.classList.add("active");
-  //     }
-  //   });
-  // };
-  // const disableButton = (button) => {
-  //   button.classList.add("disabled");
-  //   button.setAttribute("disabled", true);
-  // };
+      const pageIndex = Number(button.getAttribute("page-index"));
+      if (pageIndex == currentPage) {
+        button.classList.add("active");
+      }
+    });
+  };
+  const disableButton = (button) => {
+    button.classList.add("disabled");
+    button.setAttribute("disabled", true);
+  };
 
-  // const enableButton = (button) => {
-  //   button.classList.remove("disabled");
-  //   button.removeAttribute("disabled");
-  // };
+  const enableButton = (button) => {
+    button.classList.remove("disabled");
+    button.removeAttribute("disabled");
+  };
 
-  // const handlePageButtonsStatus = () => {
-  //   if (currentPage === 1) {
-  //     disableButton(prevButton);
-  //   } else {
-  //     enableButton(prevButton);
-  //   }
+  const handlePageButtonsStatus = () => {
+    if (currentPage === 1) {
+      disableButton(prevButton);
+    } else {
+      enableButton(prevButton);
+    }
 
-  //   if (pageCount === currentPage) {
-  //     disableButton(nextButton);
-  //   } else {
-  //     enableButton(nextButton);
-  //   }
-  // };
+    if (pageCount === currentPage) {
+      disableButton(nextButton);
+    } else {
+      enableButton(nextButton);
+    }
+  };
   function success() {
     if (
       document.getElementById("f1").value === "" ||

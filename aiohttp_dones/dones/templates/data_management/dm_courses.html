@@ -171,7 +171,7 @@
                                 <i class="far fa-list"></i>
                                 آیتم‌ها
                             </a>
-                            <a class="dcitems btn btn-outline-primary" hf="/dm-courses_news/" href="#">
+                            <a class="dcitems2 btn btn-outline-primary" hf="/dm-courses_news/" href="#">
                                 <i class="far fa-bell-exclamation"></i>
                                 اطلاعیه‌ها
                             </a>
@@ -361,6 +361,9 @@ $(function(){
         
         $("#course_settings .course-actions .dcitems").each(function(){
             $(this).attr("href",$(this).attr("hf") + course_data.id)
+        });
+        $("#course_settings .course-actions .dcitems2").each(function(){
+            $(this).attr("href",$(this).attr("hf") + "course_info_" + course_data.id)
         });
 
     });
