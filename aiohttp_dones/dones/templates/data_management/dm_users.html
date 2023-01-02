@@ -197,116 +197,7 @@
     </button>
   </form>
 </div>
-<div class="table-responsive">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>نوع کاربر</th>
-        <th>نام کاربر</th>
-        <th>موبایل</th>
-        <!-- <th>جنسیت</th>
-        <th>سن</th>
-        <th>تحصیلات</th>
-        <th>شغل</th>
-        <th>وضعیت تاهل</th> -->
-        <th>تنظیمات</th>
-      </tr>
-    </thead>
-    {% if users %} {% for user in users %}
-    <ul id="paginated-list" data-current-page="1" aria-live="polite">
-      <tr class="paginated-cases">
-        <td>{{(start_index) - (loop.index)}}</td>
-        <td>
-          {% if user.user_type == -2 %}ادمین{% elif user.user_type == -1
-          %}سازمان/گروه{% else %}عادی{% endif %}
-        </td>
-        <td>{{user.full_name}}</td>
-        <td>{{user.mobile}}</td>
-        <td>
-          <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
-            ><i class="far fa-cog"></i
-          ></a>
-        </td>
-      </tr>
-    </ul>
-    <!-- <div id="comments_container" class="relative-wrapper" data-id="{{user}}">
-      {% include 'spinner.html' %}
-    </div>
-    <nav id="pagination" class="collapse"></nav> -->
-    {% endfor %} {% endif %}
-  </table>
-  {% if page_count > 0 %}
 
-  <!-- <nav class="pagination-container">
-    <button
-      style="outline: none"
-      class="pagination-button"
-      id="prev-button"
-      aria-label="Previous page"
-      title="Previous page"
-    >
-      &lt;
-    </button>
-    <div id="pagination-numbers"></div>
-    <button
-      style="outline: none"
-      class="pagination-button"
-      id="next-button"
-      aria-label="Next page"
-      title="Next page"
-    >
-      &gt;
-    </button>
-  </nav> -->
-
-  <!-- <nav class="page d-flex justify-content-center" aria-label="Page navigation">
-    <ul class="pagination">
-      {% set number = page_count %} {% set page_number = page_number %} {% set
-      min_page = page_number - 2 %} {% set max_page = page_number + 2 %} {% if
-      min_page < 1 %}{% set min_page=1 %}{% endif %} {% set max_page=min_page +
-      3 %} {% if max_page>number %}{% set max_page = number %}{% endif %} {% set
-      min_page = max_page - 3 %} {% if min_page < 1 %}{% set min_page=1 %}{%
-      endif %}
-      <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
-        <a class="page-link" href="/dm-users?page_number=1" aria-label="first"
-          >اولین</a
-        >
-      </li>
-      <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
-        <a
-          class="page-link"
-          href="/dm-users?page_number={{page_number-1}}"
-          aria-label="Previous"
-          >قبلی</a
-        >
-      </li>
-      {%- for page in range(1, number) %}
-      <li class="page-item {% if page == page_number %}activing{% endif %}">
-        <a class="page-link" href="/dm-users?page_number={{page}}">{{page}}</a>
-      </li>
-      {% endfor %}
-      <li class="page-item {% if page_number == max_page %}disabled{% endif %}">
-        <a
-          class="page-link"
-          href="/dm-users?page_number={{page_number+1}}"
-          aria-label="Next"
-          >بعدی</a
-        >
-      </li>
-      <li class="page-item {% if page_number == number %}disabled{% endif %}">
-        <a
-          class="page-link"
-          href="/dm-users?page_number={{number}}"
-          aria-label="last"
-          >آخرین</a
-        >
-      </li>
-    </ul>
-  </nav> -->
-
-  {% endif %}
-</div>
 {% endblock %} {% block scripts %}
 
 <script>
@@ -314,7 +205,7 @@
     let pageNumber = 1;
     $("#pagination").on("click", ".page-item", function () {
       if ($(this).hasClass("active") || $(this).hasClass("disabled")) return;
-      $("#comments_container")
+      $("#user_container")
         .empty()
         .append(
           $.parseHTML(
@@ -330,17 +221,17 @@
           : pageNumber + 1;
       loadComments(targetPage);
     });
-    const sectionId = $("#comments_container").data("id");
+    const sectionId = $("#user_container").data("id");
     const structure = [
       {
-        template: "comments_dynamic.html",
-        data: "all_comments",
-        id: "comments_container",
+        template: "user_dynamic.html",
+        data: "users",
+        id: "user_container",
       },
     ];
     const loadComments = function (targetPage) {
       loadJson(
-        `/json-get-comments-and-courses_news-by-section-id/${sectionId}?page_number=${targetPage}`,
+        `/json-get-dm-users?page_number=${targetPage}`,
         structure,
         function (pageStatus) {
           current_page = pageStatus.current_page;
@@ -373,99 +264,6 @@
     loadComments(1);
   });
 
-  const paginationNumbers = document.getElementById("pagination-numbers");
-  const paginatedList = document.getElementById("paginated-list");
-  const listItems = paginatedList.getElementsByClassName("paginated-cases");
-  const nextButton = document.getElementById("next-button");
-  const prevButton = document.getElementById("prev-button");
-  const paginationLimit = 2;
-  const pageCount = Math.ceil(listItems.length / paginationLimit);
-  let currentPage;
-  const appendPageNumber = (index) => {
-    const pageNumber = document.createElement("button");
-    pageNumber.className = "pagination-number";
-    pageNumber.innerHTML = index;
-    pageNumber.setAttribute("page-index", index);
-    pageNumber.setAttribute("aria-label", "Page " + index);
-    paginationNumbers.appendChild(pageNumber);
-  };
-
-  const getPaginationNumbers = () => {
-    for (let i = 1; i <= pageCount; i++) {
-      appendPageNumber(i);
-    }
-  };
-  window.addEventListener("load", () => {
-    getPaginationNumbers();
-    setCurrentPage(1);
-
-    prevButton.addEventListener("click", () => {
-      setCurrentPage(currentPage - 1);
-    });
-
-    nextButton.addEventListener("click", () => {
-      setCurrentPage(currentPage + 1);
-    });
-
-    document.querySelectorAll(".pagination-number").forEach((button) => {
-      const pageIndex = Number(button.getAttribute("page-index"));
-
-      if (pageIndex) {
-        button.addEventListener("click", () => {
-          setCurrentPage(pageIndex);
-        });
-      }
-    });
-  });
-  const setCurrentPage = (pageNum) => {
-    currentPage = pageNum;
-
-    handleActivePageNumber();
-    handlePageButtonsStatus();
-
-    const prevRange = (pageNum - 1) * paginationLimit;
-    const currRange = pageNum * paginationLimit;
-
-    listItems.forEach((item, index) => {
-      item.classList.add("hidden");
-      if (index >= prevRange && index < currRange) {
-        item.classList.remove("hidden");
-      }
-    });
-  };
-  const handleActivePageNumber = () => {
-    document.querySelectorAll(".pagination-number").forEach((button) => {
-      button.classList.remove("active");
-
-      const pageIndex = Number(button.getAttribute("page-index"));
-      if (pageIndex == currentPage) {
-        button.classList.add("active");
-      }
-    });
-  };
-  const disableButton = (button) => {
-    button.classList.add("disabled");
-    button.setAttribute("disabled", true);
-  };
-
-  const enableButton = (button) => {
-    button.classList.remove("disabled");
-    button.removeAttribute("disabled");
-  };
-
-  const handlePageButtonsStatus = () => {
-    if (currentPage === 1) {
-      disableButton(prevButton);
-    } else {
-      enableButton(prevButton);
-    }
-
-    if (pageCount === currentPage) {
-      disableButton(nextButton);
-    } else {
-      enableButton(nextButton);
-    }
-  };
   function success() {
     if (
       document.getElementById("f1").value === "" ||
@@ -489,5 +287,4 @@
     }
   }
 </script>
-
 {% endblock %}
