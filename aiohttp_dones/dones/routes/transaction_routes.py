@@ -22,7 +22,6 @@ def make_routes(fullstack_blueprint):
             transaction = transactions_orm.Transactions.insert_new_transaction(user_id=user['id'], course_id=course_id, ipg_ref_id=ipg_ref_id, amount=amount, transaction_type=transaction_type, transaction_status=transaction_status, description=description)
             flash(f'{user_full_name} گرامی، با عرض پوزش در هنگام اتصال به درگاه بانک خطایی رخ داده است.', 'danger')
             return redirect(url_for('fullstack_blueprint.course_overview', course_id=course_id))
-        print(course_id)
         session['ipg_url'] = ipg_url
         transaction_status = transactions_orm.Transactions.Status.Unknown.value
         transaction_type = transactions_orm.Transactions.Types.buy_token.value

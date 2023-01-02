@@ -36,7 +36,7 @@ def make_routes(fullstack_blueprint):
         users_count = users_orm.Users.get_users_count()
         page_count = (users_count[0] // number_item_per_page) + 1
         start_index = users_count[0] - ((page_number - 1) * number_item_per_page) + 1
-        return {'page_number':page_number, 'page_count':page_count, 'start_index':start_index }
+        return {'page_number':page_number, 'page_count':page_count, 'start_index':start_index}
 
     @fullstack_blueprint.route("/dm-users", methods=['POST'])
     def dm_users_post():
@@ -454,10 +454,10 @@ def make_routes(fullstack_blueprint):
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
         all_courses = courses_orm.Courses.get_all_courses()
-        courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
+        course_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
         course_id = section_id.split('_')[2]
         course = courses_orm.Courses.get_course_by_id(course_id)
-        return render_template("data_management/dm_courses_news.html", user=user, courses_news=courses_news, all_courses=all_courses, course=course) 
+        return render_template("data_management/dm_courses_news.html", user=user, course_news=course_news, all_courses=all_courses, course=course) 
     
     @fullstack_blueprint.route("/dm-quiz-users-answers/<quiz_id>")
     @fullstack_blueprint.route("/quiz-registered-users/<quiz_id>")
