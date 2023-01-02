@@ -29,20 +29,4 @@ def verify_zarinpal_payment_transaction(transaction):
     result = client.service.PaymentVerification(zarinpal_merchant_id, transaction['ipg_ref_id'], amount)
     return result
 
-# def process_transaction(transaction):
-#   verify_zarinpal_payment_transaction(transaction)
-
-# def make_payment(user, amount):
-#   error = ipg_url = ipg_ref_id = None
-#   error, ipg_url, ipg_ref_id = zarinpal_make_payment(user, amount)
-#   if error != None:
-#       pass
-#   return error, ipg_url, ipg_ref_id
-
-# def verify_payment_transaction(transaction):
-#   error = transaction_status = None
-#   error = verify_zarinpal_payment_transaction(transaction)
-#   return error
-
-
 
