@@ -115,10 +115,15 @@
               <h1><i class="fa fa-caret-left icon"></i>سبد خرید</h1>
             </div>
             <div class="box">
+              <!-- <p>
+                کاربر گرامی به شماره موبایل
+                <span class="bold">{{ user.mobile }}</span> سبد خرید شما به شماره
+                فاکتور <span class="bold">{{ transaction.ipg_ref_id }}</span> به مبلغ
+                <span class="bold">{{ amount }} ریال </span> می باشد.
+              </p> -->
               <p>
                 کاربر گرامی به شماره موبایل
-                <span class="bold">{{mobile}}</span> سبد خرید شما به شماره
-                فاکتور <span class="bold">{{ tracenumber }}</span> به مبلغ
+                <span class="bold">{{ user.mobile }}</span> سبد خرید شما </span> به مبلغ
                 <span class="bold">{{ amount }} ریال </span> می باشد.
               </p>
               <p>
@@ -129,7 +134,7 @@
             <div>
               <form
                 method="post"
-                action="https://pf.efarda.ir/pf/api/ipg/purchase"
+                action="/token-buy-invoice?course_id={{course_id}}"
               >
                 <input name="username" value="" type="hidden" />
                 <input

@@ -8,7 +8,7 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route("/")
     @fullstack_blueprint.route("/home")
     def home():
-        section_id = '0'
+        section_id = 'home_page'
         db_number = 1
         user = common.get_user_from_token()
         all_courses = courses_orm.Courses.get_all_courses()

@@ -410,13 +410,11 @@ def make_routes(fullstack_blueprint):
         if section_id != 'home_page':
             for course in all_courses:
                 if str(course['id']) == section_id:
-                    section_id = str(course["id"])
-        else:
-            section_id = '0'
+                    section_id = f'course_info_{course["id"]}'
+
         unix_datetime = time.time()
         course_news_text = request.form.get('course_news_text', None)
         new_course_news = course_news_orm.Courses_news.insert_new_course_news(section_id=section_id, unix_datetime=unix_datetime, course_news_text=course_news_text)
-        all_courses_news = course_news_orm.Courses_news.get_all_courses_news()
         return redirect(url_for("fullstack_blueprint.dm_courses_news"))
 
     @fullstack_blueprint.route("/dm-courses_news/<section_id>/<notif_id>", methods=['GET','POST'])
@@ -424,24 +422,20 @@ def make_routes(fullstack_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
-        all_courses = courses_orm.Courses.get_all_courses()
         if request.method == 'POST':
                 section_id = request.form.get('section_options',None)
+                all_courses = courses_orm.Courses.get_all_courses()
                 if section_id != 'home_page':
                     for course in all_courses:
                         if str(course['id']) == section_id:
-                            section_id = str(course["id"])
-                else :
-                    section_id = '0'
+                            section_id = f'course_info_{course["id"]}'
                 unix_datetime = time.time()
                 course_news_text = request.form.get('course_news_text', None)
                 new_course_news = course_news_orm.Courses_news.update_course_news(id=notif_id, section_id=section_id, unix_datetime=unix_datetime, course_news_text=course_news_text)
-                all_courses_news = course_news_orm.Courses_news.get_all_courses_news()
                 return redirect(url_for("fullstack_blueprint.dm_courses_news"))
         else:
             course_news =  course_news_orm.Courses_news.get_course_news_by_id(notif_id)
-            all_courses_news = course_news_orm.Courses_news.get_all_courses_news()
-            return render_template("data_management/dm_courses_news.html", user=user, courses_news=all_courses_news, all_courses=all_courses, course_news=course_news, section_id=section_id, notif_id=notif_id)
+            return render_template("data_management/dm_courses_news.html", user=user, course_news=course_news, section_id=section_id, notif_id=notif_id)
 
     @fullstack_blueprint.route("/dm-delete-course_news/<section_id>/<course_news_id>")
     def dm_delete_course_news(section_id, course_news_id):
@@ -457,12 +451,10 @@ def make_routes(fullstack_blueprint):
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
         all_courses = courses_orm.Courses.get_all_courses()
-        course_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
-        if course_courses_news == []:
-            status = 'there_is_no_course_news'
-        else:
-            status = 'course_norifications_loaded'
-        return render_template("data_management/dm_courses_news.html", user=user, courses_news=course_courses_news, all_courses=all_courses, status=status) 
+        courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
+        course_id = section_id.split('_')[2]
+        course = courses_orm.Courses.get_course_by_id(course_id)
+        return render_template("data_management/dm_courses_news.html", user=user, courses_news=courses_news, all_courses=all_courses, course=course) 
     
     @fullstack_blueprint.route("/dm-quiz-users-answers/<quiz_id>")
     @fullstack_blueprint.route("/quiz-registered-users/<quiz_id>")

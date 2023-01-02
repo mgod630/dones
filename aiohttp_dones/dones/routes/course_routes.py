@@ -9,7 +9,7 @@ def make_routes(fullstack_blueprint):
         user = common.get_user_from_token()
         all_courses = courses_orm.Courses.get_all_courses()
         course = None
-        section_id = course_id
+        section_id = f'course_info_{course_id}' 
         for crs in all_courses:
             if str(crs['id']) == str(course_id):
                 course = crs
@@ -18,8 +18,7 @@ def make_routes(fullstack_blueprint):
                 break
         if course == None:
             return redirect('/404-not-found') 
-        all_comments = comments_orm.Comments.get_comments_by_section_id(
-            f'course_content_{course_id}')
+        all_comments = comments_orm.Comments.get_comments_by_section_id(section_id)
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
         return render_template("course-info.html", course=course, all_courses_news=all_courses_news, user=user, all_comments=all_comments)
 
