@@ -58,51 +58,23 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route('/comments/course_info_<course_id>')
     def comments_course_info(course_id):
         user = common.get_user_from_token()
-        page_number = request.args.get('page_number', '1')
-        page_number = int(page_number) if str.isdigit(str(page_number)) else 1
-        comments_count_per_page = 20
         course_id = f'course_info_{course_id}'
-        a_page_section_comments = comments_orm.Comments.get_comments_by_section_id(course_id, comments_count_per_page= comments_count_per_page, reversed_ordering= True)
-        if page_number != None:
-            start = page_number * comments_count_per_page - comments_count_per_page if page_number > 0 else 0
-            end = start + comments_count_per_page 
-            a_page_section_comments = a_page_section_comments[start:end]
-        comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
-        pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
-        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, section_id=course_id)
+        return render_template('comments.html', user=user, all_comments=all_comments, section_id=course_id)
 
     @fullstack_blueprint.route('/comments/course_overview_<course_id>', methods=['GET','POST'])
     def comments_course_overview(course_id):
         user = common.get_user_from_token()
-        page_number = request.args.get('page_number', '1')
-        page_number = int(page_number) if str.isdigit(str(page_number)) else 1
-        comments_count_per_page = 20
         course_id = f'course_overview_{course_id}'
-        a_page_section_comments = comments_orm.Comments.get_comments_by_section_id(course_id, comments_count_per_page= comments_count_per_page, reversed_ordering= True)
-        start = page_number * comments_count_per_page - comments_count_per_page if page_number > 0 else 0
-        end = start + comments_count_per_page 
-        a_page_section_comments = a_page_section_comments[start:end]
-        comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
-        pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
-        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, section_id=course_id)
+        return render_template('comments.html', user=user, all_comments=all_comments, section_id=course_id)
 
     @fullstack_blueprint.route('/comments/course_content_<course_id>')
     def comments_course_content(course_id):
         user = common.get_user_from_token()
-        page_number = request.args.get('page_number', '1')
-        page_number = int(page_number) if str.isdigit(str(page_number)) else 1
-        comments_count_per_page = 20
         course_id = f'course_content_{course_id}'
-        a_page_section_comments = comments_orm.Comments.get_comments_by_section_id(course_id, comments_count_per_page= comments_count_per_page, reversed_ordering= True)
-        start = page_number * comments_count_per_page - comments_count_per_page if page_number > 0 else 0
-        end = start + comments_count_per_page 
-        a_page_section_comments = a_page_section_comments[start:end]
-        comments_count = comments_orm.Comments.get_comments_count_by_section_id(course_id)
-        pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_comments = comments_orm.Comments.get_comments_by_section_id(course_id) 
-        return render_template('comments.html', user=user, all_comments=all_comments, pages_count=pages_count, current_page=page_number, section_id=course_id)
+        return render_template('comments.html', user=user, all_comments=all_comments, section_id=course_id)
 
     # post comment
     @fullstack_blueprint.route('/post-comment',methods=['POST'])

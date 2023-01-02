@@ -26,14 +26,17 @@ def make_routes(fullstack_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
+        return render_template("data_management/dm_users.html", user=user, users=users)
+    
+    @fullstack_blueprint.route("/json-get-dm-users")
+    def json_get_dm_users():
         page_number = request.args.get('page_number', '1')
         page_number = int(page_number) if str.isdigit(str(page_number)) else 1
         number_item_per_page = 20
         users_count = users_orm.Users.get_users_count()
         page_count = (users_count[0] // number_item_per_page) + 1
-        start_index = users_count[0] - \
-            ((page_number - 1) * number_item_per_page) + 1
-        return render_template("data_management/dm_users.html", user=user, users=users, page_number=page_number, page_count=page_count, start_index=start_index)
+        start_index = users_count[0] - ((page_number - 1) * number_item_per_page) + 1
+        return {'page_number':page_number, 'page_count':page_count, 'start_index':start_index }
 
     @fullstack_blueprint.route("/dm-users", methods=['POST'])
     def dm_users_post():
