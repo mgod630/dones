@@ -53,9 +53,9 @@
     ثبت
   </button>
 </form>
-{% if status %} {% if all_courses%}
+{% if courses_news %}
 <p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اطلاعیه های {{all_courses[0].title}}</p>
-{% endif %}{% else %}
+{% else %}
 <p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اطلاعیه تمام صفحات</p>
 {% endif %}
 <div class="table-responsive mt-3">
@@ -120,7 +120,7 @@
     </div>
   </div>
 </div>
-{% if status and status == 'there_is_no_course_news' or  not courses_news %}
+{% if courses_news and courses_news == 'there_is_no_course_news' or  not courses_news %}
 <div class="fw-bolder d-flex justify-content-center">هیچ موردی برای نمایش وجود ندارد.</div>
 {% endif %} {% endblock %} {% block scripts %}
 <script>

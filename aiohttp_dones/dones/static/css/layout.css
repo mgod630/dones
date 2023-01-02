@@ -438,6 +438,7 @@ p {
 }
 
 .pagination-container {
+  direction: rtl;
   width: calc(100% - 2rem);
   display: flex;
   align-items: center;

@@ -214,7 +214,8 @@
       </tr>
     </thead>
     {% if users %} {% for user in users %}
-    <tr>
+    <ul id="paginated-list" data-current-page="1" aria-live="polite">
+    <tr class="paginated-cases">
       <td>{{(start_index) - (loop.index)}}</td>
       <td>
         {% if user.user_type == -2 %}ادمین{% elif user.user_type == -1
@@ -223,27 +224,54 @@
       <td>{{user.full_name}}</td>
       <td>{{user.mobile}}</td>
       <!-- <td>
-        {% if user.gender %}{% if user.gender == 'male'%}مرد{% elif user.gender
-        == 'female' %}زن{% endif %}{% endif %}
-      </td>
-      <td>{% if user.age %}{{user.age}}{% endif %}</td>
-      <td>{% if user.grade %}{{user.grade}}{% endif %}</td>
-      <td>{% if user.job %}{{user.job}}{% endif %}</td>
-      <td>
-        {% if user.marital_status %}{% if user.marital_status ==
-        'single'%}مجرد{% elif user.marital_status == 'married' %}متاهل{% endif
-        %}{% endif %}
-      </td> -->
+          {% if user.gender %}{% if user.gender == 'male'%}مرد{% elif user.gender
+          == 'female' %}زن{% endif %}{% endif %}
+        </td>
+        <td>{% if user.age %}{{user.age}}{% endif %}</td>
+        <td>{% if user.grade %}{{user.grade}}{% endif %}</td>
+        <td>{% if user.job %}{{user.job}}{% endif %}</td>
+        <td>
+          {% if user.marital_status %}{% if user.marital_status ==
+          'single'%}مجرد{% elif user.marital_status == 'married' %}متاهل{% endif
+          %}{% endif %}
+        </td> -->
       <td>
         <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
           ><i class="far fa-cog"></i
         ></a>
       </td>
     </tr>
+
+    <!-- <div id="comments_container" class="relative-wrapper" data-id="{{user}}">
+      {% include 'spinner.html' %}
+    </div>
+    <nav id="pagination" class="collapse"></nav> -->
     {% endfor %} {% endif %}
   </table>
   {% if page_count > 0 %}
-  <nav class="page d-flex justify-content-center" aria-label="Page navigation">
+  <nav class="pagination-container">
+    <button
+      style="outline: none"
+      class="pagination-button"
+      id="prev-button"
+      aria-label="Previous page"
+      title="Previous page"
+    >
+      &lt;
+    </button>
+    <div id="pagination-numbers"></div>
+    <button
+      style="outline: none"
+      class="pagination-button"
+      id="next-button"
+      aria-label="Next page"
+      title="Next page"
+    >
+      &gt;
+    </button>
+  </nav>
+
+  <!-- <nav class="page d-flex justify-content-center" aria-label="Page navigation">
     <ul class="pagination">
       {% set number = page_count %} {% set page_number = page_number %} {% set
       min_page = page_number - 2 %} {% set max_page = page_number + 2 %} {% if
@@ -251,11 +279,11 @@
       3 %} {% if max_page>number %}{% set max_page = number %}{% endif %} {% set
       min_page = max_page - 3 %} {% if min_page < 1 %}{% set min_page=1 %}{%
       endif %}
-      <!-- <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
+      <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
         <a class="page-link" href="/dm-users?page_number=1" aria-label="first"
           >اولین</a
         >
-      </li> -->
+      </li>
       <li class="page-item {% if page_number == 1 %}disabled{% endif %}">
         <a
           class="page-link"
@@ -277,20 +305,179 @@
           >بعدی</a
         >
       </li>
-      <!-- <li class="page-item {% if page_number == number %}disabled{% endif %}">
+      <li class="page-item {% if page_number == number %}disabled{% endif %}">
         <a
           class="page-link"
           href="/dm-users?page_number={{number}}"
           aria-label="last"
           >آخرین</a
         >
-      </li> -->
+      </li>
     </ul>
-  </nav>
+  </nav> -->
   {% endif %}
 </div>
 {% endblock %} {% block scripts %}
+
 <script>
+  // $(function () {
+  //   let pageNumber = 1;
+  //   $("#pagination").on("click", ".page-item", function () {
+  //     if ($(this).hasClass("active") || $(this).hasClass("disabled")) return;
+  //     $("#comments_container")
+  //       .empty()
+  //       .append(
+  //         $.parseHTML(
+  //           '<div class="busy-overlay"><div class="spinner"></div></div>'
+  //         )
+  //       );
+  //     const clickedData = $(this).data("page");
+  //     targetPage =
+  //       clickedData !== "prev" && clickedData !== "next"
+  //         ? clickedData
+  //         : clickedData === "prev"
+  //         ? pageNumber - 1
+  //         : pageNumber + 1;
+  //     loadComments(targetPage);
+  //   });
+  //   const sectionId = $("#comments_container").data("id");
+  //   const structure = [
+  //     {
+  //       template: "comments_dynamic.html",
+  //       data: "all_comments",
+  //       id: "comments_container",
+  //     },
+  //   ];
+  //   const loadComments = function (targetPage) {
+  //     loadJson(
+  //       `/json-get-comments-and-courses_news-by-section-id/${sectionId}?page_number=${targetPage}`,
+  //       structure,
+  //       function (pageStatus) {
+  //         current_page = pageStatus.current_page;
+  //         pageNumber = current_page;
+  //         pages_count = pageStatus.pages_count;
+  //         $("#pagination").empty().addClass("collapse");
+  //         if (pages_count > 1) {
+  //           let pagination = '<ul class="pagination justify-content-center">';
+  //           pagination += `<li class="page-item ${
+  //             current_page === 1 ? "disabled" : ""
+  //           }" data-page="prev"><span class="page-link">قبلی</span></li>`;
+  //           const dummy = [...Array(pages_count).keys()].map(
+  //             (item) =>
+  //               (pagination += `<li class="page-item ${
+  //                 current_page === item + 1 ? "active" : ""
+  //               }" data-page="${item + 1}"><span class="page-link">${
+  //                 item + 1
+  //               }</span></li>`)
+  //           );
+  //           pagination += `<li class="page-item ${
+  //             current_page === pages_count ? "disabled" : ""
+  //           }" data-page="next"><span class="page-link">بعدی</span></li>`;
+  //           $("#pagination")
+  //             .append($.parseHTML(pagination))
+  //             .removeClass("collapse");
+  //         }
+  //       }
+  //     );
+  //   };
+  //   loadComments(1);
+  // });
+
+// ------------------------------------------------
+  
+  // const paginationNumbers = document.getElementById("pagination-numbers");
+  // const paginatedList = document.getElementById("paginated-list");
+  // const listItems = paginatedList.getElementsByClassName("paginated-cases");
+  // const nextButton = document.getElementById("next-button");
+  // const prevButton = document.getElementById("prev-button");
+  // const paginationLimit = 2;
+  // const pageCount = Math.ceil(listItems.length / paginationLimit);
+  // let currentPage;
+  // const appendPageNumber = (index) => {
+  //   const pageNumber = document.createElement("button");
+  //   pageNumber.className = "pagination-number";
+  //   pageNumber.innerHTML = index;
+  //   pageNumber.setAttribute("page-index", index);
+  //   pageNumber.setAttribute("aria-label", "Page " + index);
+  //   paginationNumbers.appendChild(pageNumber);
+  // };
+
+  // const getPaginationNumbers = () => {
+  //   for (let i = 1; i <= pageCount; i++) {
+  //     appendPageNumber(i);
+  //   }
+  // };
+  // window.addEventListener("load", () => {
+  //   getPaginationNumbers();
+  //   setCurrentPage(1);
+
+  //   prevButton.addEventListener("click", () => {
+  //     setCurrentPage(currentPage - 1);
+  //   });
+
+  //   nextButton.addEventListener("click", () => {
+  //     setCurrentPage(currentPage + 1);
+  //   });
+
+  //   document.querySelectorAll(".pagination-number").forEach((button) => {
+  //     const pageIndex = Number(button.getAttribute("page-index"));
+
+  //     if (pageIndex) {
+  //       button.addEventListener("click", () => {
+  //         setCurrentPage(pageIndex);
+  //       });
+  //     }
+  //   });
+  // });
+  // const setCurrentPage = (pageNum) => {
+  //   currentPage = pageNum;
+
+  //   handleActivePageNumber();
+  //   handlePageButtonsStatus();
+
+  //   const prevRange = (pageNum - 1) * paginationLimit;
+  //   const currRange = pageNum * paginationLimit;
+
+  //   listItems.forEach((item, index) => {
+  //     item.classList.add("hidden");
+  //     if (index >= prevRange && index < currRange) {
+  //       item.classList.remove("hidden");
+  //     }
+  //   });
+  // };
+  // const handleActivePageNumber = () => {
+  //   document.querySelectorAll(".pagination-number").forEach((button) => {
+  //     button.classList.remove("active");
+
+  //     const pageIndex = Number(button.getAttribute("page-index"));
+  //     if (pageIndex == currentPage) {
+  //       button.classList.add("active");
+  //     }
+  //   });
+  // };
+  // const disableButton = (button) => {
+  //   button.classList.add("disabled");
+  //   button.setAttribute("disabled", true);
+  // };
+
+  // const enableButton = (button) => {
+  //   button.classList.remove("disabled");
+  //   button.removeAttribute("disabled");
+  // };
+
+  // const handlePageButtonsStatus = () => {
+  //   if (currentPage === 1) {
+  //     disableButton(prevButton);
+  //   } else {
+  //     enableButton(prevButton);
+  //   }
+
+  //   if (pageCount === currentPage) {
+  //     disableButton(nextButton);
+  //   } else {
+  //     enableButton(nextButton);
+  //   }
+  // };
   function success() {
     if (
       document.getElementById("f1").value === "" ||
@@ -314,4 +501,5 @@
     }
   }
 </script>
+
 {% endblock %}

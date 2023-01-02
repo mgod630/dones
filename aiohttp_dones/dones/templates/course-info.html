@@ -29,7 +29,7 @@
                     {% if course.price == 0 %}
                       رایگان
                     {% else %}
-                      {{ '{0:,}'.format(course.price|int) }} ریال
+                      {{ '{0:,}'.format(course.price|int) }} تومان
                     {% endif %}
                   </span>
             </div>#}
@@ -116,7 +116,7 @@
       <div class="modal-body">
         <p>
           شما درخواست خرید <b>{{course.title}}</b> با قیمت
-          <b>{{ '{0:,}'.format(course.price|int) }}</b> ریال را دارید.
+          <b>{{ '{0:,}'.format(course.price|int) }}</b> تومان را دارید.
         </p>
         <div class="gateways-header">انتخاب درگاه</div>
         <div class="gateways-container">

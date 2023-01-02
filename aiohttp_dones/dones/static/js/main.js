@@ -56,6 +56,15 @@ $(function () {
     $(".notices").eq(1).removeClass("d-none");
     $("#reply_text").focus();
   });
+  // if (
+  //   $("#comments_container .comment-wrapper").attr("style", "padding-right") ==
+  //   "0px"
+  // ) {
+  //   console.log("block");
+  // } else {
+  //   console.log("none");
+  //   $(".comment .usc-a a").text("");
+  // }
   //End Comments
 });
 handleObject = (template, data) => {
@@ -74,6 +83,13 @@ handleObject = (template, data) => {
       rendered_html = $("<div>")
         .append(rendered_html)
         .find(".usc-buttons")
+        .remove()
+        .end()
+        .html();
+    if (key === "depth" && transformed_value > 0)
+      rendered_html = $("<div>")
+        .append(rendered_html)
+        .find(".usc-a")
         .remove()
         .end()
         .html();
