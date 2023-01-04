@@ -11,7 +11,16 @@
     text-align: left;
     margin: 0 auto 0 5px;
   }
-
+  .pagination-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    outline: none;
+  }
+  .pagination-button:hover {
+    text-decoration: none;
+  }
   /* .dropbtn {
     background-color: #4caf50;
     color: white;
@@ -197,73 +206,160 @@
     </button>
   </form>
 </div>
+<!-- <nav id="pagination" class="collapse"></nav> -->
 
+<!-- <div id="listingTable"></div>
+  <a href="javascript:prevPage()" id="btn_prev">Prev</a>
+  <a href="javascript:nextPage()" id="btn_next">Next</a>
+  page: <span id="page"></span> -->
+
+<div id="listingTable"></div>
+<nav class="pagination-container">
+  <a
+    href="javascript:prevPage()"
+    class="pagination-button"
+    id="btn_prev"
+    aria-label="Previous page"
+    title="Previous page"
+  >
+    &lt;
+  </a>
+  <span id="page"></span>
+  <a
+    href="javascript:nextPage()"
+    class="pagination-button"
+    id="btn_next"
+    aria-label="Next page"
+    title="Next page"
+  >
+    &gt;
+  </a>
+</nav>
 {% endblock %} {% block scripts %}
 
 <script>
-  $(function () {
-    let pageNumber = 1;
-    $("#pagination").on("click", ".page-item", function () {
-      if ($(this).hasClass("active") || $(this).hasClass("disabled")) return;
-      $("#user_container")
-        .empty()
-        .append(
-          $.parseHTML(
-            '<div class="busy-overlay"><div class="spinner"></div></div>'
-          )
-        );
-      const clickedData = $(this).data("page");
-      targetPage =
-        clickedData !== "prev" && clickedData !== "next"
-          ? clickedData
-          : clickedData === "prev"
-          ? pageNumber - 1
-          : pageNumber + 1;
-      loadComments(targetPage);
-    });
-    const sectionId = $("#user_container").data("id");
-    const structure = [
-      {
-        template: "user_dynamic.html",
-        data: "users",
-        id: "user_container",
-      },
-    ];
-    const loadComments = function (targetPage) {
-      loadJson(
-        `/json-get-dm-users?page_number=${targetPage}`,
-        structure,
-        function (pageStatus) {
-          current_page = pageStatus.current_page;
-          pageNumber = current_page;
-          pages_count = pageStatus.pages_count;
-          $("#pagination").empty().addClass("collapse");
-          if (pages_count > 1) {
-            let pagination = '<ul class="pagination justify-content-center">';
-            pagination += `<li class="page-item ${
-              current_page === 1 ? "disabled" : ""
-            }" data-page="prev"><span class="page-link">قبلی</span></li>`;
-            const dummy = [...Array(pages_count).keys()].map(
-              (item) =>
-                (pagination += `<li class="page-item ${
-                  current_page === item + 1 ? "active" : ""
-                }" data-page="${item + 1}"><span class="page-link">${
-                  item + 1
-                }</span></li>`)
-            );
-            pagination += `<li class="page-item ${
-              current_page === pages_count ? "disabled" : ""
-            }" data-page="next"><span class="page-link">بعدی</span></li>`;
-            $("#pagination")
-              .append($.parseHTML(pagination))
-              .removeClass("collapse");
-          }
+  $(document).ready(function () {
+    $.ajax({
+      url: "/json-get-dm-users",
+      dataType: "json",
+      method: "GET",
+    }).done(function (resp) {
+      var current_page = resp.page_number;
+      var records_per_page = resp.current_page;
+      var objJson = resp.all_users;
+      console.log(current_page);
+      console.log(records_per_page);
+      console.log(objJson);
+      function prevPage() {
+        if (current_page > 1) {
+          current_page--;
+          changePage(current_page);
         }
-      );
-    };
-    loadComments(1);
+      }
+      function nextPage() {
+        if (current_page < numPages()) {
+          current_page++;
+          changePage(current_page);
+        }
+      }
+      function changePage(page) {
+        var btn_next = document.getElementById("btn_next");
+        var btn_prev = document.getElementById("btn_prev");
+        var listing_table = document.getElementById("listingTable");
+        var page_span = document.getElementById("page");
+        // Validate page
+        if (page < 1) page = 1;
+        if (page > numPages()) page = numPages();
+        listing_table.innerHTML = "";
+        for (
+          var i = (page - 1) * records_per_page;
+          i < page * records_per_page;
+          i++
+        ) {
+          listing_table.innerHTML += objJson + "<br>";
+        }
+        page_span.innerHTML = page;
+        if (page == 1) {
+          btn_prev.style.visibility = "hidden";
+        } else {
+          btn_prev.style.visibility = "visible";
+        }
+        if (page == numPages()) {
+          btn_next.style.visibility = "hidden";
+        } else {
+          btn_next.style.visibility = "visible";
+        }
+      }
+      function numPages() {
+        return Math.ceil(objJson.length / records_per_page);
+      }
+      window.onload = function () {
+        changePage(1);
+      };
+    });
   });
-
+  // $(function () {
+  //   let pageNumber = 1;
+  //   $("#pagination").on("click", ".page-item", function () {
+  //     if ($(this).hasClass("active") || $(this).hasClass("disabled")) return;
+  //     $("#user_container")
+  //       .empty()
+  //       .append(
+  //         $.parseHTML(
+  //           '<div class="busy-overlay"><div class="spinner"></tr></tr>'
+  //         )
+  //       );
+  //     const clickedData = $(this).data("page");
+  //     targetPage =
+  //       clickedData !== "prev" && clickedData !== "next"
+  //         ? clickedData
+  //         : clickedData === "prev"
+  //         ? pageNumber - 1
+  //         : pageNumber + 1;
+  //     loadComments(targetPage);
+  //   });
+  //   const sectionId = $("#user_container").data("id");
+  //   const structure = [
+  //     {
+  //       template: "user_dynamic.html",
+  //       data: "all_users",
+  //       id: "user_container",
+  //     },
+  //   ];
+  //   const loadComments = function (targetPage) {
+  //     loadJson(
+  //       `/json-get-dm-users/${sectionId}?page_number=${targetPage}`,
+  //       structure,
+  //       function (pageStatus) {
+  //         current_page = pageStatus.current_page;
+  //         pageNumber = current_page;
+  //         pages_count = pageStatus.pages_count;
+  //         $("#pagination").empty().addClass("collapse");
+  //         if (pages_count > 1) {
+  //           let pagination = '<ul class="pagination justify-content-center">';
+  //           pagination += `<li class="page-item ${
+  //             current_page === 1 ? "disabled" : ""
+  //           }" data-page="prev"><span class="page-link">قبلی</span></li>`;
+  //           const dummy = [...Array(pages_count).keys()].map(
+  //             (item) =>
+  //               (pagination += `<li class="page-item ${
+  //                 current_page === item + 1 ? "active" : ""
+  //               }" data-page="${item + 1}"><span class="page-link">${
+  //                 item + 1
+  //               }</span></li>`)
+  //           );
+  //           pagination += `<li class="page-item ${
+  //             current_page === pages_count ? "disabled" : ""
+  //           }" data-page="next"><span class="page-link">بعدی</span></li>`;
+  //           $("#pagination")
+  //             .append($.parseHTML(pagination))
+  //             .removeClass("collapse");
+  //         }
+  //       }
+  //     );
+  //   };
+  //   loadComments(1);
+  // });
   function success() {
     if (
       document.getElementById("f1").value === "" ||

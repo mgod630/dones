@@ -1,4 +1,13 @@
 $(function () {
+  $.ajax({
+    method: "GET",
+    url: "/delete-comment",
+  }).done(function (resp) {
+    if (resp.result == "admin") {
+      console.log(resp.result);
+      $("#deletComment").css("display", "none");
+    }
+  });
   //Comments
   $("#post_comment").click(function () {
     const section_id = $("#section_id").val();

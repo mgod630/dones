@@ -19,14 +19,19 @@
       type="image/x-icon"
     />
     <style>
-      @font-face {
+      /* @font-face {
         font-family: "newfont";
         src: url("/static/fonts/IRANSansWeb.woff") format("truetype");
         font-weight: normal;
         font-style: normal;
+      } */
+      @font-face {
+        font-family: iranSans;
+        src: url(../fonts/IRANSansWeb_400.woff);
       }
       body {
-        font-family: "newfont", Arial, Helvetica, sans-serif;
+        /* font-family: "newfont", Arial, Helvetica, sans-serif; */
+        font-family: iranSans;
         width: 100%;
         margin: 0;
         padding: 0;
@@ -40,7 +45,7 @@
       .header {
         padding: 40px;
         position: relative;
-        background: #3e977c;
+        background: #10a19d;
       }
       .header h1 {
         font-size: 25px;
@@ -62,11 +67,20 @@
       }
       .btn-cost {
         display: block;
-        background: #f7ba13;
+        background: #10d19d;
         margin: 0px auto 25px;
-        width: 40%;
+        width: 150px;
         border-radius: 8px;
         padding: 10px 0px;
+        font-size: 16px;
+        font-weight: 600;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        transition: 0.4s;
+      }
+      .btn-cost:hover{
+        background: #10a19d;
       }
       .bold {
         font-weight: bold;
@@ -78,6 +92,8 @@
       }
       .box p {
         line-height: 2;
+        font-size: 16px;
+        font-weight: 600;
       }
       .icon {
         font-size: 24px;
@@ -88,9 +104,6 @@
       @media (max-width: 576px) {
         .content {
           padding: 20px 10px;
-        }
-        .btn-cost {
-          width: 60%;
         }
         .box {
           padding: 25px 0 10px;
@@ -124,7 +137,7 @@
               <p>
                 کاربر گرامی به شماره موبایل
                 <span class="bold">{{ user.mobile }}</span> سبد خرید شما </span> به مبلغ
-                <span class="bold">{{ amount }} ریال </span> می باشد.
+                <span class="bold">{{ amount }} تومان </span> می باشد.
               </p>
               <p>
                 لطفا جهت پرداخت روی دکمه زیر کلیک کنید تا به درگاه بانک متصل
