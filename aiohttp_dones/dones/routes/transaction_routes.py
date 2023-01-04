@@ -12,10 +12,6 @@ def make_routes(fullstack_blueprint):
             return redirect('/')
         user_full_name = user['full_name']
         course_id = request.args.get('course_id')
-        transaction = transactions_orm.Transactions.get_transaction_by_course_id(course_id)
-        if transaction and transaction['user_id'] != user['id'] :
-            flash('شما مجوز دسترسی به این تراکنش را ندارید.', 'danger')
-            return redirect('/')
         course = courses_orm.Courses.get_course_by_id(course_id)
         if course:
             amount = course['price']
@@ -35,7 +31,7 @@ def make_routes(fullstack_blueprint):
             transaction = transactions_orm.Transactions.insert_new_transaction(user_id=user['id'], course_id=course_id, ipg_ref_id=ipg_ref_id, fs_invoice_number=fs_invoice_number, amount=amount, transaction_type=transaction_type, transaction_status=transaction_status, description=description)
             flash(f'{user_full_name} گرامی، با عرض پوزش در هنگام اتصال به درگاه بانک خطایی رخ داده است.', 'danger')
             return redirect(url_for('fullstack_blueprint.course_overview', course_id=course_id))
-        flash(f'{user_full_name} گرامی، با عرض پوزش در خطایی رخ داده است.', 'danger')
+        flash(f'{user_full_name} گرامی، با عرض پوزش خطایی رخ داده است.', 'danger')
         return redirect(url_for('fullstack_blueprint.course_overview', course_id=course_id))
 
     @fullstack_blueprint.route("/token-buy-invoice", methods=['POST'])

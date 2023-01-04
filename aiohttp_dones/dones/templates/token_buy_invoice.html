@@ -136,8 +136,7 @@
               </p> -->
               <p>
                 کاربر گرامی به شماره موبایل
-                <span class="bold">{{ user.mobile }}</span> سبد خرید شما </span> به مبلغ
-                <span class="bold">{{ transaction.amount }} تومان </span> می باشد.
+                <span class="bold">{{ user.mobile }}</span> سبد خرید شما درس <span>{{ course.title }}</span> </span> به مبلغ<span class="bold">{{ '{0:,}'.format(course.price|int) }} تومان </span> می باشد.
               </p>
               <p>
                 لطفا جهت پرداخت روی دکمه زیر کلیک کنید تا به درگاه بانک متصل
@@ -150,11 +149,11 @@
                 action="/token-buy-invoice?course_id={{course.id}}"
               >
                 <input name="username" value="" type="hidden" />
-                <input
+                <!-- <input
                   name="traceNumber"
                   value="{{tracenumber}}"
                   type="hidden"
-                />
+                /> -->
                 <input
                   type="submit"
                   class="btn btn-primary btn-cost"

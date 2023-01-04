@@ -60,6 +60,19 @@ class Transactions:
         return row
 
     @staticmethod
+    def get_transaction_by_user_id(user_id):
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = "SELECT * FROM tbl_transactions WHERE user_id=%(user_id)s"
+        cursor.execute(query, {'user_id': user_id})
+        row = cursor.fetchone()
+        cnx.close()
+        return row
+
+    @staticmethod
     def get_last_rowid():
         global connection_pool
         if connection_pool == None:
