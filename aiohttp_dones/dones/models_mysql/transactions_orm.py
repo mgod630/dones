@@ -27,7 +27,7 @@ class Transactions:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = "SELECT * FROM tbl_transactions WHERE id='%(id)s'"
+        query = "SELECT * FROM tbl_transactions WHERE id=%(id)s"
         cursor.execute(query, {'id': transaction_id})
         row = cursor.fetchone()
         cnx.close()
@@ -60,14 +60,26 @@ class Transactions:
         return row
 
     @staticmethod
-    def insert_new_transaction(user_id, course_id, amount, create_datetime, transaction_type, status, ipg_ref_id, ipg_payment_id, description):
+    def get_last_rowid():
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_transaction = ("INSERT INTO `tbl_transactions` (`user_id`, `course_id`, `amount`, `create_datetime`, `transaction_type`, `status`, `ipg_ref_id`, `description`, `ipg_payment_id`) VALUES" +
-                           "( %(user_id)s, %(course_id)s, %(amount)s, %(create_datetime)s, %(transaction_type)s, %(status)s, %(ipg_ref_id)s, %(description)s, %(ipg_payment_id)s)")
+        cursor.execute('SELECT id FROM tbl_transactions ORDER BY id DESC LIMIT 1;') 
+        last_rowid = cursor.fetchone()
+        cnx.close()
+        return last_rowid
+
+    @staticmethod
+    def insert_new_transaction(user_id, course_id, amount, create_datetime, transaction_type, status, ipg_ref_id, fs_invoice_number, description, ipg_invoice_number=0):
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        add_transaction = ("INSERT INTO `tbl_transactions` (`user_id`, `course_id`, `amount`, `create_datetime`, `transaction_type`, `status`, `ipg_ref_id`, `description`, `fs_invoice_number`, `ipg_invoice_number`) VALUES" +
+                           "( %(user_id)s, %(course_id)s, %(amount)s, %(create_datetime)s, %(transaction_type)s, %(status)s, %(ipg_ref_id)s, %(description)s, %(fs_invoice_number)s, %(ipg_invoice_number)s)")
         data_transaction = {
             'user_id': user_id,
             'course_id': course_id,
@@ -77,7 +89,8 @@ class Transactions:
             'status': status,
             'ipg_ref_id': ipg_ref_id,
             'description': description,
-            'ipg_payment_id': ipg_payment_id
+            'ipg_invoice_number': ipg_invoice_number,
+            'fs_invoice_number': fs_invoice_number
         }
         cursor.execute(add_transaction, data_transaction)
         inserted_record_id = cursor.lastrowid
@@ -127,7 +140,7 @@ class Transactions:
         return True
 
     @staticmethod
-    def update_transaction_by_ipg_id(ipg_ref_id, create_datetime=None, transaction_type=None, status=None, description=None):
+    def update_transaction_by_ipg_id(ipg_ref_id, ipg_invoice_number=None, create_datetime=None, transaction_type=None, status=None, description=None):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -141,7 +154,9 @@ class Transactions:
         if status:
             update_string += f'status=%(status)s,'
         if description:
-            update_string += f'description=%(description)s'
+            update_string += f'description=%(description)s,'
+        if ipg_invoice_number:
+            update_string += f'ipg_invoice_number=%(ipg_invoice_number)s'
         update_string = update_string.rstrip(',')
         add_transaction = f"UPDATE tbl_transactions SET {update_string} WHERE ipg_ref_id='{ipg_ref_id}'"
         data_transaction = {
@@ -149,6 +164,7 @@ class Transactions:
             'transaction_type': transaction_type,
             'status': status,
             'description': description,
+            'ipg_invoice_number': ipg_invoice_number
         }
         cursor.execute(add_transaction, data_transaction)
         cnx.commit()

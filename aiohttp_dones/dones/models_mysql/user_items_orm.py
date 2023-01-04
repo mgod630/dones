@@ -61,6 +61,19 @@ class User_items:
         return row
 
     @staticmethod
+    def get_last_rowid():
+        global connection_pool
+        if connection_pool == None:
+            connection_pool = app.config['mysql_connection_pool']
+        cnx = connection_pool.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        cursor.execute('SELECT id FROM tbl_user_items ORDER BY id DESC LIMIT 1;') 
+        last_rowid = cursor.fetchone()
+        cnx.commit()
+        cnx.close()
+        return last_rowid
+
+    @staticmethod
     def insert_new_user_item(user_id, item_id, unix_datetime):
         global connection_pool
         if connection_pool == None:

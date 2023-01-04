@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, url_for, session
 from routes import common
-import date_converter
+import tools.date_converter as date_converter
 import time, secrets, json
 from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, course_news_orm, user_quizzes_orm
 
@@ -39,6 +39,7 @@ def make_routes(fullstack_blueprint):
         end = start + number_users_per_page 
         a_page_users = users_orm.Users.get_all_users_reverse()
         a_page_users = a_page_users[start:end]
+        print(a_page_users)
         return {'page_number':page_number, 'current_page':page_count, 'all_users':a_page_users}
 
     @fullstack_blueprint.route("/dm-users", methods=['POST'])

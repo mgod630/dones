@@ -1,4 +1,4 @@
-import secrets, time, random, sms
+import secrets, time, random, tools.sms as sms
 from flask import render_template, request, redirect, session, url_for, flash, current_app as app
 from routes import common
 from models_mysql import users_orm

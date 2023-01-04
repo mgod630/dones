@@ -1,7 +1,7 @@
 import enum
 from flask import make_response, request, session
 import bcrypt
-from models_mysql import users_orm
+from models_mysql import users_orm, transactions_orm, user_items_orm
 
 
 def get_user_from_token():
@@ -52,3 +52,15 @@ def sanitize_user_input(data_type, data):
     elif data_type == User_post_data_types.Only_letter:
         sanitized_data = data.replace('"','').replace("'",'').replace('`','').replace(',','').replace(';','')
     return error, sanitized_data
+
+def create_invoice_number() :
+    invoice_number = None
+    # last_rowid = user_items_orm.User_items.get_last_rowid()
+    last_rowid = transactions_orm.Transactions.get_last_rowid()
+    if last_rowid:
+        next_transaction_number = last_rowid['id'] + 1
+        invoice_number = f'fs{"0" * (16 - len(str(next_transaction_number)))}{next_transaction_number}'
+    else:
+        next_transaction_number = 1
+        invoice_number = f'fs{"0" * (16 - len(str(next_transaction_number)))}{next_transaction_number}'
+    return invoice_number

@@ -1,4 +1,4 @@
-import jdatetime , json, time, date_converter
+import jdatetime , json, time, tools.date_converter as date_converter
 from flask import redirect, render_template, request, session, url_for, flash
 from routes import common
 from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, course_news_orm, user_courses_orm ,user_quizzes_orm, user_items_orm
@@ -46,10 +46,10 @@ def make_routes(fullstack_blueprint):
                 course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
                 break
 
-        user_course = user_courses_orm.User_courses.get_user_course_by_ids(user_id = user['id'], course_id = course_id)
-        if not user_course:
-            unix_datetime = time.time()
-            new_user_course_id = user_courses_orm.User_courses.insert_new_user_course(user_id = user['id'], course_id=course_id,price=course['price'],unix_datetime=unix_datetime)
+        # user_course = user_courses_orm.User_courses.get_user_course_by_ids(user_id = user['id'], course_id = course_id)
+        # if not user_course:
+        #     unix_datetime = time.time()
+        #     new_user_course_id = user_courses_orm.User_courses.insert_new_user_course(user_id = user['id'], course_id=course_id,price=course['price'],unix_datetime=unix_datetime)
             
         if course['unix_start_datetime'] >= time.time():
             flash(f'{user_full_name} گرامی زمان شروع این دوره هنوز نرسیده است.', 'danger')

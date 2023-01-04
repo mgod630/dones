@@ -8,8 +8,7 @@ def zarinpal_make_payment(user, amount):
     # call_back_url = 'https://goldis.ir/zarinpal-callback'
     description = u'این یک تراکنش تستی از سمت نداست'  # Required
     email = 'user@userurl.ir'  # Optional
-    mobile = '09123456789'  # Optional
-    # amount = amount / 10 # Convert to toman.
+    mobile = user['mobile']  # Optional
     client = Client(zarinpal_webservice_url)
     result = client.service.PaymentRequest(zarinpal_merchant_id, amount, description, email, mobile, call_back_url)
     if result.Status == 100:
@@ -24,7 +23,6 @@ def verify_zarinpal_payment_transaction(transaction):
     zarinpal_merchant_id = '7186e340-04da-400c-b5a7-b7317a433915'
     zarinpal_webservice_url = 'https://www.zarinpal.com/pg/services/WebGate/wsdl'
     client = Client(zarinpal_webservice_url)
-    # amount = int(transaction['amount']) / 10 # Convert to toman.
     amount = transaction['amount']
     result = client.service.PaymentVerification(zarinpal_merchant_id, transaction['ipg_ref_id'], amount)
     return result

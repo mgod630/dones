@@ -7,7 +7,6 @@ from routes import common
 
 connection_pool = None
 
-
 class Users:
     @staticmethod
     def get_all_users():

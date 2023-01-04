@@ -1,13 +1,15 @@
 from flask import redirect, render_template, request, url_for, session, jsonify
 from routes import common
 from models_mysql import courses_orm, course_news_orm, emails_orm
-import date_converter
+import tools.date_converter as date_converter
 
 
 def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route("/")
     @fullstack_blueprint.route("/home")
     def home():
+        fs_invoice_number = common.create_invoice_number()
+        print(fs_invoice_number)
         section_id = 'home_page'
         db_number = 1
         user = common.get_user_from_token()
