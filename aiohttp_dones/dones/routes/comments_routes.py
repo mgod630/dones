@@ -1,8 +1,7 @@
 from models_mysql import comments_orm
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, url_for
 from models_mysql import courses_orm, items_orm, course_news_orm, questions_orm, comments_orm
 from routes import common
-
 
 def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route('/json-get-comments-and-courses_news-by-section-id/course_info_<course_id>')
@@ -119,16 +118,29 @@ def make_routes(fullstack_blueprint):
 
         return {'result': result}
 
-    @fullstack_blueprint.route('/delete-comment', methods=['GET', 'POST'])
+    @fullstack_blueprint.route('/delete-comment')
     def delete_comment():
         user = common.get_user_from_token()
         if user and user['user_type'] == -2:
             result = 'admin'
         else:
             result = 'not_admin'
-
-        # if request.methods == ['POST']:
-        #     dfsdlkf = 
-        
-
         return {'result': result}
+
+    @fullstack_blueprint.route('/delete-comment', methods=['POST'])
+    def delete_comment_post():
+        user = common.get_user_from_token()
+        # comments_orm.Comments.
+        comment_id = request.args.get('comment_id')
+        comment = comments_orm.Comments.get_comment_by_id(comment_id)
+        course_id = comment['section_id'].split('_')[2]
+
+        if comment['section_id'] == f'course_info_{course_id}' :
+            
+            return redirect(url_for('fullstack_blueprint.comments_course_info', course_id=course_id))
+        elif comment['section_id'] == f'course_overview_{course_id}' :
+            
+            return redirect(url_for('fullstack_blueprint.comments_course_overview', course_id=course_id))
+        else :
+            item_id = comment['section_id'].split('_')[2]
+            return redirect(url_for('fullstack_blueprint.comments_course_content', item_id=item_id))

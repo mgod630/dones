@@ -91,8 +91,8 @@ def make_routes(fullstack_blueprint):
             quizzes_jalali_datetime.append(quiz)
         all_comments = comments_orm.Comments.get_comments_by_section_id(
             f'course_content_{item_id}')
-        last_comments = all_comments[0:19]
-        return render_template("course-content.html", course=course, course_item=course_item, user=user, all_comments=last_comments, quizzes=quizzes_jalali_datetime)
+        # last_comments = all_comments[0:19]
+        return render_template("course-content.html", course=course, course_item=course_item, user=user, all_comments=all_comments, quizzes=quizzes_jalali_datetime)
 
     @fullstack_blueprint.route("/quiz/quiz_<quiz_id>")
     def quiz_content(quiz_id):

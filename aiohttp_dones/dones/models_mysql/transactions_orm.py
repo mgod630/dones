@@ -21,13 +21,17 @@ class Transactions:
         return data
 
     @staticmethod
-    def get_all_transactions_reverse():
+    def get_all_transactions_reverse_with_users():
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = ("SELECT * FROM tbl_transactions ORDER BY id DESC")
+        query = ('''SELECT t.*, u.full_name, u.mobile 
+                    FROM tbl_transactions t 
+                    INNER JOIN tbl_users u
+                    ON u.id = t.user_id
+                    ORDER BY t.id DESC''')
         cursor.execute(query)
         data = cursor.fetchall()
         cnx.close()

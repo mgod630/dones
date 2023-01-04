@@ -482,7 +482,7 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route("/dm-transactions")
     def dm_transactions():
         user = common.get_user_from_token()
-        all_transactions = transactions_orm.Transactions.get_all_transactions_reverse()
+        all_transactions = transactions_orm.Transactions.get_all_transactions_reverse_with_users()
         transactions_jalali_datetime = []
         for transaction in all_transactions:
             transaction['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(transaction['create_datetime'])

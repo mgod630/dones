@@ -163,6 +163,8 @@ class Comments:
         cnx.close()
         return True
 
+
+
     @staticmethod
     def delete_all_comments_by_section_id(section_id):
         global connection_pool
