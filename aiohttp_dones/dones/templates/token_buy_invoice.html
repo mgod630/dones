@@ -137,7 +137,7 @@
               <p>
                 کاربر گرامی به شماره موبایل
                 <span class="bold">{{ user.mobile }}</span> سبد خرید شما </span> به مبلغ
-                <span class="bold">{{ amount }} تومان </span> می باشد.
+                <span class="bold">{{ transaction.amount }} تومان </span> می باشد.
               </p>
               <p>
                 لطفا جهت پرداخت روی دکمه زیر کلیک کنید تا به درگاه بانک متصل
@@ -147,7 +147,7 @@
             <div>
               <form
                 method="post"
-                action="/token-buy-invoice?course_id={{course_id}}"
+                action="/token-buy-invoice?course_id={{course.id}}"
               >
                 <input name="username" value="" type="hidden" />
                 <input

@@ -7,7 +7,7 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route("/token-buy-invoice")
     def token_buy_invoice():
         user = common.get_user_from_token()
-        if user == None and user['user_type'] == (1,2) :
+        if user == None :
             flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
         user_full_name = user['full_name']
@@ -20,6 +20,13 @@ def make_routes(fullstack_blueprint):
         if course:
             amount = course['price']
             error, ipg_url, ipg_ref_id = zarinpal.zarinpal_make_payment(user, amount)
+            session['ipg_url'] = ipg_url
+            transaction_status = transactions_orm.Transactions.Status.Unknown.value
+            transaction_type = transactions_orm.Transactions.Types.buy_token.value
+            fs_invoice_number = common.create_invoice_number()
+            description = ''
+            transaction = transactions_orm.Transactions.insert_new_transaction(user_id=user['id'], course_id=course_id, ipg_ref_id=ipg_ref_id, fs_invoice_number=fs_invoice_number, amount=amount, transaction_type=transaction_type, status=transaction_status, create_datetime=time.time(), description=description)
+            return render_template('token_buy_invoice.html', course=course, user=user, transaction=transaction)
         if error:
             transaction_status = transactions_orm.Transactions.Status.failed.value
             transaction_type = transactions_orm.Transactions.Types.buy_token.value
@@ -28,13 +35,8 @@ def make_routes(fullstack_blueprint):
             transaction = transactions_orm.Transactions.insert_new_transaction(user_id=user['id'], course_id=course_id, ipg_ref_id=ipg_ref_id, fs_invoice_number=fs_invoice_number, amount=amount, transaction_type=transaction_type, transaction_status=transaction_status, description=description)
             flash(f'{user_full_name} گرامی، با عرض پوزش در هنگام اتصال به درگاه بانک خطایی رخ داده است.', 'danger')
             return redirect(url_for('fullstack_blueprint.course_overview', course_id=course_id))
-        session['ipg_url'] = ipg_url
-        transaction_status = transactions_orm.Transactions.Status.Unknown.value
-        transaction_type = transactions_orm.Transactions.Types.buy_token.value
-        fs_invoice_number = common.create_invoice_number()
-        description = ''
-        transaction = transactions_orm.Transactions.insert_new_transaction(user_id=user['id'], course_id=course_id, ipg_ref_id=ipg_ref_id, fs_invoice_number=fs_invoice_number, amount=amount, transaction_type=transaction_type, status=transaction_status, create_datetime=time.time(), description=description)
-        return render_template('token_buy_invoice.html', course_id=course_id, user=user, transaction=transaction)
+        flash(f'{user_full_name} گرامی، با عرض پوزش در خطایی رخ داده است.', 'danger')
+        return redirect(url_for('fullstack_blueprint.course_overview', course_id=course_id))
 
     @fullstack_blueprint.route("/token-buy-invoice", methods=['POST'])
     def token_buy_invoice_post():
