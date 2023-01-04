@@ -9,9 +9,7 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route("/home")
     def home():
         fs_invoice_number = common.create_invoice_number()
-        print(fs_invoice_number)
         section_id = 'home_page'
-        db_number = 1
         user = common.get_user_from_token()
         all_courses = courses_orm.Courses.get_all_courses()
         courses_jalali_datetime = []
@@ -23,7 +21,7 @@ def make_routes(fullstack_blueprint):
             courses_jalali_datetime.append(course)
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(
             section_id)
-        return render_template("index.html", user=user, user_account=None, all_courses=courses_jalali_datetime, all_courses_news=all_courses_news, db_number=db_number)
+        return render_template("index.html", user=user, user_account=None, all_courses=courses_jalali_datetime, all_courses_news=all_courses_news)
 
     @fullstack_blueprint.route("/landing-page")
     def landing_page():

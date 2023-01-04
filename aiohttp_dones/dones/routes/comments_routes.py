@@ -122,7 +122,7 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route('/delete-comment', methods=['GET', 'POST'])
     def get_admin():
         user = common.get_user_from_token()
-        if user['user_type'] == -2:
+        if user and user['user_type'] == -2:
             result = 'admin'
         else:
             result = 'not admin'

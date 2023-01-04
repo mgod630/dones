@@ -4,10 +4,6 @@ from routes import common
 from models_mysql import users_orm
 
 def make_routes(fullstack_blueprint):
-    async def send_sms(mobile):
-        registering_code = random.randint(10000, 99999)
-        await sms.send_message_by_313(mobile, str(registering_code))
-        
     @fullstack_blueprint.route('/login')
     def login():
         return render_template('login.html', user=None)
@@ -35,7 +31,7 @@ def make_routes(fullstack_blueprint):
         return render_template('login.html', user=None)
 
     @fullstack_blueprint.route('/signup-post', methods=['POST'])
-    def signup_post():
+    async def signup_post():
         step = request.args.get('step')
         if step == '1':
             if 'mobile' in session:
@@ -46,14 +42,16 @@ def make_routes(fullstack_blueprint):
                 status = 'mobile_already_exist'
                 return redirect(url_for('fullstack_blueprint.login', status=status))
             elif user and user['user_type'] == users_orm.Users.Types.unregistered_user.value :
-                send_sms(mobile)
+                registering_code = random.randint(10000, 99999)
+                await sms.send_message_by_313(mobile, str(registering_code))
                 session['mobile'] = mobile
                 update_unregistered_user = users_orm.Users.update_user_by_mobile(mobile=mobile, register_datetime=time.time(), registering_code=registering_code)
                 status = 'registering_code_sent'
                 return redirect(url_for('fullstack_blueprint.login', status=status))
             elif user and user['user_type'] == users_orm.Users.Types.registered_user.value :
                 if user['register_datetime'] - time.time() > 86400 : # after one day
-                    send_sms(mobile)
+                    registering_code = random.randint(10000, 99999)
+                    await sms.send_message_by_313(mobile, str(registering_code))
                     session['mobile'] = mobile
                     update_registered_user = users_orm.Users.update_user_by_mobile(mobile=mobile, register_datetime=time.time(), registering_code=registering_code)
                     status = 'registering_code_sent'
@@ -62,7 +60,8 @@ def make_routes(fullstack_blueprint):
                     status = 'registering_code_correct'
                     return redirect(url_for('fullstack_blueprint.login', status=status))
             else:
-                send_sms(mobile)
+                registering_code = random.randint(10000, 99999)
+                await sms.send_message_by_313(mobile, str(registering_code))
                 user_type = users_orm.Users.Types.unregistered_user.value
                 g_token = secrets.token_hex()
                 session['mobile'] = mobile

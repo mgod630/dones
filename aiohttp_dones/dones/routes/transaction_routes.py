@@ -7,14 +7,19 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route("/token-buy-invoice")
     def token_buy_invoice():
         user = common.get_user_from_token()
-        if user == None:
+        if user == None and user['user_type'] == (1,2) :
             flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
         user_full_name = user['full_name']
         course_id = request.args.get('course_id')
+        transaction = transactions_orm.Transactions.get_transaction_by_course_id(course_id)
+        if transaction and transaction['user_id'] != user['id'] :
+            flash('شما مجوز دسترسی به این تراکنش را ندارید.', 'danger')
+            return redirect('/')
         course = courses_orm.Courses.get_course_by_id(course_id)
-        amount = course['price']
-        error, ipg_url, ipg_ref_id = zarinpal.zarinpal_make_payment(user, amount)
+        if course:
+            amount = course['price']
+            error, ipg_url, ipg_ref_id = zarinpal.zarinpal_make_payment(user, amount)
         if error:
             transaction_status = transactions_orm.Transactions.Status.failed.value
             transaction_type = transactions_orm.Transactions.Types.buy_token.value
@@ -43,10 +48,17 @@ def make_routes(fullstack_blueprint):
 
     @fullstack_blueprint.route("/bill-result")
     def bill_result():
+        user = common.get_user_from_token()
+        if user == None:
+            flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
+            return redirect('/')
         invoice_result = None
         if request.args.get('invoice_number') :
             ipg_ref_id = request.args.get('invoice_number')
             transaction = transactions_orm.Transactions.get_transaction_by_ipg_id(ipg_ref_id)
+            if transaction['user_id'] != user['id'] :
+                flash('شما مجوز دسترسی به این تراکنش را ندارید.', 'danger')
+                return redirect('/')
             if transaction:
                 invoice_result = transaction
         if invoice_result == None:
