@@ -478,3 +478,7 @@ def make_routes(fullstack_blueprint):
         all_answers = json.dumps(all_answers)
         questions = questions_orm.Questions.get_all_questions_by_id_quiz_id(quiz_id)
         return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=user_quizzes, all_answers=all_answers, registered_users=user_quizzes_jalali_datetime, questions=questions)
+
+    @fullstack_blueprint.route("/dm-transactions")
+    def dm_transactions():
+        return render_template('data_management/dm_transactions.html')
