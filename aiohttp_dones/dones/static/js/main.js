@@ -1,13 +1,13 @@
 $(function () {
-  $.ajax({
-    method: "GET",
-    url: "/delete-comment",
-  }).done(function (resp) {
-    if (resp.result == "not_admin") {
-      console.log(resp.result);
-      $("#deletComment").css("display", "none");
-    }
-  });
+  // $.ajax({
+  //   method: "GET",
+  //   url: "/delete-comment",
+  // }).done(function (resp) {
+  //   if (resp.result == "not_admin") {
+  //     console.log(resp.result);
+  //     $(".deletComment").css("display", "none");
+  //   }
+  // });
   //Comments
   $("#post_comment").click(function () {
     const section_id = $("#section_id").val();
@@ -102,6 +102,14 @@ handleObject = (template, data) => {
         .remove()
         .end()
         .html();
+    $.ajax({
+      method: "GET",
+      url: "/delete-comment",
+    }).done(function (resp) {
+      if (resp.result == "admin") {
+        $(".deletComment").css("display", "block");
+      }
+    });
     rendered_html = rendered_html.replace(
       new RegExp(`{{${key}}}`, "g"),
       transformed_value

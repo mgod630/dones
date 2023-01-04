@@ -214,14 +214,40 @@
   <a href="javascript:nextPage()" id="btn_next">Next</a>
   page: <span id="page"></span> -->
 
-<div id="listingTable"></div>
-<nav class="pagination-container">
-  <button class="pagination-button" id="btn_prev">&lt;</button>
-  <span id="page"></span>
-  <button class="pagination-button" id="btn_next">&gt;</button>
-</nav>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>نوع کاربر</th>
+        <th>نام کاربر</th>
+        <th>موبایل</th>
+        <th>تنظیمات</th>
+      </tr>
+    </thead>
+    <tr>
+      <td></td>
+      <td id="listing_table_user_type"></td>
+      <td id="listing_table_full_name"></td>
+      <td id="listing_table_mobile"></td>
+      <td>
+        <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
+          ><i class="far fa-cog"></i
+        ></a>
+      </td>
+    </tr>
+    </tr>  
+  </table>
+</div>
+      <!-- <div id="listingTable"></div> -->
 
-<!-- <div class="table-responsive">
+      <nav class="pagination-container">
+        <button class="pagination-button" id="btn_prev">&lt;</button>
+        <span id="page"></span>
+        <button class="pagination-button" id="btn_next">&gt;</button>
+      </nav>
+
+      <!-- <div class="table-responsive">
   <table class="table table-striped">
     <thead>
       <tr>
@@ -237,164 +263,168 @@
   </table>
 </div> -->
 
-{% endblock %} {% block scripts %}
+      {% endblock %} {% block scripts %}
 
-<script>
-  $(document).ready(function () {
-    $.ajax({
-      url: "/json-get-dm-users",
-      dataType: "json",
-      method: "GET",
-    }).done(function (resp) {
-      var current_page = resp.page_number;
-      var records_per_page = resp.current_page;
-      var objJson = resp.all_users;
-      console.log(current_page);
-      console.log(records_per_page);
-      console.log(objJson);
-      // alert(JSON.stringify(objJson));
-      $("#btn_prev").click(function prevPage() {
-        if (current_page > 1) {
-          current_page--;
-          changePage(current_page);
+      <script>
+        $(document).ready(function () {
+          $.ajax({
+            url: "/json-get-dm-users",
+            dataType: "json",
+            method: "GET",
+          }).done(function (resp) {
+            var current_page = resp.page_number;
+            var records_per_page = resp.number_users_per_page;
+            var objJson = resp.all_users;
+            console.log(current_page);
+            console.log(records_per_page);
+            console.log(objJson);
+            // alert(JSON.stringify(objJson));
+            $("#btn_prev").click(function prevPage() {
+              if (current_page > 1) {
+                current_page--;
+                changePage(current_page);
+              }
+            });
+            $("#btn_next").click(function nextPage() {
+              if (current_page < numPages()) {
+                current_page++;
+                changePage(current_page);
+              }
+            });
+            function changePage(page) {
+              var btn_next = document.getElementById("btn_next");
+              var btn_prev = document.getElementById("btn_prev");
+              var listing_table_full_name = document.getElementById("listing_table_full_name");
+              var listing_table_mobile = document.getElementById("listing_table_mobile");
+              var listing_table_user_type = document.getElementById("listing_table_user_type");
+              var page_span = document.getElementById("page");
+              // Validate page
+              if (page < 1) page = 1;
+              if (page > numPages()) page = numPages();
+              listing_table_full_name.innerHTML = "";
+              listing_table_mobile.innerHTML = "";
+              listing_table_user_type.innerHTML = "";
+              for (
+                var i = (page - 1) * records_per_page;
+                i < page * records_per_page;
+                i++
+              ) {
+                listing_table_full_name.innerHTML += JSON.stringify(objJson[i].full_name);
+                listing_table_mobile.innerHTML += JSON.stringify(objJson[i].mobile);
+                if (JSON.stringify(objJson[i].user_type) == -2 || JSON.stringify(objJson[i].user_type) == -1){
+                  listing_table_user_type.innerHTML = 'ادمین';
+                }
+                else{
+                  listing_table_user_type.innerHTML = 'عادی'
+                }
+                // listing_table_user_type.innerHTML += JSON.stringify(objJson[i].user_type);
+              }
+              page_span.innerHTML = page;
+              if (page == 1) {
+                btn_prev.style.visibility = "hidden";
+              } else {
+                btn_prev.style.visibility = "visible";
+              }
+              if (page == numPages()) {
+                btn_next.style.visibility = "hidden";
+              } else {
+                btn_next.style.visibility = "visible";
+              }
+            }
+            function numPages() {
+              return Math.ceil(objJson.length / records_per_page);
+            }
+            window.onload = function () {
+              changePage(1);
+            };
+          });
+        });
+        // $(function () {
+        //   let pageNumber = 1;
+        //   $("#pagination").on("click", ".page-item", function () {
+        //     if ($(this).hasClass("active") || $(this).hasClass("disabled")) return;
+        //     $("#user_container")
+        //       .empty()
+        //       .append(
+        //         $.parseHTML(
+        //           '<div class="busy-overlay"><div class="spinner"></tr></tr>'
+        //         )
+        //       );
+        //     const clickedData = $(this).data("page");
+        //     targetPage =
+        //       clickedData !== "prev" && clickedData !== "next"
+        //         ? clickedData
+        //         : clickedData === "prev"
+        //         ? pageNumber - 1
+        //         : pageNumber + 1;
+        //     loadComments(targetPage);
+        //   });
+        //   const sectionId = $("#user_container").data("id");
+        //   const structure = [
+        //     {
+        //       template: "user_dynamic.html",
+        //       data: "all_users",
+        //       id: "user_container",
+        //     },
+        //   ];
+        //   const loadComments = function (targetPage) {
+        //     loadJson(
+        //       `/json-get-dm-users/${sectionId}?page_number=${targetPage}`,
+        //       structure,
+        //       function (pageStatus) {
+        //         current_page = pageStatus.current_page;
+        //         pageNumber = current_page;
+        //         pages_count = pageStatus.pages_count;
+        //         $("#pagination").empty().addClass("collapse");
+        //         if (pages_count > 1) {
+        //           let pagination = '<ul class="pagination justify-content-center">';
+        //           pagination += `<li class="page-item ${
+        //             current_page === 1 ? "disabled" : ""
+        //           }" data-page="prev"><span class="page-link">قبلی</span></li>`;
+        //           const dummy = [...Array(pages_count).keys()].map(
+        //             (item) =>
+        //               (pagination += `<li class="page-item ${
+        //                 current_page === item + 1 ? "active" : ""
+        //               }" data-page="${item + 1}"><span class="page-link">${
+        //                 item + 1
+        //               }</span></li>`)
+        //           );
+        //           pagination += `<li class="page-item ${
+        //             current_page === pages_count ? "disabled" : ""
+        //           }" data-page="next"><span class="page-link">بعدی</span></li>`;
+        //           $("#pagination")
+        //             .append($.parseHTML(pagination))
+        //             .removeClass("collapse");
+        //         }
+        //       }
+        //     );
+        //   };
+        //   loadComments(1);
+        // });
+        function success() {
+          if (
+            document.getElementById("f1").value === "" ||
+            document.getElementById("f2").value === "" ||
+            // document.getElementById("f3").value === "" ||
+            document.getElementById("f4").value === "" ||
+            document.getElementById("f4").value === "" ||
+            document.getElementById("f5").value === ""
+          ) {
+            document.getElementById("submitbtn").disabled = true;
+          } else {
+            document.getElementById("submitbtn").disabled = false;
+          }
         }
-      });
-      $("#btn_next").click(function nextPage() {
-        if (current_page < numPages()) {
-          current_page++;
-          changePage(current_page);
+        function dropd() {
+          let x = document.getElementById("ddContent");
+          if ((x.style.display = "inline-block")) {
+            x.style.display = "block";
+          } else {
+            x.style.display = "inline-block";
+          }
         }
-      });
-      function changePage(page) {
-        var btn_next = document.getElementById("btn_next");
-        var btn_prev = document.getElementById("btn_prev");
-        var listing_table = document.getElementById("listingTable");
-        var page_span = document.getElementById("page");
-        // Validate page
-        if (page < 1) page = 1;
-        if (page > numPages()) page = numPages();
-        listing_table.innerHTML = "";
-        // for (
-        //   var i = (page - 1) * records_per_page;
-        //   i < page * records_per_page;
-        //   i++
-        // ) {
-        //   listing_table.innerHTML += objJson[i] + "<br>";
-        // }
-        for (
-          var i = (page - 1) * records_per_page;
-          i < page * records_per_page;
-          i++
-        ) {
-          listing_table.innerHTML +=
-            JSON.stringify(objJson[i].full_name) +
-            JSON.stringify(objJson[i].mobile) +
-            JSON.stringify(objJson[i].user_type) +
-            "<br>";
-        }
-        page_span.innerHTML = page;
-        if (page == 1) {
-          btn_prev.style.visibility = "hidden";
-        } else {
-          btn_prev.style.visibility = "visible";
-        }
-        if (page == numPages()) {
-          btn_next.style.visibility = "hidden";
-        } else {
-          btn_next.style.visibility = "visible";
-        }
-      }
-      function numPages() {
-        return Math.ceil(objJson.length / records_per_page);
-      }
-      window.onload = function () {
-        changePage(1);
-      };
-    });
-  });
-  // $(function () {
-  //   let pageNumber = 1;
-  //   $("#pagination").on("click", ".page-item", function () {
-  //     if ($(this).hasClass("active") || $(this).hasClass("disabled")) return;
-  //     $("#user_container")
-  //       .empty()
-  //       .append(
-  //         $.parseHTML(
-  //           '<div class="busy-overlay"><div class="spinner"></tr></tr>'
-  //         )
-  //       );
-  //     const clickedData = $(this).data("page");
-  //     targetPage =
-  //       clickedData !== "prev" && clickedData !== "next"
-  //         ? clickedData
-  //         : clickedData === "prev"
-  //         ? pageNumber - 1
-  //         : pageNumber + 1;
-  //     loadComments(targetPage);
-  //   });
-  //   const sectionId = $("#user_container").data("id");
-  //   const structure = [
-  //     {
-  //       template: "user_dynamic.html",
-  //       data: "all_users",
-  //       id: "user_container",
-  //     },
-  //   ];
-  //   const loadComments = function (targetPage) {
-  //     loadJson(
-  //       `/json-get-dm-users/${sectionId}?page_number=${targetPage}`,
-  //       structure,
-  //       function (pageStatus) {
-  //         current_page = pageStatus.current_page;
-  //         pageNumber = current_page;
-  //         pages_count = pageStatus.pages_count;
-  //         $("#pagination").empty().addClass("collapse");
-  //         if (pages_count > 1) {
-  //           let pagination = '<ul class="pagination justify-content-center">';
-  //           pagination += `<li class="page-item ${
-  //             current_page === 1 ? "disabled" : ""
-  //           }" data-page="prev"><span class="page-link">قبلی</span></li>`;
-  //           const dummy = [...Array(pages_count).keys()].map(
-  //             (item) =>
-  //               (pagination += `<li class="page-item ${
-  //                 current_page === item + 1 ? "active" : ""
-  //               }" data-page="${item + 1}"><span class="page-link">${
-  //                 item + 1
-  //               }</span></li>`)
-  //           );
-  //           pagination += `<li class="page-item ${
-  //             current_page === pages_count ? "disabled" : ""
-  //           }" data-page="next"><span class="page-link">بعدی</span></li>`;
-  //           $("#pagination")
-  //             .append($.parseHTML(pagination))
-  //             .removeClass("collapse");
-  //         }
-  //       }
-  //     );
-  //   };
-  //   loadComments(1);
-  // });
-  function success() {
-    if (
-      document.getElementById("f1").value === "" ||
-      document.getElementById("f2").value === "" ||
-      // document.getElementById("f3").value === "" ||
-      document.getElementById("f4").value === "" ||
-      document.getElementById("f4").value === "" ||
-      document.getElementById("f5").value === ""
-    ) {
-      document.getElementById("submitbtn").disabled = true;
-    } else {
-      document.getElementById("submitbtn").disabled = false;
-    }
-  }
-  function dropd() {
-    let x = document.getElementById("ddContent");
-    if ((x.style.display = "inline-block")) {
-      x.style.display = "block";
-    } else {
-      x.style.display = "inline-block";
-    }
-  }
-</script>
-{% endblock %}
+      </script>
+      {% endblock %}
+    </tr>
+  </table>
+</div>
