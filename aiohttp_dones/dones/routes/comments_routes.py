@@ -125,5 +125,8 @@ def make_routes(fullstack_blueprint):
         if user and user['user_type'] == -2:
             result = 'admin'
         else:
-            result = 'not admin'
+            result = 'not_admin'
+
+        
+
         return {'result': result}
