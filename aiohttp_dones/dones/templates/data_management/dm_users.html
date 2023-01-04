@@ -11,16 +11,17 @@
     text-align: left;
     margin: 0 auto 0 5px;
   }
-  .pagination-button {
+  /* .pagination-button {
     display: flex;
     justify-content: center;
     align-items: center;
     text-decoration: none;
     outline: none;
+    border: none;
   }
   .pagination-button:hover {
     text-decoration: none;
-  }
+  } */
   /* .dropbtn {
     background-color: #4caf50;
     color: white;
@@ -215,26 +216,27 @@
 
 <div id="listingTable"></div>
 <nav class="pagination-container">
-  <a
-    href="javascript:prevPage()"
-    class="pagination-button"
-    id="btn_prev"
-    aria-label="Previous page"
-    title="Previous page"
-  >
-    &lt;
-  </a>
+  <button class="pagination-button" id="btn_prev">&lt;</button>
   <span id="page"></span>
-  <a
-    href="javascript:nextPage()"
-    class="pagination-button"
-    id="btn_next"
-    aria-label="Next page"
-    title="Next page"
-  >
-    &gt;
-  </a>
+  <button class="pagination-button" id="btn_next">&gt;</button>
 </nav>
+
+<!-- <div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>نوع کاربر</th>
+        <th>نام کاربر</th>
+        <th>موبایل</th>
+        <th>تنظیمات</th>
+      </tr>
+    </thead>
+    <tr id="user_container">
+    </tr>
+  </table>
+</div> -->
+
 {% endblock %} {% block scripts %}
 
 <script>
@@ -250,18 +252,19 @@
       console.log(current_page);
       console.log(records_per_page);
       console.log(objJson);
-      function prevPage() {
+      // alert(JSON.stringify(objJson));
+      $("#btn_prev").click(function prevPage() {
         if (current_page > 1) {
           current_page--;
           changePage(current_page);
         }
-      }
-      function nextPage() {
+      });
+      $("#btn_next").click(function nextPage() {
         if (current_page < numPages()) {
           current_page++;
           changePage(current_page);
         }
-      }
+      });
       function changePage(page) {
         var btn_next = document.getElementById("btn_next");
         var btn_prev = document.getElementById("btn_prev");
@@ -271,12 +274,23 @@
         if (page < 1) page = 1;
         if (page > numPages()) page = numPages();
         listing_table.innerHTML = "";
+        // for (
+        //   var i = (page - 1) * records_per_page;
+        //   i < page * records_per_page;
+        //   i++
+        // ) {
+        //   listing_table.innerHTML += objJson[i] + "<br>";
+        // }
         for (
           var i = (page - 1) * records_per_page;
           i < page * records_per_page;
           i++
         ) {
-          listing_table.innerHTML += objJson + "<br>";
+          listing_table.innerHTML +=
+            JSON.stringify(objJson[i].full_name) +
+            JSON.stringify(objJson[i].mobile) +
+            JSON.stringify(objJson[i].user_type) +
+            "<br>";
         }
         page_span.innerHTML = page;
         if (page == 1) {

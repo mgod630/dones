@@ -465,8 +465,11 @@ p {
   border-radius: 0.2rem;
   color: #000;
   transition: 0.5s;
+  outline: none;
 }
-
+.pagination-button:focus {
+  outline: none;
+}
 .pagination-number:hover,
 .pagination-button:not(.disabled):hover {
   color: #fff;

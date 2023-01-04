@@ -89,7 +89,7 @@
               <a class="dropdown-item" href="/profile"
                 ><i class="far fa-user"></i> حساب کاربری</a
               >
-              {% if user.user_type == -2 %}
+              {% if user.user_type == -2 or user.user_type == -1 %}
               <a class="dropdown-item" href="/dm-users"
                 ><i class="far fa-address-card"></i>پنل ادمین</a
               >

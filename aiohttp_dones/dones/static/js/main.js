@@ -3,7 +3,7 @@ $(function () {
     method: "GET",
     url: "/delete-comment",
   }).done(function (resp) {
-    if (resp.result == "admin") {
+    if (resp.result == "not_admin") {
       console.log(resp.result);
       $("#deletComment").css("display", "none");
     }
