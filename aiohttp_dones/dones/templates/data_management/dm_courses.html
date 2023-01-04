@@ -101,8 +101,10 @@
                 </div>
             </td>
             <td>{{course.title}}</td>
-            <td>{{course.jalali_start_datetime}}</td>
-            <td>{{course.jalali_end_datetime}}</td>
+            {% set start_date, start_time = course.jalali_start_datetime.split(' ') %}
+            <td>{{ start_date }}</td>
+            {% set end_date, end_time = course.jalali_end_datetime.split(' ') %}
+            <td>{{ end_date }}</td>
             <td>
                 {% if course.price == 0 %}
                     رایگان

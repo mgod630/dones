@@ -66,6 +66,7 @@
         <!-- <th>نوع اطلاعیه</th> -->
         <!-- <th>صفحه اطلاعیه</th> -->
         <th>تاریخ اطلاعیه</th>
+        <th>ساعت اطلاعیه</th>
         <th>ویرایش</th>
         <th>حذف</th>
       </tr>
@@ -76,7 +77,9 @@
       <td>{{notif.course_news_text}}</td>
       <!-- <td>{{notif.course_news_type}}</td> -->
       <!-- <td>{{title}}</td> -->
-      <td>{{notif.jalali_datetime}}</td>
+      {% set date, time = notif.jalali_datetime.split(' ') %}
+      <td>{{ date }}</td>
+      <td>{{ time }}</td>
       <td>
         <a class="btn btn-success btn-sm" href="/dm-courses_news/{{notif.section_id}}/{{notif.id}}">
           <i class="far fa-cog"></i>

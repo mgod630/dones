@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for, session
 from routes import common
 import tools.date_converter as date_converter
 import time, secrets, json
-from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, course_news_orm, user_quizzes_orm
+from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, course_news_orm, user_quizzes_orm, transactions_orm
 
 
 def make_routes(fullstack_blueprint):
@@ -481,4 +481,10 @@ def make_routes(fullstack_blueprint):
 
     @fullstack_blueprint.route("/dm-transactions")
     def dm_transactions():
-        return render_template('data_management/dm_transactions.html')
+        user = common.get_user_from_token()
+        all_transactions = transactions_orm.Transactions.get_all_transactions_reverse()
+        transactions_jalali_datetime = []
+        for transaction in all_transactions:
+            transaction['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(transaction['create_datetime'])
+            transactions_jalali_datetime.append(transaction)
+        return render_template('data_management/dm_transactions.html', user=user, all_transactions=transactions_jalali_datetime)

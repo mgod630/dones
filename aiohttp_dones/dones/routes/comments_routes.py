@@ -120,13 +120,15 @@ def make_routes(fullstack_blueprint):
         return {'result': result}
 
     @fullstack_blueprint.route('/delete-comment', methods=['GET', 'POST'])
-    def get_admin():
+    def delete_comment():
         user = common.get_user_from_token()
         if user and user['user_type'] == -2:
             result = 'admin'
         else:
             result = 'not_admin'
 
+        # if request.methods == ['POST']:
+        #     dfsdlkf = 
         
 
         return {'result': result}
