@@ -3,7 +3,12 @@
     <div class="usc-image">
       <img src="/static/template/profile.jpg" />
     </div>
-    <a class="deletComment" href="#">حذف دیدگاه</a>
+    <a
+      class="deletComment"
+      href="/delete-comment?comment_id={{id}}"
+      data-postid="{{id}}"
+      >حذف دیدگاه</a
+    >
     <div class="usc-a">
       <a href="#reply_container" class="reply-button mt-4" data-postid="{{id}}"
         >پاسخ</a
