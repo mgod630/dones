@@ -38,7 +38,7 @@ block inner_content %}
       </tr>
     </thead>
     <tbody>
-      {{all_transactions}} {% for transactions in all_transactions %}
+      {% for transactions in all_transactions %}
       <tr>
         <td></td>
         <td>{{transactions.full_name}}</td>
