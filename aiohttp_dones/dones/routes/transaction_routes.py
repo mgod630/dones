@@ -14,7 +14,7 @@ def make_routes(fullstack_blueprint):
         course_id = request.args.get('course_id')
         course = courses_orm.Courses.get_course_by_id(course_id)
         amount = course['price']
-        # error, ipg_url, ipg_ref_id = zarinpal.zarinpal_make_payment(user, amount)
+        error, ipg_url, ipg_ref_id = zarinpal.zarinpal_make_payment(user, amount)
         if error:
             transaction_status = transactions_orm.Transactions.Status.failed.value
             transaction_type = transactions_orm.Transactions.Types.buy_token.value

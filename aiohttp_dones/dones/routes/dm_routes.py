@@ -33,13 +33,14 @@ def make_routes(fullstack_blueprint):
         page_number = request.args.get('page_number', '1')
         page_number = int(page_number) if str.isdigit(str(page_number)) else 1
         number_users_per_page = 20
-        users_count = users_orm.Users.get_users_count()
-        page_count = (users_count[0] // number_users_per_page) + 1
-        start = users_count[0] - ((page_number - 1) * number_users_per_page) + 1
-        end = start + number_users_per_page 
-        a_page_users = users_orm.Users.get_all_users_reverse()
-        a_page_users = a_page_users[start:end]
-        print(a_page_users)
+        users_count = users_orm.Users.get_users_count()[0]
+        page_count = (users_count // number_users_per_page) + 1
+        if page_number != None:
+            start = page_number * users_count - \
+                    users_count if page_number > 0 else 0
+            end = start + number_users_per_page 
+            a_page_users = users_orm.Users.get_all_users_reverse()
+            a_page_users = a_page_users[start:end]
         return {'page_number':page_number, 'current_page':page_count, 'all_users':a_page_users}
 
     @fullstack_blueprint.route("/dm-users", methods=['POST'])
