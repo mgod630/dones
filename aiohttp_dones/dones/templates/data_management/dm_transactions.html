@@ -38,11 +38,11 @@ block inner_content %}
       </tr>
     </thead>
     <tbody>
-      {{all_transactions}} {% for transactions in all_transactions %}
+      {% for transactions in all_transactions %}
       <tr>
         <td></td>
-        <td></td>
-        <td></td>
+        <td>{{transactions.full_name}}</td>
+        <td>{{transactions.mobile}}</td>
         {% for tr in transactions.jalali_datetime.split(' ') %}
         <td>{{tr}}</td>
         {% endfor %}
