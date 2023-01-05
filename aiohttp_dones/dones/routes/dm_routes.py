@@ -8,7 +8,7 @@ from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questio
 def make_routes(fullstack_blueprint):
     def is_admin_user(user):
         is_admin = False
-        if user and 'user_type' in user and user['user_type'] == -2:
+        if user and 'user_type' in user and (user['user_type'] == -2 or user['user_type'] == -1):
             is_admin = True
         return is_admin
 

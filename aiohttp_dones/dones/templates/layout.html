@@ -194,7 +194,9 @@
         </div> -->
       </div>
     </footer>
+    {% if user %}
     <div id="ut" style="display: none">{{user.user_type}}</div>
+    {% endif %}
     <script src="/static/js/app.js"></script>
     <script src="/static/js/jquery-3.4.1.min.js"></script>
     <script src="/static/js/bootstrap.bundle.min.js"></script>
