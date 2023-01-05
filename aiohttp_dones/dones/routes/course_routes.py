@@ -18,9 +18,7 @@ def make_routes(fullstack_blueprint):
                 break
         if course == None:
             return redirect('/404-not-found') 
-        all_comments = comments_orm.Comments.get_comments_by_section_id(section_id)
-        all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(section_id)
-        return render_template("course-info.html", course=course, all_courses_news=all_courses_news, user=user, all_comments=all_comments)
+        return render_template("course-info.html", course=course, user=user)
 
     @fullstack_blueprint.route('/course-overview/course_<course_id>')
     def course_overview(course_id):
@@ -57,9 +55,7 @@ def make_routes(fullstack_blueprint):
         if course['unix_end_datetime'] <= time.time():
             flash(f'{user_full_name} گرامی زمان شرکت در این دوره به پایان رسیده است.', 'danger')
             return redirect('/')
-        all_comments = comments_orm.Comments.get_comments_by_section_id(
-            f'course_overview_{course_id}')
-        return render_template("course-overview.html", course=course, course_items=items_jalali_datetime,user=user, all_comments=all_comments)
+        return render_template("course-overview.html", course=course, course_items=items_jalali_datetime,user=user)
 
     @fullstack_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
     def course_content(course_id, item_id):
@@ -89,10 +85,7 @@ def make_routes(fullstack_blueprint):
             quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
             quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
             quizzes_jalali_datetime.append(quiz)
-        all_comments = comments_orm.Comments.get_comments_by_section_id(
-            f'course_content_{item_id}')
-        # last_comments = all_comments[0:19]
-        return render_template("course-content.html", course=course, course_item=course_item, user=user, all_comments=all_comments, quizzes=quizzes_jalali_datetime)
+        return render_template("course-content.html", course=course, course_item=course_item, user=user, quizzes=quizzes_jalali_datetime)
 
     @fullstack_blueprint.route("/quiz/quiz_<quiz_id>")
     def quiz_content(quiz_id):

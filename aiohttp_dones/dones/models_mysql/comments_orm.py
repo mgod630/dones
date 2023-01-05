@@ -79,14 +79,14 @@ class Comments:
         return all_comments
 
     @staticmethod
-    def insert_new_comment(comment_text, sender_name, sender_id, section_id, reply_to_comment_id=-1, depth=0):
+    def insert_new_comment(comment_text, sender_name, sender_id, section_id, unix_datetime, reply_to_comment_id=-1, depth=0):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        add_comment = ("INSERT INTO `tbl_comments` (`comment_text`, `sender_name`, `sender_id`, `section_id`, `depth`,`reply_to_comment_id`) VALUES" +
-                       "( %(comment_text)s, %(sender_name)s, %(sender_id)s, %(section_id)s, %(depth)s, %(reply_to_comment_id)s)")
+        add_comment = ("INSERT INTO `tbl_comments` (`comment_text`, `sender_name`, `sender_id`, `section_id`, `depth`,`reply_to_comment_id`, `unix_datetime`) VALUES" +
+                       "( %(comment_text)s, %(sender_name)s, %(sender_id)s, %(section_id)s, %(depth)s, %(reply_to_comment_id)s, %(unix_datetime)s)")
         data_comment = {
             'comment_text': comment_text,
             'sender_name': sender_name,
@@ -94,6 +94,7 @@ class Comments:
             'section_id': section_id,
             'depth': depth,
             'reply_to_comment_id': reply_to_comment_id,
+            'unix_datetime': unix_datetime
         }
          
         cursor.execute(add_comment, data_comment)
