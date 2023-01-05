@@ -255,26 +255,26 @@
       //   return newStr;
       // }
 
-      // var replaceDigits = function () {
-      //   var map = [
-      //     "&\#1776;",
-      //     "&\#1777;",
-      //     "&\#1778;",
-      //     "&\#1779;",
-      //     "&\#1780;",
-      //     "&\#1781;",
-      //     "&\#1782;",
-      //     "&\#1783;",
-      //     "&\#1784;",
-      //     "&\#1785;",
-      //   ];
-      //   document.body.innerHTML = document.body.innerHTML.replace(
-      //     /\d(?=[^<>]*(<|$))/g,
-      //     function ($0) {
-      //       return map[$0];
-      //     }
-      //   );
-      // };
+      var replaceDigits = function () {
+        var map = [
+          "&\#1776;",
+          "&\#1777;",
+          "&\#1778;",
+          "&\#1779;",
+          "&\#1780;",
+          "&\#1781;",
+          "&\#1782;",
+          "&\#1783;",
+          "&\#1784;",
+          "&\#1785;",
+        ];
+        document.body.innerHTML = document.body.innerHTML.replace(
+          /\d(?=[^<>]*(<|$))/g,
+          function ($0) {
+            return map[$0];
+          }
+        );
+      };
 
       const TI11 = "22 march 2023";
       const daysEl = document.getElementById("days");
@@ -293,6 +293,7 @@
         hoursEl.innerHTML = hours;
         minutesEl.innerHTML = minutes;
         secondsEl.innerHTML = seconds;
+        replaceDigits();
       }
       countdown();
       setInterval(countdown, 1000);
@@ -354,7 +355,7 @@
           },
         });
       });
-      // window.onload = replaceDigits;
+      replaceDigits();
     </script>
   </body>
 </html>

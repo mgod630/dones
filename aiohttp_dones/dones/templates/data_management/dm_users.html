@@ -273,9 +273,11 @@
             method: "GET",
           }).done(function (resp) {
             var current_page = resp.page_number;
+            var current_page2 = resp.current_page;
             var records_per_page = resp.number_users_per_page;
             var objJson = resp.all_users;
             console.log(current_page);
+            console.log(current_page2);
             console.log(records_per_page);
             console.log(objJson);
             // alert(JSON.stringify(objJson));
@@ -317,6 +319,7 @@
                 else{
                   listing_table_user_type.innerHTML = 'عادی'
                 }
+                '<br>'
                 // listing_table_user_type.innerHTML += JSON.stringify(objJson[i].user_type);
               }
               page_span.innerHTML = page;
