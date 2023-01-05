@@ -11,16 +11,14 @@ def make_routes(fullstack_blueprint):
         section_id = 'home_page'
         user = common.get_user_from_token()
         all_courses = courses_orm.Courses.get_all_courses()
-        courses_jalali_datetime = []
         for course in all_courses:
             course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(
                 course['unix_start_datetime'])
             course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(
                 course['unix_end_datetime'])
-            courses_jalali_datetime.append(course)
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(
             section_id)
-        return render_template("index.html", user=user, user_account=None, all_courses=courses_jalali_datetime, all_courses_news=all_courses_news)
+        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_courses_news=all_courses_news)
 
     @fullstack_blueprint.route("/landing-page")
     def landing_page():

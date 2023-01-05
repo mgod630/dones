@@ -24,13 +24,9 @@ def make_routes(fullstack_blueprint):
         pages_count = (comments_count[0] // comments_count_per_page) + 1
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(
             section_id)
-
-        a_page_section_comments_jalali = []
         for comment in a_page_section_comments:
             comment['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(comment['unix_datetime'])
-            a_page_section_comments_jalali.append(comment)
-
-        return {'all_comments': a_page_section_comments_jalali, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_courses_news': all_courses_news}
+        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_courses_news': all_courses_news}
 
     @fullstack_blueprint.route('/json-get-comments-and-courses_news-by-section-id/course_overview_<course_id>')
     def json_get_comments_course_overview(course_id):
@@ -47,13 +43,9 @@ def make_routes(fullstack_blueprint):
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(
             course_id)
         pages_count = (comments_count[0] // comments_count_per_page) + 1
-
-        a_page_section_comments_jalali = []
         for comment in a_page_section_comments:
             comment['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(comment['unix_datetime'])
-            a_page_section_comments_jalali.append(comment)
-
-        return {'all_comments': a_page_section_comments_jalali, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id}
+        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id}
 
     @fullstack_blueprint.route('/json-get-comments-and-courses_news-by-section-id/course_content_<item_id>')
     def json_get_comments_course_content(item_id):
@@ -70,11 +62,9 @@ def make_routes(fullstack_blueprint):
         comments_count = comments_orm.Comments.get_comments_count_by_section_id(
             item_id)
         pages_count = (comments_count[0] // comments_count_per_page) + 1
-        a_page_section_comments_jalali = []
         for comment in a_page_section_comments:
             comment['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(comment['unix_datetime'])
-            a_page_section_comments_jalali.append(comment)
-        return {'all_comments': a_page_section_comments_jalali, 'pages_count': pages_count, 'current_page': page_number, 'section_id': item_id}
+        return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': item_id}
 
     # comments page
     @fullstack_blueprint.route('/comments/course_info_<course_id>')

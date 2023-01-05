@@ -10,10 +10,13 @@
         <div class="white-box">
           <div class="course-info-details">
             <div class="info-bit">
-                  <span>تاریخ آغاز:</span><span>{{course.jalali_start_datetime}}</span>
+                  <span>تاریخ آغاز:</span><span>{% set date,time = course.jalali_start_datetime.split(' ') %}
+                    {{date}}</span>
             </div>
             <div class="info-bit">
-                  <span>تاریخ پایان:</span><span>{{course.jalali_end_datetime}}</span>
+                  <span>تاریخ پایان:</span><span>
+                    {% set date,time = course.jalali_end_datetime.split(' ') %}
+                    {{date}}</span>
             </div>
             <div class="info-bit">
                   <span>مدرس:</span><span>{{course.institute}}</span>

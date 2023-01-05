@@ -30,11 +30,9 @@ def make_routes(fullstack_blueprint):
             user_full_name = user['full_name']
 
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
-        items_jalali_datetime = []
         for item in course_items:
             item['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
             item['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
-            items_jalali_datetime.append(item)
         all_courses = courses_orm.Courses.get_all_courses()
         course = None
         for crs in all_courses:
@@ -55,7 +53,7 @@ def make_routes(fullstack_blueprint):
         if course['unix_end_datetime'] <= time.time():
             flash(f'{user_full_name} گرامی زمان شرکت در این دوره به پایان رسیده است.', 'danger')
             return redirect('/')
-        return render_template("course-overview.html", course=course, course_items=items_jalali_datetime,user=user)
+        return render_template("course-overview.html", course=course, course_items=course_items,user=user)
 
     @fullstack_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
     def course_content(course_id, item_id):
@@ -80,12 +78,10 @@ def make_routes(fullstack_blueprint):
                 course_item = crs_item
                 break
         quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(item_id)
-        quizzes_jalali_datetime = []
         for quiz in quizzes:
             quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
             quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
-            quizzes_jalali_datetime.append(quiz)
-        return render_template("course-content.html", course=course, course_item=course_item, user=user, quizzes=quizzes_jalali_datetime)
+        return render_template("course-content.html", course=course, course_item=course_item, user=user, quizzes=quizzes)
 
     @fullstack_blueprint.route("/quiz/quiz_<quiz_id>")
     def quiz_content(quiz_id):
@@ -130,14 +126,12 @@ def make_routes(fullstack_blueprint):
             flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
         user_courses = user_courses_orm.User_courses.get_user_courses_by_user_id(user['id'])
-        user_courses_with_title = []
         course = None
         if user_courses:
             for crs in user_courses:
                 course = courses_orm.Courses.get_course_by_id(crs['course_id'])
                 crs['title'] = course['title']
-                user_courses_with_title.append(crs)
-        return render_template('my-courses.html', user=user, courses = user_courses_with_title)
+        return render_template('my-courses.html', user=user, courses = user_courses)
     
     @fullstack_blueprint.route('/my-items')
     def my_items():
@@ -147,12 +141,10 @@ def make_routes(fullstack_blueprint):
             return redirect('/')
         course_id = request.args.get('course_id')
         user_items = user_items_orm.User_items.get_all_user_items_by_ids(user['id'], course_id)
-        user_items_with_title = []
         for it in user_items:
             item = items_orm.Items.get_item_by_id(it['item_id'])
             it['title'] = item['title']
-            user_items_with_title.append(it)
-        return render_template('my-items.html', user=user, items = user_items_with_title, course_id=course_id)
+        return render_template('my-items.html', user=user, items = user_items, course_id=course_id)
 
     @fullstack_blueprint.route("/quiz-results/item_<item_id>")
     def user_quizzes(item_id):
@@ -161,10 +153,8 @@ def make_routes(fullstack_blueprint):
             flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
         user_quizzes = user_quizzes_orm.User_quizzes.get_all_user_quizzes_by_ids(user['id'], item_id)
-        user_quizzes_jalali_datetime = []
         for quiz in user_quizzes:
             quiz['date'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_datetime'])
-            user_quizzes_jalali_datetime.append(quiz)
-        return render_template('quiz_results.html', user=user, attender=user, user_quizzes=user_quizzes_jalali_datetime)
+        return render_template('quiz_results.html', user=user, attender=user, user_quizzes=user_quizzes)
 
     

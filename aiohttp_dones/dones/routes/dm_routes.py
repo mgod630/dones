@@ -84,12 +84,10 @@ def make_routes(fullstack_blueprint):
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
         all_courses = courses_orm.Courses.get_all_courses()
-        courses_jalali_datetime = []
         for course in all_courses:
             course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
             course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
-            courses_jalali_datetime.append(course)
-        return render_template("data_management/dm_courses.html", user=user, all_courses=courses_jalali_datetime)
+        return render_template("data_management/dm_courses.html", user=user, all_courses=all_courses)
 
     @fullstack_blueprint.route("/dm-courses", methods=['POST'])
     def dm_courses_post():
@@ -153,12 +151,10 @@ def make_routes(fullstack_blueprint):
             update_course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_course['unix_start_datetime'])
             update_course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_course['unix_end_datetime'])
             all_courses = courses_orm.Courses.get_all_courses()
-            courses_jalali_datetime = []
             for course in all_courses:
                 course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
                 course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
-                courses_jalali_datetime.append(course)
-            return render_template("data_management/dm_courses.html", user=user, all_courses=courses_jalali_datetime, update_course=update_course, course_id=course_id)
+            return render_template("data_management/dm_courses.html", user=user, all_courses=all_courses, update_course=update_course, course_id=course_id)
 
     # delete course
     @fullstack_blueprint.route("/dm-delete-course/<course_id>")
@@ -178,12 +174,10 @@ def make_routes(fullstack_blueprint):
             return redirect('/404-not-found')
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         len_course_items = len(course_items) if course_items else None
-        items_jalali_datetime = []
         for item in course_items:
             item['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
             item['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
-            items_jalali_datetime.append(item)
-        return render_template("data_management/dm_course_items.html", user=user, course_items=items_jalali_datetime, course_id=course_id, len=len_course_items)
+        return render_template("data_management/dm_course_items.html", user=user, course_items=course_items, course_id=course_id, len=len_course_items)
 
     @fullstack_blueprint.route("/dm-course-items/<course_id>", methods=['POST'])
     def dm_course_items_post(course_id):
@@ -236,11 +230,9 @@ def make_routes(fullstack_blueprint):
             update_course_item['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_start_datetime'])
             update_course_item['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_course_item['unix_end_datetime'])
             len_course_items = len(course_items) if course_items else None
-            items_jalali_datetime = []
             for item in course_items:
                 item['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
                 item['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
-                items_jalali_datetime.append(item)
             return render_template("data_management/dm_course_items.html", user=user, course_items=course_items, update_course_item=update_course_item, course_id=course_id, len=len_course_items, course_item_id=course_item_id)
 
     # delete item
@@ -259,12 +251,10 @@ def make_routes(fullstack_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False: return redirect('/404-not-found')
         quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(course_item_id)
-        quizzes_jalali_datetime = []
         for quiz in quizzes:
             quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
             quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
-            quizzes_jalali_datetime.append(quiz)
-        return render_template("data_management/dm_quiz.html", user=user, quizs=quizzes_jalali_datetime, course_item_id= course_item_id)   
+        return render_template("data_management/dm_quiz.html", user=user, quizs=quizzes, course_item_id= course_item_id)   
 
     @fullstack_blueprint.route("/dm-quiz/<course_item_id>", methods=['POST'])
     def dm_quiz_post(course_item_id):
@@ -320,12 +310,10 @@ def make_routes(fullstack_blueprint):
             update_quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_quiz['unix_start_datetime'])
             update_quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(update_quiz['unix_end_datetime'])
             quizzes = quizzes_orm.Quizzes.get_all_quizzes_by_item_id(course_item_id)
-            quizzes_jalali_datetime = []
             for quiz in quizzes:
                 quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
                 quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
-                quizzes_jalali_datetime.append(quiz)
-            return render_template("data_management/dm_quiz.html", user=user, quizs=quizzes_jalali_datetime, course_item_id= course_item_id, update_quiz=update_quiz , quiz_id=quiz_id)
+            return render_template("data_management/dm_quiz.html", user=user, quizs=quizzes, course_item_id= course_item_id, update_quiz=update_quiz , quiz_id=quiz_id)
     
     @fullstack_blueprint.route("/dm-delete-quiz/<course_item_id>/<quiz_id>")
     def dm_delete_quiz(course_item_id, quiz_id):
@@ -395,11 +383,9 @@ def make_routes(fullstack_blueprint):
             return redirect('/404-not-found')
         all_courses = courses_orm.Courses.get_all_courses()
         all_courses_news = course_news_orm.Courses_news.get_all_courses_news()
-        courses_news_jalali_datetime = []
         for course_news in all_courses_news:
             course_news['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course_news['unix_datetime'])
-            courses_news_jalali_datetime.append(course_news)
-        return render_template("data_management/dm_courses_news.html", user=user, courses_news=courses_news_jalali_datetime, all_courses=all_courses)   
+        return render_template("data_management/dm_courses_news.html", user=user, courses_news=all_courses_news, all_courses=all_courses)   
 
     @fullstack_blueprint.route("/dm-courses_news", methods=['POST'])
     def dm_courses_news_post():
@@ -463,7 +449,6 @@ def make_routes(fullstack_blueprint):
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
         quiz = user_quizzes_orm.User_quizzes.get_user_quiz_by_quiz_id(user['id'], quiz_id)
-        user_quizzes_jalali_datetime = []
         user_quizzes = None
         if quiz:
             item_id = quiz['item_id']
@@ -472,19 +457,18 @@ def make_routes(fullstack_blueprint):
             quiz_id)
         for user in registered_users:
                 user['jalali_date'] = date_converter.Date_converter.unix_timestamp_to_jalali(user['unix_datetime'])
-                user_quizzes_jalali_datetime.append(user)
         all_answers = user_quizzes_orm.User_quizzes.get_all_user_results_by_ids(
             user_id=user['id'], quiz_id=quiz_id)
         all_answers = json.dumps(all_answers)
         questions = questions_orm.Questions.get_all_questions_by_id_quiz_id(quiz_id)
-        return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=user_quizzes, all_answers=all_answers, registered_users=user_quizzes_jalali_datetime, questions=questions)
+        return render_template('data_management/dm_quiz_registered_users.html', user=user, quiz_id=quiz_id, all_quizzes=user_quizzes, all_answers=all_answers, registered_users=registered_users, questions=questions)
 
     @fullstack_blueprint.route("/dm-transactions")
     def dm_transactions():
         user = common.get_user_from_token()
         all_transactions = transactions_orm.Transactions.get_all_transactions_reverse_with_users()
-        transactions_jalali_datetime = []
         for transaction in all_transactions:
+            course = courses_orm.Courses.get_course_by_id(transaction['course_id'])
+            transaction['course_title'] = course['title']
             transaction['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(transaction['create_datetime'])
-            transactions_jalali_datetime.append(transaction)
-        return render_template('data_management/dm_transactions.html', user=user, all_transactions=transactions_jalali_datetime)
+        return render_template('data_management/dm_transactions.html', user=user, all_transactions=all_transactions)

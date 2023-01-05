@@ -38,7 +38,7 @@ def make_routes(fullstack_blueprint):
                 session.pop('mobile', None)
             mobile = request.form.get('sg_mobile', None)
             user = users_orm.Users.get_user_by_mobile(mobile)
-            if user and (user['user_type'] == users_orm.Users.Types.system_user.value or user['user_type'] == users_orm.Users.Types.admin.value or user['user_type'] == users_orm.Users.Types.super_admin.value):
+            if user and (user['user_type'] in (users_orm.Users.Types.system_user.value, users_orm.Users.Types.admin.value, users_orm.Users.Types.super_admin.value)):
                 status = 'mobile_already_exist'
                 return redirect(url_for('fullstack_blueprint.login', status=status))
             elif user and user['user_type'] == users_orm.Users.Types.unregistered_user.value :
@@ -103,6 +103,60 @@ def make_routes(fullstack_blueprint):
                     return redirect(url_for('fullstack_blueprint.login', status=status))
         if 'mobile' not in session:
             status = 'mobile_is_not_entered'
+            return redirect(url_for('fullstack_blueprint.login', status=status))
+        return redirect(url_for('fullstack_blueprint.login'))
+
+    @fullstack_blueprint.route('/reset-password', methods=['POST'])
+    async def reset_password():
+        step = request.args.get('step')
+        if step == '1':
+            if 'mobile' in session:
+                session.pop('mobile', None)
+            mobile = request.form.get('rp_mobile', None)
+            user = users_orm.Users.get_user_by_mobile(mobile)
+            if user == None:
+                status = 'user_not_found'
+                return redirect(url_for('fullstack_blueprint.login', status=status))
+            if user and (user['user_type'] in (users_orm.Users.Types.system_user.value, users_orm.Users.Types.admin.value, users_orm.Users.Types.super_admin.value)):
+                registering_code = random.randint(10000, 99999)
+                await sms.send_message_by_313(mobile, str(registering_code))
+                session['mobile'] = mobile
+                users_orm.Users.update_user_by_mobile(mobile=mobile, registering_code=registering_code)
+                status = 'rp_registering_code_sent'
+                return redirect(url_for('fullstack_blueprint.login', status=status))
+            else:
+                status = 'user_is_not_registered'
+                return redirect(url_for('fullstack_blueprint.login', status=status))
+        elif step == '2' :
+            if 'mobile' not in session:
+                status = 'rp_mobile_is_not_entered'
+                return redirect(url_for('fullstack_blueprint.login', status=status))
+            registering_code = request.form.get('rp_registering_code')
+            user = users_orm.Users.get_user_by_mobile(session['mobile'])
+            if str(user['registering_code']) == registering_code:
+                status = 'rp_registering_code_correct'
+                return redirect(url_for('fullstack_blueprint.login', status=status))
+            else:
+                status = 'rp_registering_code_incorrect'
+                return redirect(url_for('fullstack_blueprint.login', status=status))
+        elif step == '3':
+            if 'mobile' not in session:
+                status = 'rp_mobile_is_not_entered'
+                return redirect(url_for('fullstack_blueprint.login', status=status))
+            else:
+                user = users_orm.Users.get_user_by_mobile(session['mobile'])
+                if user and  user['user_type'] == users_orm.Users.Types.registered_user.value:
+                    password = request.form.get('rp_password', None)
+                    update_user_password = users_orm.Users.update_user_by_mobile(mobile=session['mobile'], password=password)
+                    if 'mobile' in session:
+                        session.pop('mobile', None)
+                    session['g_token'] = user['g_token']
+                    return redirect(url_for('fullstack_blueprint.home'))
+                else :
+                    status = 'user_is_not_registered'
+                    return redirect(url_for('fullstack_blueprint.login', status=status))
+        if 'mobile' not in session:
+            status = 'rp_mobile_is_not_entered'
             return redirect(url_for('fullstack_blueprint.login', status=status))
         return redirect(url_for('fullstack_blueprint.login'))
     

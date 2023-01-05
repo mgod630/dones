@@ -31,23 +31,27 @@ block inner_content %}
         <th>#</th>
         <th>نام</th>
         <th>موبایل</th>
+        <th>درس</th>
         <th>تاریخ</th>
         <th>ساعت</th>
+        <th>وضعیت</th>
         <th>مبلغ</th>
         <th>شناسه پرداخت</th>
       </tr>
     </thead>
     <tbody>
-      {% for transactions in all_transactions %}
+      {% for transaction in all_transactions %}
       <tr>
         <td></td>
-        <td>{{transactions.full_name}}</td>
-        <td>{{transactions.mobile}}</td>
-        {% for tr in transactions.jalali_datetime.split(' ') %}
+        <td>{{transaction.full_name}}</td>
+        <td>{{transaction.mobile}}</td>
+        <td>{{transaction.course_title}}</td>
+        {% for tr in transaction.jalali_datetime.split(' ') %}
         <td>{{tr}}</td>
         {% endfor %}
-        <td>{{transactions.amount}}</td>
-        <td>{{transactions.fs_invoice_number}}</td>
+        <td>{{transaction.status}}</td>
+        <td>{{transaction.amount}}</td>
+        <td>{{transaction.fs_invoice_number}}</td>
       </tr>
       {% endfor %}
     </tbody>

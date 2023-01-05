@@ -5,7 +5,7 @@ import mysql.connector.pooling
 from routes import make_routes, common
 
 def init(config_file="settings.py"):
-    app = Flask(__name__)
+    app = Flask(__name__)          
     app.config.from_pyfile(config_file)
     app.config["UPLOAD_FOLDER"] = os.path.join("static", "uploaded_files")
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000

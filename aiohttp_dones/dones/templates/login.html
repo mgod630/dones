@@ -198,7 +198,7 @@
           {% endif %}
           <form
             id="reset_form"
-            action="/login"
+            action="/reset-password?step=1"
             style="display: none"
             method="post"
           >
@@ -213,14 +213,14 @@
               </button>
             </div>
           </form>
-          <form
+          <!-- <form
             id="resend_code_form"
-            action="/login"
+            action="/reset-password"
             style="display: none"
             method="post"
           >
             <input name="rp_mobile" />
-          </form>
+          </form> -->
         </div>
       </div>
     </div>
