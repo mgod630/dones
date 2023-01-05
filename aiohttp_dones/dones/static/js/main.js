@@ -104,7 +104,7 @@ handleObject = (template, data) => {
         .html();
     $.ajax({
       method: "GET",
-      url: "/delete-comment",
+      url: "/get-admin",
     }).done(function (resp) {
       if (resp.result == "admin") {
         $(".deletComment").css("display", "block");
