@@ -118,8 +118,8 @@ def make_routes(fullstack_blueprint):
 
         return {'result': result}
 
-    @fullstack_blueprint.route('/delete-comment')
-    def delete_comment():
+    @fullstack_blueprint.route('/get-admin')
+    def get_admin():
         user = common.get_user_from_token()
         if user and user['user_type'] == -2:
             result = 'admin'
@@ -130,13 +130,19 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route('/delete-comment', methods=['POST'])
     def delete_comment_post():
         user = common.get_user_from_token()
-        # comments_orm.Comments.
         comment_id = request.args.get('comment_id')
         comment = comments_orm.Comments.get_comment_by_id(comment_id)
         course_id = comment['section_id'].split('_')[2]
-
+        reply_comments_ids = comments_orm.Comments.get_comments_id_by_reply_to_comment_id(comment_id)
+        if reply_comments_ids : # delete comment with its replies
+            comments_orm.Comments.delete_a_comment_by_id(comment_id)
+            for element in reply_comments_ids:
+                comments_orm.Comments.delete_a_comment_by_id(element['id'])
+                print(element['id'])
+        else:
+            comments_orm.Comments.delete_a_comment_by_id(comment_id)
+            print(comment_id)
         if comment['section_id'] == f'course_info_{course_id}' :
-            
             return redirect(url_for('fullstack_blueprint.comments_course_info', course_id=course_id))
         elif comment['section_id'] == f'course_overview_{course_id}' :
             

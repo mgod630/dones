@@ -157,7 +157,7 @@ class Comments:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        query = "DELETE FROM tbl_comments WHERE section_id='%(id)s'"
+        query = "DELETE FROM tbl_comments WHERE id=%(id)s"
         cursor.execute(query, {'id': comment_id})
         cnx.commit()
         cnx.close()
@@ -172,7 +172,7 @@ class Comments:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
-        query = "DELETE FROM tbl_comments WHERE section_id='%(id)s'"
+        query = "DELETE FROM tbl_comments WHERE section_id=%(id)s"
         cursor.execute(query, {'id': section_id})
         cnx.commit()
         cnx.close()
