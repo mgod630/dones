@@ -143,7 +143,12 @@
                 <img
                   src="/static/template/carousel (2).jpg"
                   alt=""
-                  style="width: 200px; height: 200px; border-radius: 50%"
+                  style="
+                    width: 200px;
+                    height: 200px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                  "
                 />
                 <p class="mt-4 mx-4 fs-6 fw-bold text-dark">
                   تو ده جلسه برنامه نویسی یاد گرفتیم فراتر از یک دوره بود و راحت
@@ -158,7 +163,12 @@
                 <img
                   src="/static/template/carousel (3).jpg"
                   alt=""
-                  style="width: 200px; height: 200px; border-radius: 50%"
+                  style="
+                    width: 200px;
+                    height: 200px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                  "
                 />
                 <p class="mt-4 mx-4 fs-6 fw-bold text-dark">
                   این دوره یک مسیر خیلی سخت و طولانی رو واسم کوتاه و لذتبخش کرد
@@ -220,6 +230,52 @@
     <script src="/static/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/owl/owl.carousel.min.js"></script>
     <script>
+      // var map = [
+      //   "&\#1632;",
+      //   "&\#1633;",
+      //   "&\#1634;",
+      //   "&\#1635;",
+      //   "&\#1636;",
+      //   "&\#1637;",
+      //   "&\#1638;",
+      //   "&\#1639;",
+      //   "&\#1640;",
+      //   "&\#1641;",
+      // ];
+
+      // function getArabicNumbers(str) {
+      //   var newStr = "";
+
+      //   str = String(str);
+
+      //   for (i = 0; i < str.length; i++) {
+      //     newStr += map[parseInt(str.charAt(i))];
+      //   }
+
+      //   return newStr;
+      // }
+
+      // var replaceDigits = function () {
+      //   var map = [
+      //     "&\#1776;",
+      //     "&\#1777;",
+      //     "&\#1778;",
+      //     "&\#1779;",
+      //     "&\#1780;",
+      //     "&\#1781;",
+      //     "&\#1782;",
+      //     "&\#1783;",
+      //     "&\#1784;",
+      //     "&\#1785;",
+      //   ];
+      //   document.body.innerHTML = document.body.innerHTML.replace(
+      //     /\d(?=[^<>]*(<|$))/g,
+      //     function ($0) {
+      //       return map[$0];
+      //     }
+      //   );
+      // };
+
       const TI11 = "22 march 2023";
       const daysEl = document.getElementById("days");
       const hoursEl = document.getElementById("hours");
@@ -298,6 +354,7 @@
           },
         });
       });
+      // window.onload = replaceDigits;
     </script>
   </body>
 </html>

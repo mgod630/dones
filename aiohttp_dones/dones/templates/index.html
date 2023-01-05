@@ -51,11 +51,16 @@
             <div class="crd-title">{{course.title}}</div>
           </div>
           <div class="crd-detail">
-            <span>تاریخ آغاز:</span
-            ><span>{{course.jalali_start_datetime}}</span>
+            <span>تاریخ آغاز:</span>
+            {% set date,time = course.jalali_start_datetime.split(' ') %}<span
+              >{{date}}</span
+            >
           </div>
           <div class="crd-detail">
-            <span>تاریخ پایان:</span><span>{{course.jalali_end_datetime}}</span>
+            <span>تاریخ پایان:</span>
+            {% set date,time = course.jalali_end_datetime.split(' ') %}<span
+              >{{date}}</span
+            >
           </div>
           <div class="crd-detail">
             <span>مدرس:</span><span>{{course.institute}}</span>
