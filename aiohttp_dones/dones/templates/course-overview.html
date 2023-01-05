@@ -57,9 +57,11 @@
           <div class="crd-title">{{course_item.title|truncate(65, True)}}</div>
         </div>
         <div class="course-dates">
-          <span><span class="d-none d-sm-inline">تاریخ</span> آغاز: {{course_item.jalali_start_datetime}}</span>
+          <span><span class="d-none d-sm-inline">تاریخ</span> آغاز: {% set date,time = course.jalali_start_datetime.split(' ') %}<span
+          >{{date}}</span></span>
           <div class="v-divider"></div>
-          <span><span class="d-none d-sm-inline d-lg-none d-xl-inline">تاریخ</span> پایان: {{course_item.jalali_end_datetime}}</span>
+          <span><span class="d-none d-sm-inline d-lg-none d-xl-inline">تاریخ</span> پایان: {% set date,time = course.jalali_end_datetime.split(' ') %}<span
+          >{{date}}</span></span>
         </div>
         <div class="crd-body">
           <a href="/course-content/course_{{course.id}}/item_{{course_item.id}}" class="btn btn-block btn-outline-secondary"><i class="fal fa-books"></i> ورود</a>
