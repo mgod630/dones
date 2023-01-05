@@ -15,7 +15,7 @@ $(function () {
             .addClass("text-danger")
             .text("لطفا ابتدا وارد حساب کاربری خود شوید.")
             .slideDown();
-        } else if (resp.result == "only_admins_are_allowed") {
+        } else if (resp.result == "you_cant_answer_to_this_comment") {
           $("#result_message")
             .addClass("text-danger")
             .text("دسترسی به این قسمت برای شما مقدور نمی باشد.")
@@ -92,14 +92,14 @@ handleObject = (template, data) => {
         .remove()
         .end()
         .html();
-    // $.ajax({
-    //   method: "GET",
-    //   url: "/get-admin",
-    // }).done(function (resp) {
-    //   if (resp.result == "admin") {
-    //     $(".deletComment").css("display", "block");
-    //   }
-    // });
+    $.ajax({
+      method: "GET",
+      url: "/get-admin",
+    }).done(function (resp) {
+      if (resp.result == "admin") {
+        $(".deletComment").css("display", "block");
+      }
+    });
     rendered_html = rendered_html.replace(
       new RegExp(`{{${key}}}`, "g"),
       transformed_value

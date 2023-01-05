@@ -255,49 +255,6 @@
       //   return newStr;
       // }
 
-      var replaceDigits = function () {
-        var map = [
-          "&\#1776;",
-          "&\#1777;",
-          "&\#1778;",
-          "&\#1779;",
-          "&\#1780;",
-          "&\#1781;",
-          "&\#1782;",
-          "&\#1783;",
-          "&\#1784;",
-          "&\#1785;",
-        ];
-        document.body.innerHTML = document.body.innerHTML.replace(
-          /\d(?=[^<>]*(<|$))/g,
-          function ($0) {
-            return map[$0];
-          }
-        );
-      };
-
-      const TI11 = "22 march 2023";
-      const daysEl = document.getElementById("days");
-      const hoursEl = document.getElementById("hours");
-      const minutesEl = document.getElementById("minutes");
-      const secondsEl = document.getElementById("seconds");
-      function countdown() {
-        const TI11cd = new Date(TI11);
-        const current_date = new Date();
-        const total_time = (TI11cd - current_date) / 1000;
-        const days = Math.floor(total_time / 3600 / 24);
-        const hours = Math.floor(total_time / 3600) % 24;
-        const minutes = Math.floor(total_time / 60) % 60;
-        const seconds = Math.floor(total_time) % 60;
-        daysEl.innerHTML = days;
-        hoursEl.innerHTML = hours;
-        minutesEl.innerHTML = minutes;
-        secondsEl.innerHTML = seconds;
-        replaceDigits();
-      }
-      countdown();
-      setInterval(countdown, 1000);
-
       $(function () {
         $("#landing-page-form").submit(function () {
           event.preventDefault();
@@ -355,7 +312,49 @@
           },
         });
       });
+
+      var replaceDigits = function () {
+        var map = [
+          "&\#1776;",
+          "&\#1777;",
+          "&\#1778;",
+          "&\#1779;",
+          "&\#1780;",
+          "&\#1781;",
+          "&\#1782;",
+          "&\#1783;",
+          "&\#1784;",
+          "&\#1785;",
+        ];
+        document.body.innerHTML = document.body.innerHTML.replace(
+          /\d(?=[^<>]*(<|$))/g,
+          function ($0) {
+            return map[$0];
+          }
+        );
+      };
       replaceDigits();
+
+      const TI11 = "22 march 2023";
+      const daysEl = document.getElementById("days");
+      const hoursEl = document.getElementById("hours");
+      const minutesEl = document.getElementById("minutes");
+      const secondsEl = document.getElementById("seconds");
+      function countdown() {
+        const TI11cd = new Date(TI11);
+        const current_date = new Date();
+        const total_time = (TI11cd - current_date) / 1000;
+        const days = Math.floor(total_time / 3600 / 24);
+        const hours = Math.floor(total_time / 3600) % 24;
+        const minutes = Math.floor(total_time / 60) % 60;
+        const seconds = Math.floor(total_time) % 60;
+        daysEl.innerHTML = days;
+        hoursEl.innerHTML = hours;
+        minutesEl.innerHTML = minutes;
+        secondsEl.innerHTML = seconds;
+      }
+      countdown();
+      setInterval(countdown, 1000);
     </script>
   </body>
 </html>
