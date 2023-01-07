@@ -1,5 +1,5 @@
 {% extends "data_management/dm_layout.html" %} {% set current_tab =
-'courses_news' %} {% block inner_content %}
+'course_news' %} {% block inner_content %}
 <style>
   .table .btn {
     height: 27px;
@@ -12,7 +12,7 @@
 >
   <div class="form-row">
     <div class="form-group col-12">
-      <label>صفحه اطلاعیه</label>
+      <label>صفحه اخبار</label>
       <select id="secion_options" name="section_options">
         <option value="home_page">صفحه اصلی</option>
         {% if all_courses %} {% for course in all_courses %}
@@ -21,7 +21,7 @@
       </select>
     </div>
     <!-- <div class="form-group col-12">
-      <label><span style="color: red"> * </span>نوع اطلاعیه</label>
+      <label><span style="color: red"> * </span>نوع خبر</label>
       <input
         id="esse1"
         onkeyup="success()"
@@ -32,7 +32,7 @@
       />
     </div> -->
     <div class="form-group col-12">
-      <label><span style="color: red"> * </span>متن اطلاعیه</label>
+      <label><span style="color: red"> * </span>متن خبر</label>
       <textarea
         id="esse2"
         onkeyup="success()"
@@ -54,19 +54,19 @@
   </button>
 </form>
 {% if course and course.title != 'home_page' %}
-<p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اطلاعیه های {{course.title}}</p>
+<p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اخبار {{course.title}}</p>
 {% else %}
-<p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اطلاعیه تمام صفحات</p>
+<p class="mt-5 mb-3 warningTitle d-flex justify-content-center">اخبار تمام صفحات</p>
 {% endif %}
 <div class="table-responsive mt-3">
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>متن اطلاعیه</th>
-        <!-- <th>نوع اطلاعیه</th> -->
-        <!-- <th>صفحه اطلاعیه</th> -->
-        <th>تاریخ اطلاعیه</th>
-        <th>ساعت اطلاعیه</th>
+        <th>متن خبر</th>
+        <!-- <th>نوع خبر</th> -->
+        <!-- <th>صفحه خبر</th> -->
+        <th>تاریخ خبر</th>
+        <th>ساعت خبر</th>
         <th>ویرایش</th>
         <th>حذف</th>
       </tr>
@@ -98,7 +98,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">حذف اطلاعیه</h5>
+        <h5 class="modal-title">حذف خبر</h5>
         <button
           type="button"
           class="close"

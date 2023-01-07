@@ -192,11 +192,6 @@
 <script src="/static/js/mediaelement-and-player.min.js"></script>
 <script>
   $(function () {
-    if (document.getElementById("esse1").value === "") {
-      document.getElementById("submitbtn").disabled = true;
-    } else {
-      document.getElementById("submitbtn").disabled = false;
-    }
     if ($(".mejs").length > 0) $(".mejs").mediaelementplayer();
     const comments = [
       {
@@ -211,6 +206,5 @@
       comments
     );
   });
-  // document.getElementById("submitbtn").disabled = true;
 </script>
 {% endblock %}

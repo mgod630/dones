@@ -85,8 +85,10 @@
     {% for quiz in quizs %}
     <tr>
         <td>{{quiz.title}}</td>
-        <td>{{quiz.jalali_start_datetime}}</td>
-        <td>{{quiz.jalali_end_datetime}}</td>
+        {% set start_date, start_time = quiz.jalali_start_datetime.split(' ') %}
+        <td>{{ start_date }}</td>
+        {% set end_date, end_time = quiz.jalali_end_datetime.split(' ') %}
+        <td>{{ end_date }}</td>
         <td>{{quiz.description}}</td>
         <td>{{quiz.question_count}}</td>
         <td>{{quiz.duration}}</td>

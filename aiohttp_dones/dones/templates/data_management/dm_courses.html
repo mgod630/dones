@@ -62,7 +62,7 @@
         flex-wrap: wrap;
     }
     .course-actions>a {
-        flex: 1 1 48%;
+        width:  48%;
         text-align: right;
         font-size: 14px;
         margin: 2px;
@@ -71,10 +71,7 @@
         width: 100%;
         max-width: 50px;
         height: auto;
-    }    
-    i {
-    padding-top: 3px;
-    }
+    }   
 
 </style>
 <div class="text-left mb-1">
@@ -173,23 +170,23 @@
                                 <i class="far fa-user"></i>
                                 کاربران
                             </a> -->
-                            <a class="dcitems btn btn-outline-primary" hf="/dm-course-items/" href="#">
+                            <a style="width: 48%; margin: 3px;" class=" btn btn-outline-primary dcitems" hf="/dm-course-items/" href="#">
                                 <i class="far fa-list"></i>
                                 آیتم‌ها
                             </a>
-                            <a class="dcitems2 btn btn-outline-primary" hf="/dm-courses_news/" href="#">
+                            <a style="width: 48%; margin: 3px;" class=" btn btn-outline-primary dcitems2 " hf="/dm-courses_news/" href="#">
                                 <i class="far fa-bell-exclamation"></i>
-                                اطلاعیه‌ها
+                                اخبار
                             </a>
-                            <!-- <a class="btn btn-outline-primary" hf="/dm-copy-course/" href="#">
+                            <!-- <a style="width: 48%; margin: 3px;" class=" btn btn-outline-primary" hf="/dm-copy-course/" href="#">
                                 <i class="far fa-copy"></i>
                                 کپی
                             </a> -->
-                            <a class="delNotif dlbtn btn btn-outline-danger" {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}" {% endfor %} >
+                            <a style="width: 48%; margin: 3px;" class=" btn btn-outline-danger delNotif dlbtn " {% for attr in course if attr not in ["description","body_html","welcome_text"]%}data-{{attr}}="{{course[attr]}}" {% endfor %} >
                                 <i style="display: inline-block;" class="far fa-trash-alt"></i>
                                 حذف
                             </a>
-                            <a class="virayesh btn btn-outline-success" hf="/dm-courses/" href="#" style="width: 50%; height: 90%;" >
+                            <a style="width: 48%; margin: 3px;" class=" btn btn-outline-success virayesh " hf="/dm-courses/" href="#" >
                                 <i class="far fa-pen"></i>
                                 ویرایش
                             </a>

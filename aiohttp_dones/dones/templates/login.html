@@ -265,9 +265,7 @@
             <p class="subtle" style="text-align: right; margin: 0 15px 12px">
               رمز عبور جدید خود را وارد نمائید.
             </p>
-            {{mcr_inputs.input('password', required=true)}}
-            {{mcr_inputs.input('password', required=true)}}
-            <!-- <input
+            <input
               style="margin-bottom: 15px"
               class="rcInput"
               type="password"
@@ -287,9 +285,14 @@
               placeholder="تکرار رمز عبور"
               minlength="6"
               onkeyup="passCheck()"
-            /> -->
+            />
             <div class="form-footer">
-              <button class="button solid-purple" type="submit">
+              <button
+                disabled
+                id="checkButt"
+                class="button solid-purple"
+                type="submit"
+              >
                 ثبت رمز عبور
               </button>
             </div>

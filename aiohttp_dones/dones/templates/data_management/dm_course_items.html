@@ -94,8 +94,10 @@
   {%if len %} {% for i in range(0,len) %}
   <tr>
     <td>{{course_items[i].title}}</td>
-    <td>{{course_items[i].jalali_start_datetime}}</td>
-    <td>{{course_items[i].jalali_end_datetime}}</td>
+    {% set start_date, start_time = course_items[i].jalali_start_datetime.split(' ') %}
+    <td>{{ start_date }}</td>
+    {% set end_date, end_time = course_items[i].jalali_end_datetime.split(' ') %}
+    <td>{{ end_date }}</td>
     {% if course_items[i].description %}
     <td>
       {% if course_items[i].description[0:40]
@@ -129,7 +131,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">حذف اطلاعیه</h5>
+        <h5 class="modal-title">حذف خبر</h5>
         <button
           type="button"
           class="close"

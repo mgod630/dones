@@ -78,9 +78,9 @@
   $("#set_password_form button").click(function () {
     validateForm("set_password_form");
   });
-  $("#reset_form_3 button").click(function () {
-    validatePassword("reset_form_3");
-  });
+  // $("#reset_form_3 button").click(function () {
+  //   validatePassword();
+  // });
   $("#login_form").on("keydown", function (e) {
     if (e.keyCode == 13) $("#login_form button").click();
   });
@@ -146,18 +146,18 @@
       $("#" + formId).submit();
     }
   }
-  function validatePassword() {
-    let fieldIsInvalid = false;
-    let ffInput_1 = document.getElementById("firstPass").value;
-    let ffInput_2 = document.getElementById("secondPass").vaue;
-    let ffError = $(this).find(".field-error");
-    if (ffInput_1 !== ffInput_2) {
-      ffError.fadeIn(100);
-      ffError.text("رمزعبورها یکسان نیستند.");
-      fieldIsInvalid = true;
-      ffError.delay(500).fadeOut(3000);
-    }
-  }
+  // function validatePassword() {
+  //   let fieldIsInvalid = false;
+  //   let ffInput_1 = document.getElementById("passInput").value;
+  //   let ffInput_2 = document.getElementById("passInput").vaue;
+  //   let ffError = $(this).find(".field-error");
+  //   if (ffInput_1 !== ffInput_2) {
+  //     ffError.fadeIn(100);
+  //     ffError.text("رمزعبورها یکسان نیستند.");
+  //     fieldIsInvalid = true;
+  //     ffError.delay(500).fadeOut(3000);
+  //   }
+  // }
   $(".show-pass").on("click", function () {
     let passField = $(this).closest("div").find("input.form-control");
     if (passField.attr("type") == "password") {
@@ -242,13 +242,19 @@ function isValidNationalId(input) {
 //   }
 // }
 
-// function passCheck() {
+function passCheck() {
+  var passValue = document.getElementById("firstPass").value;
+  var confpassValue = document.getElementById("secondPass").value;
+  if (passValue !== confpassValue) {
+    document.getElementById("checkButt").disabled = true;
+  } else {
+    document.getElementById("checkButt").disabled = false;
+  }
+}
+// function checkPassword() {
 //   var passValue = document.getElementById("firstPass").value;
 //   var confpassValue = document.getElementById("secondPass").value;
 //   if (passValue !== confpassValue) {
-//     // window.alert("رمز عبور ها یکسان نیستند");
-//     document.getElementById("checkButt").disabled = true;
-//   } else {
-//     document.getElementById("checkButt").disabled = false;
+//     alert("رمزعبورها یکسان نیستند.");
 //   }
 // }

@@ -92,7 +92,16 @@ handleObject = (template, data) => {
         .remove()
         .end()
         .html();
-
+    $.ajax({
+      method: "GET",
+      url: "/get-admin",
+    }).done(function (resp) {
+      if (resp.result == "admin") {
+        console.log(resp.result);
+        $(".deletComment").css("display", "inline-block");
+        $(".answerComment").css("display", "block");
+      }
+    });
     rendered_html = rendered_html.replace(
       new RegExp(`{{${key}}}`, "g"),
       transformed_value
@@ -136,10 +145,6 @@ loadJson = (url, structure, callback) => {
   $.ajax({ method: "GET", url: url })
     .done(function (resp) {
       console.log(resp.error);
-      if (resp.error === "admin") {
-        $(".deletComment").attr("style", "display:block");
-        console.log("jfslf");
-      }
       if (resp.error === "Not Found") {
         $(".busy-overlay").addClass("error");
       } else {
@@ -188,16 +193,16 @@ loadJson = (url, structure, callback) => {
       $(".busy-overlay").addClass("error");
     });
 };
-
-getAdmin = (url) => {
-  $.ajax({
-    method: "GET",
-    url: url,
-  }).done(function (resp) {
-    if (resp.result == "admin") {
-      console.log(resp.result);
-      $("#deletComment").css("display", "block");
-      $("#answerComment").css("display", "block");
-    }
+$(function () {
+  $(".delNotif").click(function () {
+    var notif = $(this).data();
+    $("#delete_course .titleNotif").text(notif.course_news_text);
+    $("#delete_course a").each(function () {
+      $(this).attr(
+        "href",
+        $(this).attr("hf") + notif.section_id + "/" + notif.id
+      );
+    });
+    $("#delete_course").modal("show");
   });
-};
+});
