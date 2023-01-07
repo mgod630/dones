@@ -4,12 +4,21 @@
       <img src="/static/template/profile.jpg" />
     </div>
     <form action="/delete-comment?comment_id={{id}}" method="post">
-      <button type="submit" class="deletComment" data-postid="{{id}}">
+      <button
+        type="submit"
+        class="deletComment btn-sm btn-danger"
+        id="deletComment"
+        data-postid="{{id}}"
+      >
         حذف دیدگاه
       </button>
     </form>
     <div class="usc-a">
-      <a href="#reply_container" class="reply-button mt-4" data-postid="{{id}}"
+      <a
+        href="#reply_container"
+        id="answerComment"
+        class="answerComment reply-button mt-4"
+        data-postid="{{id}}"
         >پاسخ</a
       >
     </div>
@@ -17,9 +26,7 @@
     <div class="usc-body">
       <div class="usc-name">{{sender_name}}</div>
       <p>{{comment_text}}</p>
-      <p>
-      {{jalali_datetime}}
-      </p>
+      <p>{{jalali_datetime}}</p>
     </div>
   </div>
 </div>

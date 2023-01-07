@@ -48,7 +48,8 @@
           </div>
           {% elif request.args.get('status') == 'mobile_isnt_valid' %}
           <div class="flash-message fm-danger">شماره موبایل صحیح نمی‌باشد.</div>
-          {% elif request.args.get('status') == 'mobile_is_not_entered' %}
+          {% elif request.args.get('status') == 'mobile_is_not_entered' or
+          request.args.get('status') == 'rp_mobile_is_not_entered'%}
           <div class="flash-message fm-danger">
             ابتدا شماره تلفن خود را وارد نمائید.
           </div>
@@ -72,13 +73,21 @@
           <div class="flash-message fm-info">
             لینک بازنشانی کلمه عبور برای شما ایمیل شد.
           </div>
-          {% elif request.args.get('status') == 'registering_code_sent'%}
+          {% elif request.args.get('status') ==
+          'password_successfully_changed'%}
+          <div class="flash-message fm-info">
+            رمزعبور شما با موفقیت تغییر یافت.
+          </div>
+          {% elif request.args.get('status') == 'registering_code_sent' or
+          request.args.get('status') == rp_registering_code_sent%}
           <div class="flash-message fm-info">
             پین کد 5 رقمی ارسال شده را وارد کنید.
           </div>
-          {% elif request.args.get('status') == 'registering_code_incorrect'%}
+          {% elif request.args.get('status') == 'registering_code_incorrect' or
+          request.args.get('status') == 'rp_registering_code_incorrect'%}
           <div class="flash-message fm-danger">پین وارد شده صحیح نمی باشد.</div>
-          {% elif request.args.get('status') == 'registering_code_correct'%}
+          {% elif request.args.get('status') == 'registering_code_correct' or
+          request.args.get('status') == 'rp_registering_code_correct'%}
           <div class="flash-message fm-info">اطلاعات خود را تکمیل کنید</div>
           {% elif request.args.get('status') == 'flash' %}
           <div class="flash-message fm-info">{{ message|safe }}</div>
@@ -107,7 +116,7 @@
           <div id="mobile_buttons">
             <div
               id="mb_login"
-              class="{% if request.args.get('status') != 'registering_code_sent' and request.args.get('status') != 'registering_code_incorrect' and request.args.get('status') != 'registering_code_correct'%}active{% endif %}"
+              class="{% if request.args.get('status') != 'registering_code_sent' and request.args.get('status') != 'registering_code_incorrect' and request.args.get('status') != 'registering_code_correct' and request.args.get('status') != 'rp_registering_code_sent' and request.args.get('status') != 'rp_registering_code_correct' and request.args.get('status') != 'rp_registering_code_incorrect'%}active{% endif %}"
             >
               ورود
             </div>
@@ -116,7 +125,7 @@
           <form
             id="login_form"
             action="/login-post"
-            class="{% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_correct' or request.args.get('status') == 'registering_code_incorrect' %}collapse{% else %}active{% endif %}"
+            class="{% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_correct' or request.args.get('status') == 'registering_code_incorrect' or request.args.get('status') == 'rp_registering_code_sent' or request.args.get('status') == 'rp_registering_code_correct' or request.args.get('status') == 'rp_registering_code_incorrect'%}collapse{% else %}active{% endif %}"
             method="post"
           >
             {{ mcr_inputs.input('mobile', section='lg', required=true)}} {{
@@ -137,7 +146,7 @@
           <form
             id="signup_form"
             action="/signup-post?step=1"
-            class="{% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_correct' or request.args.get('status') == 'registering_code_incorrect' %}collapse{% else %}active{% endif %}"
+            class="{% if request.args.get('status') == 'registering_code_sent' or request.args.get('status') == 'registering_code_correct' or request.args.get('status') == 'registering_code_incorrect' or request.args.get('status') == 'rp_registering_code_sent' or request.args.get('status') == 'rp_registering_code_correct' or request.args.get('status') == 'rp_registering_code_incorrect'%}collapse{% else %}active{% endif %}"
             method="post"
           >
             <!-- {{ mcr_inputs.input('fullname', required=true)}}  -->
@@ -206,21 +215,86 @@
               برای بازنشانی کلمه عبور، شماره موبایلی که با آن ثبت نام کرده‌اید
               را وارد نمایید.
             </p>
-            {{ mcr_inputs.input('mobile', section='rp', required=true)}}
+            <input
+              class="rcInput"
+              type="text"
+              name="rp_mobile"
+              required="true"
+              placeholder="شماره موبایل"
+              maxlength="11"
+              minlength="11"
+            />
             <div class="form-footer">
               <button class="button solid-purple" type="button">
-                ارسال پین
+                دریافت پین
               </button>
             </div>
           </form>
-          <!-- <form
-            id="resend_code_form"
-            action="/reset-password"
-            style="display: none"
+          {% if request.args.get('status') == 'rp_registering_code_sent' or
+          request.args.get('status') == 'rp_registering_code_incorrect' %}
+          <form
+            id="reset_form_2"
+            action="/reset-password?step=2"
+            class="{% if request.args.get('status') == 'rp_registering_code_correct' %}collapse{% else %}active{% endif %}"
             method="post"
           >
-            <input name="rp_mobile" />
-          </form> -->
+            <p class="subtle" style="text-align: right; margin: 0 15px 12px">
+              کد 5 رقمی ارسال شده را وارد نمائید.
+            </p>
+            <input
+              class="rcInput"
+              type="text"
+              name="rp_registering_code"
+              required="true"
+              placeholder="پین ارسالی وارد نمائید"
+              maxlength="5"
+              minlength="5"
+            />
+            <div class="form-footer">
+              <button class="button solid-purple" type="submit">ثبت پین</button>
+            </div>
+          </form>
+          {% endif %} {% if request.args.get('status') ==
+          'rp_registering_code_correct'%}
+          <form
+            id="reset_form_3"
+            action="/reset-password?step=3"
+            class="active"
+            method="post"
+          >
+            <p class="subtle" style="text-align: right; margin: 0 15px 12px">
+              رمز عبور جدید خود را وارد نمائید.
+            </p>
+            {{mcr_inputs.input('password', required=true)}}
+            {{mcr_inputs.input('password', required=true)}}
+            <!-- <input
+              style="margin-bottom: 15px"
+              class="rcInput"
+              type="password"
+              id="firstPass"
+              name="rp_password"
+              required="true"
+              placeholder="رمز عبور"
+              minlength="6"
+              onkeyup="passCheck()"
+            />
+            <input
+              class="rcInput"
+              type="password"
+              id="secondPass"
+              name="rp_password_repeat"
+              required="true"
+              placeholder="تکرار رمز عبور"
+              minlength="6"
+              onkeyup="passCheck()"
+            /> -->
+            <div class="form-footer">
+              <button class="button solid-purple" type="submit">
+                ثبت رمز عبور
+              </button>
+            </div>
+          </form>
+          {% endif%}
         </div>
       </div>
     </div>

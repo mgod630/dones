@@ -392,7 +392,8 @@ p {
   top: 25px;
   right: 5px;
 }
-.deletComment {
+#deletComment,
+#answerComment {
   display: none;
   cursor: pointer;
   /* position: absolute;

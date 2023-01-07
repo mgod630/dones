@@ -92,14 +92,7 @@ handleObject = (template, data) => {
         .remove()
         .end()
         .html();
-    $.ajax({
-      method: "GET",
-      url: "/get-admin",
-    }).done(function (resp) {
-      if (resp.result == "admin") {
-        $(".deletComment").css("display", "block");
-      }
-    });
+
     rendered_html = rendered_html.replace(
       new RegExp(`{{${key}}}`, "g"),
       transformed_value
@@ -142,6 +135,11 @@ isObject = (inp) => typeof inp === "object" && inp !== null;
 loadJson = (url, structure, callback) => {
   $.ajax({ method: "GET", url: url })
     .done(function (resp) {
+      console.log(resp.error);
+      if (resp.error === "admin") {
+        $(".deletComment").attr("style", "display:block");
+        console.log("jfslf");
+      }
       if (resp.error === "Not Found") {
         $(".busy-overlay").addClass("error");
       } else {
@@ -189,4 +187,17 @@ loadJson = (url, structure, callback) => {
     .fail(function (err) {
       $(".busy-overlay").addClass("error");
     });
+};
+
+getAdmin = (url) => {
+  $.ajax({
+    method: "GET",
+    url: url,
+  }).done(function (resp) {
+    if (resp.result == "admin") {
+      console.log(resp.result);
+      $("#deletComment").css("display", "block");
+      $("#answerComment").css("display", "block");
+    }
+  });
 };
