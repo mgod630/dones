@@ -207,12 +207,6 @@
     </button>
   </form>
 </div>
-<!-- <nav id="pagination" class="collapse"></nav> -->
-
-<!-- <div id="listingTable"></div>
-  <a href="javascript:prevPage()" id="btn_prev">Prev</a>
-  <a href="javascript:nextPage()" id="btn_next">Next</a>
-  page: <span id="page"></span> -->
 
 <div class="table-responsive">
   <table class="table table-striped">
@@ -236,32 +230,14 @@
         ></a>
       </td>
     </tr>
-    </tr>  
   </table>
 </div>
-      <!-- <div id="listingTable"></div> -->
 
       <nav class="pagination-container">
         <button class="pagination-button" id="btn_prev">&lt;</button>
         <span id="page"></span>
         <button class="pagination-button" id="btn_next">&gt;</button>
       </nav>
-
-      <!-- <div class="table-responsive">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>نوع کاربر</th>
-        <th>نام کاربر</th>
-        <th>موبایل</th>
-        <th>تنظیمات</th>
-      </tr>
-    </thead>
-    <tr id="user_container">
-    </tr>
-  </table>
-</div> -->
 
       {% endblock %} {% block scripts %}
 
@@ -311,6 +287,7 @@
                 i < page * records_per_page;
                 i++
               ) {
+                // $("#comments_container").empty().append($.parseHTML('<div class="busy-overlay"><div class="spinner"></div></div>'))
                 listing_table_full_name.innerHTML += JSON.stringify(objJson[i].full_name);
                 listing_table_mobile.innerHTML += JSON.stringify(objJson[i].mobile);
                 if (JSON.stringify(objJson[i].user_type) == -2 || JSON.stringify(objJson[i].user_type) == -1){
@@ -319,7 +296,6 @@
                 else{
                   listing_table_user_type.innerHTML = 'عادی'
                 }
-
                 // listing_table_user_type.innerHTML += JSON.stringify(objJson[i].user_type);
               }
               page_span.innerHTML = page;
