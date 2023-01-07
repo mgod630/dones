@@ -3,7 +3,6 @@ from routes import common
 from models_mysql import courses_orm, course_news_orm, emails_orm
 import tools.date_converter as date_converter
 
-
 def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route("/")
     @fullstack_blueprint.route("/home")

@@ -150,7 +150,7 @@ def make_routes(fullstack_blueprint):
                     update_user_password = users_orm.Users.update_user_by_mobile(mobile=session['mobile'], password=password)
                     if 'mobile' in session:
                         session.pop('mobile', None)
-                    session['g_token'] = user['g_token']
+                    # session['g_token'] = user['g_token']
                     return redirect(url_for('fullstack_blueprint.home'))
                 else :
                     status = 'user_is_not_registered'

@@ -54,7 +54,7 @@ def make_routes(fullstack_blueprint):
         if request.args.get('invoice_number') :
             ipg_ref_id = request.args.get('invoice_number')
             transaction = transactions_orm.Transactions.get_transaction_by_ipg_id(ipg_ref_id)
-            if transaction['user_id'] != user['id'] :
+            if transaction and transaction['user_id'] != user['id'] :
                 flash('شما مجوز دسترسی به این تراکنش را ندارید.', 'danger')
                 return redirect('/')
             if transaction:
