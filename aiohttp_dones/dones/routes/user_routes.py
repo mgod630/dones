@@ -145,7 +145,7 @@ def make_routes(fullstack_blueprint):
                 return redirect(url_for('fullstack_blueprint.login', status=status))
             else:
                 user = users_orm.Users.get_user_by_mobile(session['mobile'])
-                if user and  user['user_type'] == users_orm.Users.Types.registered_user.value:
+                if user and  (user['user_type'] in (users_orm.Users.Types.system_user.value, users_orm.Users.Types.admin.value, users_orm.Users.Types.super_admin.value)):
                     password = request.form.get('rp_password', None)
                     update_user_password = users_orm.Users.update_user_by_mobile(mobile=session['mobile'], password=password)
                     if 'mobile' in session:
