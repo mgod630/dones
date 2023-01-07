@@ -25,7 +25,7 @@ def make_routes(fullstack_blueprint):
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(
             section_id)
         for comment in a_page_section_comments:
-            comment['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(comment['unix_datetime'])
+            comment['jalali_datetime'], time = date_converter.Date_converter.unix_timestamp_to_jalali(comment['unix_datetime']).split(' ')
         return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id, 'all_courses_news': all_courses_news}
 
     @fullstack_blueprint.route('/json-get-comments-and-courses_news-by-section-id/course_overview_<course_id>')
@@ -44,7 +44,7 @@ def make_routes(fullstack_blueprint):
             course_id)
         pages_count = (comments_count[0] // comments_count_per_page) + 1
         for comment in a_page_section_comments:
-            comment['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(comment['unix_datetime'])
+            comment['jalali_datetime'], time = date_converter.Date_converter.unix_timestamp_to_jalali(comment['unix_datetime']).split(' ')
         return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': course_id}
 
     @fullstack_blueprint.route('/json-get-comments-and-courses_news-by-section-id/course_content_<item_id>')
@@ -63,7 +63,7 @@ def make_routes(fullstack_blueprint):
             item_id)
         pages_count = (comments_count[0] // comments_count_per_page) + 1
         for comment in a_page_section_comments:
-            comment['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(comment['unix_datetime'])
+            comment['jalali_datetime'], time = date_converter.Date_converter.unix_timestamp_to_jalali(comment['unix_datetime']).split(' ')
         return {'all_comments': a_page_section_comments, 'pages_count': pages_count, 'current_page': page_number, 'section_id': item_id}
 
     # comments page
