@@ -151,7 +151,8 @@ def make_routes(fullstack_blueprint):
                     if 'mobile' in session:
                         session.pop('mobile', None)
                     # session['g_token'] = user['g_token']
-                    return redirect(url_for('fullstack_blueprint.home'))
+                    status = 'password_successfully_changed'
+                    return redirect(url_for('fullstack_blueprint.login', status=status))
                 else :
                     status = 'user_is_not_registered'
                     return redirect(url_for('fullstack_blueprint.login', status=status))

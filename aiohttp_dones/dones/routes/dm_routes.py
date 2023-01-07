@@ -4,7 +4,6 @@ import tools.date_converter as date_converter
 import time, secrets, json
 from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, course_news_orm, user_quizzes_orm, transactions_orm
 
-
 def make_routes(fullstack_blueprint):
     def is_admin_user(user):
         is_admin = False
