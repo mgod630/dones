@@ -54,8 +54,12 @@ def make_routes(fullstack_blueprint):
         mobile = request.form.get('mobile', None)
         password = request.form.get('password', None)
         user_type = request.form.get('user_type', None)
-        new_user = users_orm.Users.insert_new_user(full_name=full_name, mobile=mobile, password=password, user_type=user_type, g_token=g_token, register_datetime=register_datetime)
+        user = users_orm.Users.get_user_by_mobile(mobile) 
         users = users_orm.Users.get_all_users_reverse()
+        if user:
+            status = 'mobile_already_exists'
+            return render_template("data_management/dm_users.html", user=user, users=users, status=status)
+        new_user = users_orm.Users.insert_new_user(full_name=full_name, mobile=mobile, password=password, user_type=user_type, g_token=g_token, register_datetime=register_datetime)
         return redirect('/dm-users')
 
     @fullstack_blueprint.route("/dm-users/<user_id>", methods=['GET', 'POST'])
