@@ -465,6 +465,8 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route("/dm-transactions")
     def dm_transactions():
         user = common.get_user_from_token()
+        if is_admin_user(user) == False:
+            return redirect('/404-not-found')
         all_transactions = transactions_orm.Transactions.get_all_transactions_reverse_with_users()
         for transaction in all_transactions:
             course = courses_orm.Courses.get_course_by_id(transaction['course_id'])

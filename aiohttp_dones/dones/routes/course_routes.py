@@ -20,55 +20,62 @@ def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route('/course-overview/course_<course_id>')
     def course_overview(course_id):
         user = common.get_user_from_token()
-        if user == None:
+        course = courses_orm.Courses.get_course_by_id(course_id)
+        if user == None and course['price'] != 0:
             flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
-        else:
-            user_full_name = user['full_name']
         
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         for item in course_items:
             item['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_start_datetime'])
             item['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(item['unix_end_datetime'])
-        course = courses_orm.Courses.get_course_by_id(course_id)
+        
         course['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_start_datetime'])
         course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
-
-        user_course = user_courses_orm.User_courses.get_user_course_by_ids(user_id = user['id'], course_id = course_id)
-        if not user_course :
-            if course['price'] == 0 :
-                unix_datetime = time.time()
-                new_user_course_id = user_courses_orm.User_courses.insert_new_user_course(user_id = user['id'], course_id=course_id,price=course['price'],unix_datetime=unix_datetime)
-            else:
-                flash(f'{user_full_name} گرامی برای دسترسی به این دوره ابتدا باید آن را خریداری کنید.', 'danger')
-                return redirect(url_for('fullstack_blueprint.course_info', course_id=course_id))
+        if user:
+            user_full_name = user['full_name']
+            user_course = user_courses_orm.User_courses.get_user_course_by_ids(user_id = user['id'], course_id = course_id)
+            if not user_course :
+                if course['price'] == 0 :
+                    unix_datetime = time.time()
+                    new_user_course_id = user_courses_orm.User_courses.insert_new_user_course(user_id = user['id'], course_id=course_id,price=course['price'],unix_datetime=unix_datetime)
+                else:
+                    flash(f'{user_full_name} گرامی برای دسترسی به این دوره ابتدا باید آن را خریداری کنید.', 'danger')
+                    return redirect(url_for('fullstack_blueprint.course_info', course_id=course_id))
             
+            if course['unix_start_datetime'] >= time.time():
+                flash(f'{user_full_name} گرامی زمان شروع این دوره هنوز نرسیده است.', 'danger')
+                return redirect('/')
+            if course['unix_end_datetime'] <= time.time():
+                flash(f'{user_full_name} گرامی زمان شرکت در این دوره به پایان رسیده است.', 'danger')
+                return redirect('/')
+
         if course['unix_start_datetime'] >= time.time():
-            flash(f'{user_full_name} گرامی زمان شروع این دوره هنوز نرسیده است.', 'danger')
-            return redirect('/')
+                flash('کاربر گرامی زمان شروع این دوره هنوز نرسیده است.', 'danger')
+                return redirect('/')
         if course['unix_end_datetime'] <= time.time():
-            flash(f'{user_full_name} گرامی زمان شرکت در این دوره به پایان رسیده است.', 'danger')
+            flash('کاربر گرامی زمان شروع این دوره هنوز نرسیده است.', 'danger')
             return redirect('/')
         return render_template("course-overview.html", course=course, course_items=course_items,user=user)
 
     @fullstack_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
     def course_content(course_id, item_id):
         user = common.get_user_from_token()
+        course = courses_orm.Courses.get_course_by_id(course_id)
         if user == None:
             flash('کاربر گرامی، لطفا ابتدا ثبت نام یا ورود کنید.', 'danger')
             return redirect('/')
         else:
             user_full_name = user['full_name']
-        course = courses_orm.Courses.get_course_by_id(course_id)
-        user_course = user_courses_orm.User_courses.get_user_course_by_ids(user_id = user['id'], course_id = course_id)
-        user_item = user_items_orm.User_items.get_user_item_by_ids(user_id=user['id'], item_id=item_id)
-        if not user_course:
-            if course['price'] != 0 :
-                flash(f'{user_full_name} گرامی برای دسترسی به این دوره ابتدا باید آن را خریداری کنید.', 'danger')
-            return redirect(url_for('fullstack_blueprint.course_info', course_id=course_id))
-        if not user_item :
-            unix_datetime = time.time()
-            new_user_item_id = user_items_orm.User_items.insert_new_user_item(user_id=user['id'], item_id=item_id, unix_datetime=unix_datetime)
+            user_course = user_courses_orm.User_courses.get_user_course_by_ids(user_id = user['id'], course_id = course_id)
+            user_item = user_items_orm.User_items.get_user_item_by_ids(user_id=user['id'], item_id=item_id)
+            if not user_course:
+                if course['price'] != 0 :
+                    flash(f'{user_full_name} گرامی برای دسترسی به این دوره ابتدا باید آن را خریداری کنید.', 'danger')
+                return redirect(url_for('fullstack_blueprint.course_info', course_id=course_id))
+            if not user_item :
+                unix_datetime = time.time()
+                new_user_item_id = user_items_orm.User_items.insert_new_user_item(user_id=user['id'], item_id=item_id, unix_datetime=unix_datetime)
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         course_item = None
         for crs_item in course_items:
@@ -83,7 +90,7 @@ def make_routes(fullstack_blueprint):
                 quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
             return render_template("course-content.html", course=course, course_item=course_item, user=user, quizzes=quizzes)
         else:
-            flash(f'{user_full_name} گرامی برای این دوره تاکنون جلسه ای تعریف نشده است.', 'warning')
+            flash('کاربر گرامی برای این دوره تاکنون جلسه ای تعریف نشده است.', 'warning')
             return redirect(url_for('fullstack_blueprint.course_overview', course_id=course_id))
 
     @fullstack_blueprint.route("/quiz/quiz_<quiz_id>")
