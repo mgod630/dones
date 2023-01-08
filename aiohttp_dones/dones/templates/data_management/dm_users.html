@@ -82,7 +82,11 @@
   />
   <button class="btn btn-success btn-sm">جستجو</button> -->
 </form>
-
+{% if status == 'mobile_already_exists' %}
+<div class="my-3">
+  با این شماره قبلا ثبت نام کرده اید.
+</div>
+{% endif %}
 <div class="collapse mb-3 {% if user_id %}d-block{% endif %}" id="collapse">
   <form
     action="{% if user_id  %}/dm-users/{{ user_id }}{% else %}/dm-users{% endif %}"
@@ -146,9 +150,8 @@
         <label><span style="color: red"> * </span>نوع کاربر</label>
 
         <select id="f5" oninput="success()" name="user_type">
-          <option value="2">عادی</option>
-          <option value="-2">ادمین</option>
-          <option value="-1">سازمان/گروه</option>
+          <option value="3">عادی</option>
+          <option value="-1">ادمین</option>
         </select>
       </div>
       <!-- <input

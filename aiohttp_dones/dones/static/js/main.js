@@ -68,6 +68,16 @@ $(function () {
 });
 handleObject = (template, data) => {
   let rendered_html = template;
+  $.ajax({
+    method: "GET",
+    url: "/get-admin",
+  }).done(function (resp) {
+    if (resp.result == "admin") {
+      console.log(resp.result);
+      $(".deletComment").css("display", "inline-block");
+      $(".answerComment").css("display", "block");
+    }
+  });
   for (const [key, value] of Object.entries(data)) {
     let transformed_value = value;
     switch (key) {
@@ -92,16 +102,6 @@ handleObject = (template, data) => {
         .remove()
         .end()
         .html();
-    $.ajax({
-      method: "GET",
-      url: "/get-admin",
-    }).done(function (resp) {
-      if (resp.result == "admin") {
-        console.log(resp.result);
-        $(".deletComment").css("display", "inline-block");
-        $(".answerComment").css("display", "block");
-      }
-    });
     rendered_html = rendered_html.replace(
       new RegExp(`{{${key}}}`, "g"),
       transformed_value
@@ -144,7 +144,6 @@ isObject = (inp) => typeof inp === "object" && inp !== null;
 loadJson = (url, structure, callback) => {
   $.ajax({ method: "GET", url: url })
     .done(function (resp) {
-      console.log(resp.error);
       if (resp.error === "Not Found") {
         $(".busy-overlay").addClass("error");
       } else {

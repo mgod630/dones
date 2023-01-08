@@ -115,20 +115,22 @@
           </div>
         </div>
         <div class="cc-quiz-row">
-          <a
-            {%
-            if
-            not
-            quiz.question_count
-            %}
-            style="pointer-events: none"
-            {%
-            endif
-            %}
-            id="submitbtn"
-            class="btn btn-warning {% if not quiz.question_count %} btn-danger {% endif%}"
-            href="/quiz/quiz_{{quiz.id}}"
-            >ورود به آزمون</a
+          <a href="/quiz/quiz_{{quiz.id}}">
+            <button
+              {%
+              if
+              not
+              quiz.question_count
+              %}
+              disabled
+              {%
+              endif
+              %}
+              id="submitbtn"
+              class="btn btn-warning"
+            >
+              ورود به آزمون
+            </button></a
           >
         </div>
       </div>
@@ -205,6 +207,14 @@
       `/json-get-comments-and-courses_news-by-section-id/course_content_${courseId}`,
       comments
     );
+    (function () {
+      if (window.localStorage) {
+        if (!localStorage.getItem("firstLoad")) {
+          localStorage["firstLoad"] = true;
+          window.location.reload();
+        } else localStorage.removeItem("firstLoad");
+      }
+    })();
   });
 </script>
 {% endblock %}

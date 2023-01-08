@@ -69,11 +69,23 @@
   $("#reset_form button").click(function () {
     validateForm("reset_form");
   });
+  $("#reset_form_2 button").click(function () {
+    validateForm("reset_form_2");
+  });
+  // $("#reset_form_3 button").click(function () {
+  //   validateForm("reset_form_3");
+  // });
   $("#login_form button").click(function () {
     validateForm("login_form");
   });
   $("#signup_form button").click(function () {
     validateForm("signup_form");
+  });
+  $("#signup_form_2 button").click(function () {
+    validateForm("signup_form_2");
+  });
+  $("#signup_form_3 button").click(function () {
+    validateForm("signup_form_3");
   });
   $("#set_password_form button").click(function () {
     validateForm("set_password_form");
@@ -246,11 +258,21 @@ function passCheck() {
   var passValue = document.getElementById("firstPass").value;
   var confpassValue = document.getElementById("secondPass").value;
   if (passValue !== confpassValue) {
-    document.getElementById("checkButt").disabled = true;
+    // e.preventDefault();
+    // document.getElementById("checkButt").disabled = true;
+    $("#checkButt").attr("type", "button");
+    $("#passwordError")
+      .text("رمزعبورها یکسان نیستند.")
+      .css("color", "red")
+      .fadeIn(100)
+      .delay(500)
+      .fadeOut(5000);
   } else {
-    document.getElementById("checkButt").disabled = false;
+    // document.getElementById("checkButt").disabled = false;
+    $("#checkButt").attr("type", "submit");
   }
 }
+
 // function checkPassword() {
 //   var passValue = document.getElementById("firstPass").value;
 //   var confpassValue = document.getElementById("secondPass").value;

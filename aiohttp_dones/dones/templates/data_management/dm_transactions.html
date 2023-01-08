@@ -24,6 +24,7 @@ block inner_content %}
     </tr>  
   </table>
 </div> -->
+<p class="mt-5 mb-5 warningTitle d-flex justify-content-center">تراکنش ها</p>
 <div class="table-responsive">
   <table class="table table-striped">
     <thead>
@@ -49,7 +50,16 @@ block inner_content %}
         {% for tr in transaction.jalali_datetime.split(' ') %}
         <td>{{tr}}</td>
         {% endfor %}
-        <td>{{transaction.status}}</td>
+        <td
+          {% if transaction.status == 1 or transaction.status == 3 or transaction.status == 7 or transaction.status == 8 %} style=" color: red; "{% else %} style="color: green;"{% endif %}
+        >
+          {% if transaction.status == 1 %} نامشخص {% elif transaction.status ==
+          2 %} موفق {% elif transaction.status == 3 %} ناموفق {% elif
+          transaction.status == 4 %} درانتظار {% elif transaction.status == 5 %}
+          منقضی {% elif transaction.status == 6 %} در صف {% elif
+          transaction.status == 7 %} در حال لغو {% elif transaction.status == 8
+          %} لغو شده {% endif %}
+        </td>
         <td>{{transaction.amount}}</td>
         <td>{{transaction.fs_invoice_number}}</td>
       </tr>
