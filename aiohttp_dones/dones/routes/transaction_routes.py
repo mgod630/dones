@@ -60,7 +60,7 @@ def make_routes(fullstack_blueprint):
                 return redirect('/')
             if transaction:
                 invoice_result = transaction
-                transaction['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(transaction['create_datetime'])
+                invoice_result['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(transaction['create_datetime'])
         if invoice_result == None:
             return redirect(url_for('fullstack_blueprint.home'))
         return render_template('bill_result.html', invoice_result=invoice_result)
