@@ -179,6 +179,18 @@ $(function(){
     const params = e.target.value !== '' ? '&takhfif_name='+e.target.value : ''
     $("#payment_link").attr("href", baseLink+params)
   });
+  (function(){
+  if( window.localStorage )
+  {
+    if( !localStorage.getItem('firstLoad') )
+    {
+      localStorage['firstLoad'] = true;
+      window.location.reload();
+    }  
+    else
+      localStorage.removeItem('firstLoad');
+  }
+})();
   /*
   $(".gateway").click(function(){
     if ($(this).hasClass("disabled")) return;

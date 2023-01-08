@@ -62,8 +62,8 @@
         </a>
       </div>
       <div class="col-12 col-lg-6">
-        <video class="vHaji" controls>
-          <!-- <source src="../static/template/Dsc 0654 2.m4v" /> -->
+        <video id="hajiVideo" class="vHaji" controls>
+          <source src="../static/template/Dsc 0654 2.m4v" />
           Your browser does not support HTML video.
         </video>
       </div>
@@ -230,30 +230,11 @@
     <script src="/static/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/owl/owl.carousel.min.js"></script>
     <script>
-      // var map = [
-      //   "&\#1632;",
-      //   "&\#1633;",
-      //   "&\#1634;",
-      //   "&\#1635;",
-      //   "&\#1636;",
-      //   "&\#1637;",
-      //   "&\#1638;",
-      //   "&\#1639;",
-      //   "&\#1640;",
-      //   "&\#1641;",
-      // ];
-
-      // function getArabicNumbers(str) {
-      //   var newStr = "";
-
-      //   str = String(str);
-
-      //   for (i = 0; i < str.length; i++) {
-      //     newStr += map[parseInt(str.charAt(i))];
-      //   }
-
-      //   return newStr;
-      // }
+      $(document).ready(function () {
+        $("#hajiVideo").bind("contextmenu", function () {
+          return false;
+        });
+      });
 
       $(function () {
         $("#landing-page-form").submit(function () {

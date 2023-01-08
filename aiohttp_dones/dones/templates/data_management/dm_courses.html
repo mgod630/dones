@@ -21,8 +21,8 @@
         margin: 2px;
     }
     .course-image img, .course-video video {
-        width: 100%;
-        height: 100%;
+        width: 380px;
+        height: 225px;
     }
     .modal-header img {
         height: 56px;
@@ -94,7 +94,7 @@
         <tr>
             <td>
                 <div class="logo-container">
-                    <img style="width: 70px;" src="{{course.logo_path}}">
+                    <img style="width: 45px;" src="{{course.logo_path}}">
                 </div>
             </td>
             <td>{{course.title}}</td>
@@ -198,7 +198,6 @@
     </div>
   </div>
 </div>
-{% endfor %}
 <div class="modal" tabindex="-1" role="dialog" id="new_course">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -220,25 +219,25 @@
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label><span style="color: red"> * </span>عنوان:</label>
-                                <input id="esse1" onkeyup="success()" type="text" class="form-control" name="title" value="{% if course_id  %}{{update_course.title}}{% endif %}">
+                                <input id="esse1" oninput="success()" type="text" class="form-control" name="title" value="{% if course_id  %}{{update_course.title}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label><span style="color: red"> * </span>زمان آغاز:</label>
-                                <input id="esse2" onkeyup="success()" type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_start_datetime" value="{% if course_id  %}{{update_course.jalali_start_datetime}}{% endif %}">
+                                <input id="esse2" oninput="success()" type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_start_datetime" value="{% if course_id  %}{{start_date}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label><span style="color: red"> * </span>زمان پایان:</label>
-                                <input id="esse4" onkeyup="success()" type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_end_datetime" value="{% if course_id  %}{{update_course.jalali_end_datetime}}{% endif %}">
+                                <input id="esse4" oninput="success()" type="text" class="form-control ltr" placeholder="yyyy/mm/dd hh:mm" name="unix_end_datetime" value="{% if course_id  %}{{end_date}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label><span style="color: red"> * </span>قیمت (تومان):</label>
-                                <input id="esse3" onkeyup="success()" type="text" class="form-control ltr" name="price" value="{% if course_id  %}{{update_course.price}}{% endif %}">
+                                <input id="esse3" oninput="success()" type="text" class="form-control ltr" name="price" value="{% if course_id  %}{{update_course.price}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -250,19 +249,19 @@
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>آدرس لوگو:</label>
-                                <input id="logoInput" type="text" class=" form-control ltr" name="logo_path" value="{% if course_id  %}{{update_course.logo_path}}{% endif %}">
+                                <input maxlength="2047" id="logoInput" type="text" class=" form-control ltr" name="logo_path" value="{% if course_id  %}{{update_course.logo_path}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>آدرس عکس دوره:</label>
-                                <input id="imageInput" type="text" class="form-control ltr" name="image_path" value="{% if course_id  %}{{update_course.image_path}}{% endif %}">
+                                <input maxlength="2047" id="imageInput" type="text" class="form-control ltr" name="image_path" value="{% if course_id  %}{{update_course.image_path}}{% endif %}">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-step">
                                 <label>آدرس ویدیو:</label>
-                                <input type="text" class="form-control ltr" name="video_path" value="{% if course_id  %}{{update_course.video_path}}{% endif %}">
+                                <input maxlength="2047" type="text" class="form-control ltr" name="video_path" value="{% if course_id  %}{{update_course.video_path}}{% endif %}">
                             </div>
                         </div>
                         <!-- <div class="col-12 col-sm-6">
@@ -298,6 +297,7 @@
         </div>
     </div>
 </div>
+{% endfor %}
 <div class="modal" tabindex="-1" role="dialog" id="delete_course">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -375,9 +375,9 @@ $(function(){
         var image = document.getElementById('imageInput');
         var institute = document.getElementById('instituteInput');
         if(logo.value.length == 0)
-            logo.value = "../../static/template/goldis-logo-horizontal.png"
+            logo.value = "../../static/template/111.jpg"
         if(image.value.length == 0)
-            image.value = "../../static/template/4321da5b-57d7-49f7-abe1-3ad1c6c3abd9-cb9d6e5bef65.small.png"
+            image.value = "../../static/template/1111.jpg"
         if(institute.value.length == 0)
             institute.value = 'فول استک'
     })

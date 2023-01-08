@@ -20,11 +20,13 @@
     />
     <style>
       @font-face {
-        font-family: iranSans;
+        font-family: "iranSans";
         src: url(../fonts/IRANSansWeb_400.woff);
       }
+      * {
+        font-family: "iranSans";
+      }
       body {
-        font-family: iranSans;
         width: 100%;
         margin: 0;
         padding: 0;
@@ -132,7 +134,9 @@
               <p>با تشکر از شما</p>
               <p>
                 شماره پیگیری :
-                <span class="bold">{{ invoice_result.ipg_invoice_number }}</span>
+                <span class="bold"
+                  >{{ invoice_result.ipg_invoice_number }}</span
+                >
               </p>
               <a href="/" style="text-decoration: none"
                 ><input
@@ -166,9 +170,12 @@
               </p>
               <p>با تشکر از شما</p>
               <p>
-                شماره پیگیری : <span class="bold">{{ invoice_result.fs_invoice_number }}</span>
+                شماره پیگیری :
+                <span class="bold">{{ invoice_result.fs_invoice_number }}</span>
               </p>
-              {#<span class="bold">{{ '{0:,}'.format(invoice_result.fs_invoice_number|int) }}</span
+              {#<span class="bold"
+                >{{ '{0:,}'.format(invoice_result.fs_invoice_number|int)
+                }}</span
               >#}
               <a href="/" style="text-decoration: none"
                 ><input

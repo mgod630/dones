@@ -168,6 +168,18 @@
       $(this).addClass("active");
       $("#payment_link").attr("href","/" + $(this).data("id") + "?course_id=" + $("#payment_link").data("cid"))
     });
+    (function(){
+  if( window.localStorage )
+  {
+    if( !localStorage.getItem('firstLoad') )
+    {
+      localStorage['firstLoad'] = true;
+      window.location.reload();
+    }  
+    else
+      localStorage.removeItem('firstLoad');
+  }
+})();
   });
 
 </script>

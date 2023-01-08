@@ -8,15 +8,22 @@
     />
     <meta name="theme-color" content="#2e8640" />
     <meta name="apple-mobile-web-app-status-bar-style" content="#2e8640" />
-    <!-- <link
+    <link
       rel="shortcut icon"
-      href="/static/template/favicon.ico"
+      href="/static/template/loggo.jpg"
       type="image/x-icon"
-    /> -->
+    />
     <link rel="stylesheet" href="/static/css/fontawesome.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/login.css?5" />
     {% block styles %}{% endblock %}
     <title>فول استک - ورود</title>
+    <style>
+      #passwordError {
+        text-align: right;
+        margin: 0 15px 12px;
+        color: gray;
+      }
+    </style>
   </head>
   <body>
     {% import 'login-fields-macro.html' as mcr_inputs %}
@@ -154,7 +161,7 @@
             <!-- {{mcr_inputs.input('password', section='sg', required=true)}} -->
             <div class="form-footer">
               <a
-                ><button class="button solid-blue" type="submit">
+                ><button class="button solid-blue" type="button">
                   ارسال کد
                 </button></a
               >
@@ -184,7 +191,7 @@
               minlength="5"
             />
             <div class="form-footer">
-              <button class="button solid-blue" type="submit">تائید کد</button>
+              <button class="button solid-blue" type="button">تائید کد</button>
             </div>
           </form>
           {% endif %} {% if request.args.get('status') ==
@@ -196,10 +203,19 @@
             class="{% if request.args.get('status') == 'registering_code_correct'%} active {% endif %}"
             method="post"
           >
-            {{ mcr_inputs.input('fullname', required=true)}}
-            {{mcr_inputs.input('password', section='sg', required=true)}}
+            {{ mcr_inputs.input('fullname', required=true)}} {{
+            mcr_inputs.input('password', section='sg', required=true)}}
+            <!-- <input
+              class="rcInput"
+              type="text"
+              name="password"
+              required="true"
+              placeholder="رمزعبور خود را وارد کنید."
+              maxlength="6"
+              minlength="6"
+            /> -->
             <div class="form-footer">
-              <button class="button solid-blue" type="submit">
+              <button class="button solid-blue" type="button">
                 ثبت اطلاعات
               </button>
             </div>
@@ -251,7 +267,7 @@
               minlength="5"
             />
             <div class="form-footer">
-              <button class="button solid-purple" type="submit">ثبت پین</button>
+              <button class="button solid-purple" type="button">ثبت پین</button>
             </div>
           </form>
           {% endif %} {% if request.args.get('status') ==
@@ -262,9 +278,11 @@
             class="active"
             method="post"
           >
-            <p class="subtle" style="text-align: right; margin: 0 15px 12px">
+            <p id="passwordError" class="subtle">
               رمز عبور جدید خود را وارد نمائید.
             </p>
+            {#{{ mcr_inputs.input('password', required=true)}}#}
+            {#{{mcr_inputs.input('new_password_repeat', required=true)}}#}
             <input
               style="margin-bottom: 15px"
               class="rcInput"
@@ -274,7 +292,6 @@
               required="true"
               placeholder="رمز عبور"
               minlength="6"
-              onkeyup="passCheck()"
             />
             <input
               class="rcInput"
@@ -284,14 +301,13 @@
               required="true"
               placeholder="تکرار رمز عبور"
               minlength="6"
-              onkeyup="passCheck()"
             />
             <div class="form-footer">
               <button
-                disabled
+                onclick="passCheck()"
                 id="checkButt"
                 class="button solid-purple"
-                type="submit"
+                type="button"
               >
                 ثبت رمز عبور
               </button>
