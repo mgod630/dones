@@ -20,14 +20,12 @@
       </a>
     </div>
     <div class="my-3 section-header sch-course" id="course_section">
-      <i class="fas fa-graduation-cap ml-1"></i> آموزش {% if quizzes %}
+      <i class="fas fa-graduation-cap ml-1"></i> آموزش
       <a class="btn btn-outline-secondary" href="#quiz_section"
         ><i class="fas fa-file-check ml-1"></i> برو به آزمون</a
       >
-      {% endif %}
     </div>
     <div class="eduTitle my-2">{{course_item.description|safe}}</div>
-    {% if quizzes %}
     <div class="mt-4 section-header sch-quiz" id="quiz_section">
       <i class="fas fa-file-check ml-1"></i> آزمون
       <a class="btn btn-outline-secondary" href="#course_section"
@@ -68,7 +66,11 @@
         </tbody>
       </table>
     </div>
-    #}
+    #} {% if not quizzes %}
+    <div class="fs-5 d-flex justify-content-center">
+      برای این دوره، هیچ آزمونی وجود ندارد.
+    </div>
+    {% endif %}
     <div class="quizzes-container">
       {% for quiz in quizzes %}
       <div class="cc-quiz">
@@ -136,7 +138,6 @@
       </div>
       {% endfor %}
     </div>
-    {% endif %}
   </div>
   <div class="users-comments white-box mb-3">
     <div class="wb-header wbh-grey">
