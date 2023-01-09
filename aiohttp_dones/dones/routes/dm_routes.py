@@ -481,7 +481,10 @@ def make_routes(fullstack_blueprint):
         all_notifications = notifications_orm.Notifications.get_all_notifications_with_users()
         for notification in all_notifications:
             notification['jalali_date'] = date_converter.Date_converter.unix_timestamp_to_jalali(notification['unix_datetime'])
-        return render_template('data_management/dm_notifications.html', user=user, all_notifications=all_notifications)
+        unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])
+        if unread_notifications_count:
+            unread_notifications_count = unread_notifications_count[0]
+        return render_template('data_management/dm_notifications.html', user=user, all_notifications=all_notifications, unread_notifications_count=unread_notifications_count)
 
     @fullstack_blueprint.route('/dm-notifications', methods=['POST'])
     def dm_notifications_post():

@@ -16,6 +16,8 @@ def make_routes(fullstack_blueprint):
         if course == None:
             return redirect('/404-not-found') 
         unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])
+        if unread_notifications_count:
+            unread_notifications_count = unread_notifications_count[0]
         return render_template("course-info.html", course=course, user=user, unread_notifications_count=unread_notifications_count)
 
     @fullstack_blueprint.route('/course-overview/course_<course_id>')
@@ -59,6 +61,8 @@ def make_routes(fullstack_blueprint):
             return redirect('/')
         
         unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])
+        if unread_notifications_count:
+            unread_notifications_count = unread_notifications_count[0]
         return render_template("course-overview.html", course=course, course_items=course_items,user=user, unread_notifications_count=unread_notifications_count)
 
     @fullstack_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
@@ -80,6 +84,8 @@ def make_routes(fullstack_blueprint):
                 unix_datetime = time.time()
                 new_user_item_id = user_items_orm.User_items.insert_new_user_item(user_id=user['id'], item_id=item_id, unix_datetime=unix_datetime)
         unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])
+        if unread_notifications_count:
+            unread_notifications_count = unread_notifications_count[0]
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         course_item = None
         for crs_item in course_items:
