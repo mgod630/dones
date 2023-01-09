@@ -1,7 +1,7 @@
 import secrets, time, random, tools.sms as sms
 from flask import render_template, request, redirect, session, url_for, flash, current_app as app
 from routes import common
-from models_mysql import users_orm
+from models_mysql import users_orm, notifications_orm
 
 def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route('/login')
@@ -97,6 +97,8 @@ def make_routes(fullstack_blueprint):
                     if 'mobile' in session:
                         session.pop('mobile', None)
                     session['g_token'] = g_token
+                    notification_text = 'به فول استک خوش آمدید.'
+                    new_notification = notifications_orm.Notifications.insert_new_notification(receiver_id=user['id'], notification_text=notification_text, unix_datetime=time.time(), is_read=notifications_orm.Notifications.Read_status.unread.value)
                     return redirect(url_for('fullstack_blueprint.home'))
                 else :
                     status = 'user_is_not_registered'

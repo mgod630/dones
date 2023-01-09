@@ -1,6 +1,4 @@
 import enum
-import time
-from datetime import datetime
 import mysql.connector.pooling
 from flask import current_app as app
 
@@ -217,21 +215,21 @@ class Transactions:
         gift_cash_deposit = enum.auto()
         buy_token = enum.auto()
 
-def transactions_orm_functions_test():
-    import random
-    i = random.randint(1, 1000)
-    last_id = Transactions.insert_new_transaction(i, i, i, time.time(
-    ), Transactions.Types.buy_token, Transactions.Status.pending, 0, f'{i*11}')
-    update = Transactions.update_transaction(last_id, user_id=i*2)
-    last_transaction = Transactions.get_transaction_by_id(last_id)
-    print(last_transaction)
-    print('-' * 80)
-    all_transactions = Transactions.get_all_transactions()
-    print(all_transactions)
+# def transactions_orm_functions_test():
+#     import random
+#     i = random.randint(1, 1000)
+#     last_id = Transactions.insert_new_transaction(i, i, i, time.time(
+#     ), Transactions.Types.buy_token, Transactions.Status.pending, 0, f'{i*11}')
+#     update = Transactions.update_transaction(last_id, user_id=i*2)
+#     last_transaction = Transactions.get_transaction_by_id(last_id)
+#     print(last_transaction)
+#     print('-' * 80)
+#     all_transactions = Transactions.get_all_transactions()
+#     print(all_transactions)
 
 
 if __name__ == '__main__':
     connection_pool = mysql.connector.pooling.MySQLConnectionPool(
         user="root", password="", database='goldis', use_pure=False, pool_name="my_pool", pool_size=32, buffered=True)
-    transactions_orm_functions_test()
+    # transactions_orm_functions_test()
     print('Everything is alright!')

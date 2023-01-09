@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, url_for, session, jsonify
 from routes import common
-from models_mysql import courses_orm, course_news_orm, emails_orm
+from models_mysql import courses_orm, course_news_orm, emails_orm, notifications_orm
 import tools.date_converter as date_converter
 
 def make_routes(fullstack_blueprint):
@@ -17,7 +17,8 @@ def make_routes(fullstack_blueprint):
                 course['unix_end_datetime'])
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(
             section_id)
-        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_courses_news=all_courses_news)
+        unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])
+        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_courses_news=all_courses_news, unread_notifications_count=unread_notifications_count)
 
     @fullstack_blueprint.route("/landing-page")
     def landing_page():

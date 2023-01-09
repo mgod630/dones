@@ -1,7 +1,7 @@
 import jdatetime , json, time, tools.date_converter as date_converter
 from flask import redirect, render_template, request, session, url_for, flash
 from routes import common
-from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, comments_orm, course_news_orm, user_courses_orm ,user_quizzes_orm, user_items_orm
+from models_mysql import courses_orm, items_orm, quizzes_orm, questions_orm, notifications_orm, course_news_orm, user_courses_orm ,user_quizzes_orm, user_items_orm
 
 def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route("/course-info/course_<course_id>")
@@ -15,7 +15,8 @@ def make_routes(fullstack_blueprint):
         course['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(course['unix_end_datetime'])
         if course == None:
             return redirect('/404-not-found') 
-        return render_template("course-info.html", course=course, user=user)
+        unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])
+        return render_template("course-info.html", course=course, user=user, unread_notifications_count=unread_notifications_count)
 
     @fullstack_blueprint.route('/course-overview/course_<course_id>')
     def course_overview(course_id):
@@ -56,7 +57,9 @@ def make_routes(fullstack_blueprint):
         if course['unix_end_datetime'] <= time.time():
             flash('کاربر گرامی زمان شروع این دوره هنوز نرسیده است.', 'danger')
             return redirect('/')
-        return render_template("course-overview.html", course=course, course_items=course_items,user=user)
+        
+        unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])
+        return render_template("course-overview.html", course=course, course_items=course_items,user=user, unread_notifications_count=unread_notifications_count)
 
     @fullstack_blueprint.route('/course-content/course_<course_id>/item_<item_id>')
     def course_content(course_id, item_id):
@@ -76,6 +79,7 @@ def make_routes(fullstack_blueprint):
             if not user_item :
                 unix_datetime = time.time()
                 new_user_item_id = user_items_orm.User_items.insert_new_user_item(user_id=user['id'], item_id=item_id, unix_datetime=unix_datetime)
+        unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])
         course_items = items_orm.Items.get_all_items_by_course_id(course_id)
         course_item = None
         for crs_item in course_items:
@@ -88,10 +92,10 @@ def make_routes(fullstack_blueprint):
             for quiz in quizzes:
                 quiz['jalali_start_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_start_datetime'])
                 quiz['jalali_end_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(quiz['unix_end_datetime'])
-            return render_template("course-content.html", course=course, course_item=course_item, user=user, quizzes=quizzes)
+            return render_template("course-content.html", course=course, course_item=course_item, user=user, quizzes=quizzes, unread_notifications_count=unread_notifications_count)
         else:
             flash('کاربر گرامی برای این دوره تاکنون جلسه ای تعریف نشده است.', 'warning')
-            return redirect(url_for('fullstack_blueprint.course_overview', course_id=course_id))
+            return redirect(url_for('fullstack_blueprint.course_overview', course_id=course_id, unread_notifications_count=unread_notifications_count))
 
     @fullstack_blueprint.route("/quiz/quiz_<quiz_id>")
     def quiz_content(quiz_id):

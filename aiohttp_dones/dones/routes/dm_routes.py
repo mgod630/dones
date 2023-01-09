@@ -483,14 +483,18 @@ def make_routes(fullstack_blueprint):
         user = common.get_user_from_token()
         if is_admin_user(user) == False:
             return redirect('/404-not-found')
-        return render_template('data_management/dm_notifications.html', user=user)
+        all_notifications = notifications_orm.Notifications.get_all_notifications_with_users()
+        for notification in all_notifications:
+            notification['jalali_date'] = date_converter.Date_converter.unix_timestamp_to_jalali(notification['unix_datetime'])
+        return render_template('data_management/dm_notifications.html', user=user, all_notifications=all_notifications)
 
     @fullstack_blueprint.route('/dm-notifications', methods=['POST'])
     def dm_notifications_post():
         mobile = request.form.get('mobile')
         notification_text = request.form.get('notification_text')
         user = users_orm.Users.get_user_by_mobile(mobile)
-        is_read = notifications_orm.Notifications.Read_status.unread.value
-        new_notification = notifications_orm.Notifications.insert_new_notification(receiver_id=user['id'], notification_text=notification_text, unix_datetime=time.time(), is_read=is_read)
-        print(new_notification)
+        if user == None:
+            status = 'user_not_found'
+            return redirect(url_for('fullstack_blueprint.dm_notifications', status=status))
+        new_notification = notifications_orm.Notifications.insert_new_notification(receiver_id=user['id'], notification_text=notification_text, unix_datetime=time.time(), is_read=notifications_orm.Notifications.Read_status.unread.value)
         return redirect(url_for('fullstack_blueprint.dm_notifications'))
