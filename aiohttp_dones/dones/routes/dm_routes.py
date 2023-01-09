@@ -477,3 +477,11 @@ def make_routes(fullstack_blueprint):
             transaction['course_title'] = course['title']
             transaction['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(transaction['create_datetime'])
         return render_template('data_management/dm_transactions.html', user=user, all_transactions=all_transactions)
+
+    @fullstack_blueprint.route('/dm-notifications')
+    def dm_notifications():
+      return render_template('dm_notifications.html')
+
+    @fullstack_blueprint.route('/dm-notifications', methods=['POST'])
+    def dm_notifications_post():
+      return redirect(url_for('fullstack_blueprint.dm_notifications'))
