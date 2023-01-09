@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for, session
 from routes import common
 import tools.date_converter as date_converter
 import time, secrets, json
-from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, course_news_orm, user_quizzes_orm, transactions_orm
+from models_mysql import users_orm, courses_orm, items_orm, quizzes_orm, questions_orm, user_courses_orm, course_news_orm, user_quizzes_orm, transactions_orm, notifications_orm
 
 def make_routes(fullstack_blueprint):
     def is_admin_user(user):
@@ -487,5 +487,10 @@ def make_routes(fullstack_blueprint):
 
     @fullstack_blueprint.route('/dm-notifications', methods=['POST'])
     def dm_notifications_post():
-        
-      return redirect(url_for('fullstack_blueprint.dm_notifications'))
+        mobile = request.form.get('mobile')
+        notification_text = request.form.get('notification_text')
+        user = users_orm.Users.get_user_by_mobile(mobile)
+        is_read = notifications_orm.Notifications.Read_status.unread.value
+        new_notification = notifications_orm.Notifications.insert_new_notification(receiver_id=user['id'], notification_text=notification_text, unix_datetime=time.time(), is_read=is_read)
+        print(new_notification)
+        return redirect(url_for('fullstack_blueprint.dm_notifications'))

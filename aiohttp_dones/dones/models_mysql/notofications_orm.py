@@ -47,7 +47,7 @@ class Notifications:
         return row
     
     @staticmethod
-    def get_notifications_count_by_receiver_id(receiver_id):
+    def get_unread_notifications_count_by_receiver_id(receiver_id):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
@@ -60,14 +60,14 @@ class Notifications:
         return row
 
     @staticmethod
-    def insert_new_notification(receiver_id, notification_text, unix_datetime, is_read=0):
+    def insert_new_notification(receiver_id, notification_text, unix_datetime, is_read):
         global connection_pool
         if connection_pool == None:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
         add_notification = ("INSERT INTO `tbl_notifications` (`receiver_id`, `notification_text`, `unix_datetime`, `is_read`) VALUES" +
-                           "( %(receiver_id)s, %(notification_text)s, %(unix_datetime)s, %(is_read)s)")
+                           "(%(receiver_id)s, %(notification_text)s, %(unix_datetime)s, %(is_read)s)")
         data_notification = {
             'receiver_id': receiver_id,
             'notification_text': notification_text,
@@ -109,53 +109,10 @@ class Notifications:
         cnx.close()
         return True
 
-        global connection_pool
-        if connection_pool == None:
-            connection_pool = app.config['mysql_connection_pool']
-        cnx = connection_pool.get_connection()
-        cursor = cnx.cursor()
-        update_string = ''
-        if is_read:
-            update_string += f'is_read=%(is_read)s,'
-        if notification_type:
-            update_string += f'notification_type=%(notification_type)s,'
-        if status:
-            update_string += f'status=%(status)s,'
-        if description:
-            update_string += f'description=%(description)s,'
-        if ipg_invoice_number:
-            update_string += f'ipg_invoice_number=%(ipg_invoice_number)s'
-        update_string = update_string.rstrip(',')
-        add_notification = f"UPDATE tbl_notifications SET {update_string} WHERE ipg_ref_id='{ipg_ref_id}'"
-        data_notification = {
-            'is_read': is_read,
-            'notification_type': notification_type,
-            'status': status,
-            'description': description,
-            'ipg_invoice_number': ipg_invoice_number
-        }
-        cursor.execute(add_notification, data_notification)
-        cnx.commit()
-        cnx.close()
-        return True
-
-    class Status(enum.Enum):
-        Unknown = enum.auto()
-        successful = enum.auto()
-        failed = enum.auto()
-        pending = enum.auto()
-        expired = enum.auto()
-        queued = enum.auto()
-        canceling = enum.auto()
-        canceled = enum.auto()
-
-    class Types(enum.Enum):
-        ipg_cash_deposit = enum.auto()
-        admin_cash_deposit = enum.auto()
-        gift_cash_deposit = enum.auto()
-        buy_token = enum.auto()
-
-
+    class Read_status(enum.Enum):
+      unread = enum.auto()
+      read = enum.auto()
+    
 
 if __name__ == '__main__':
     connection_pool = mysql.connector.pooling.MySQLConnectionPool(

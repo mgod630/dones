@@ -25,7 +25,7 @@ def make_routes(fullstack_blueprint):
             transaction = transactions_orm.Transactions.insert_new_transaction(user_id=user['id'], course_id=course_id, ipg_ref_id=ipg_ref_id, fs_invoice_number=fs_invoice_number, amount=amount, transaction_type=transaction_type, status=transaction_status, create_datetime=time.time(), description=description)
             return render_template('token_buy_invoice.html', course=course, user=user, transaction=transaction)
         if error:
-            transaction_status = transactions_orm.Transactions.Status.failed.value
+            transaction_status = transactions_orm.Transactions.Status.failed.value 
             transaction_type = transactions_orm.Transactions.Types.buy_token.value
             fs_invoice_number = common.create_invoice_number()
             description = ''

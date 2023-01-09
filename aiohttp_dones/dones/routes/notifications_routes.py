@@ -7,4 +7,5 @@ from tools import date_converter
 def make_routes(fullstack_blueprint):
     @fullstack_blueprint.route('/notifications')
     def notifications():
+      user = common.get_user_from_token()
       return render_template('notifications.html')
