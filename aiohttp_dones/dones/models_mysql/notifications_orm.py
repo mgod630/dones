@@ -52,7 +52,7 @@ class Notifications:
             connection_pool = app.config['mysql_connection_pool']
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = "SELECT t.*, u.full_name, u.mobile FROM tbl_notifications t INNER JOIN tbl_users u ON u.id = t.user_id"
+        query = "SELECT t.*, u.full_name, u.mobile FROM tbl_notifications t INNER JOIN tbl_users u ON u.id = t.receiver_id"
         cursor.execute(query)
         row = cursor.fetchall()
         cnx.close()
