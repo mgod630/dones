@@ -1,0 +1,28 @@
+<div class="notifications-container">
+  {% for notif in notifications %}
+  <a
+    href="/notification-content?notification_id={{notif.id}}"
+    class="notification-link"
+  >
+    <div class="notification-row">
+      <div>
+        <div class="notif-date">
+          <div>
+            <i class="fal fa-calendar"></i>
+            <span>{{notif.shamsi_date_time}}</span>
+          </div>
+        </div>
+        <div class="notif-content">{{notif.notification_text}}</div>
+      </div>
+      <i class="fas fa-chevron-left"></i>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="notifications-container">
+  <div class="notification-row" data-id="-1">
+    <div class="notif-content text-center">هیچ پیامی وجود ندارد.</div>
+  </div>
+</div>
+{% endif %}

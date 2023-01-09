@@ -1,0 +1,6 @@
+{% extends "data_management/dm_layout.html" %}
+{% set current_tab = 'notifications' %}
+<form action="/dm-notifications" method="post">
+  <input name="mobile" type="text" placeholder="شماره موبایل">
+  <textarea name="notif_text" id="" cols="30" rows="10"></textarea>
+</form>
