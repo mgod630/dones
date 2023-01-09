@@ -31,15 +31,10 @@ def make_routes(fullstack_blueprint):
     def json_get_dm_users():
         page_number = request.args.get('page_number', '1')
         page_number = int(page_number) if str.isdigit(str(page_number)) else 1
-        number_users_per_page = 1
+        number_users_per_page = 3
         users_count = users_orm.Users.get_users_count()[0]
         page_count = (users_count // number_users_per_page) + 1
         if page_number != None:
-            # start = page_number * users_count - \
-            #         users_count if page_number > 0 else 0
-            # end = start + number_users_per_page 
-            # all_users = users_orm.Users.get_all_users_reverse()
-            # a_page_users = a_page_users[start:end]
             all_users = users_orm.Users.get_all_users_reverse()
         return {'page_number':page_number, 'current_page':page_count, 'all_users':all_users, 'number_users_per_page': number_users_per_page}
 
