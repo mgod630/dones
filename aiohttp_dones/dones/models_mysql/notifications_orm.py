@@ -66,9 +66,9 @@ class Notifications:
         cnx = connection_pool.get_connection()
         cursor = cnx.cursor()
         is_read = Notifications.Read_status.unread.value
-        query = 'SELECT COUNT(receiver_id) FROM tbl_comments WHERE (receiver_id=%(receiver_id)s AND is_read=%(is_read)s);'
+        query = 'SELECT COUNT(receiver_id) FROM tbl_notifications WHERE (receiver_id=%(receiver_id)s AND is_read=%(is_read)s);'
         cursor.execute(query, {'receiver_id': receiver_id, 'is_read': is_read})
-        row = cursor.fetchall()
+        row = cursor.fetchone()
         cnx.close()
         return row
 
