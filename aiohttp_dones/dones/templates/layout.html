@@ -104,32 +104,7 @@
           </div>
           <div class="v-divider"></div>
           <div class="dropdown shopping-cart">
-            <button
-              class="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <i class="far fa-bell"></i>
-              {% if user.cart_items %}
-              <div class="cart-items-count">{{user.cart_items|length}}</div>
-              {% endif %}
-            </button>
-            <div class="dropdown-menu">
-              {% if user.cart_items %} {% for cart_item in user.cart_items %}
-              <div class="cart-item">
-                {{cart_item.title}}
-                <a href="/remove_from_cart/course_id={{cart_item.id}}"
-                  ><i class="far fa-trash-alt"></i
-                ></a>
-              </div>
-              {% endfor %}
-              <a class="dropdown-item text-center" href="#">پرداخت</a>
-              {% else %}
-              <div class="empty-cart">اطلاعیه جدیدی وجود ندارد.</div>
-              {% endif %}
-            </div>
+            <a href="/notifications"><i class="far fa-bell"></i></a>
           </div>
           {% else %}
           <a href="/login" class="btn btn-outline-primary">
