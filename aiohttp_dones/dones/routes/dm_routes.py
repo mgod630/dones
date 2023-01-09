@@ -480,8 +480,12 @@ def make_routes(fullstack_blueprint):
 
     @fullstack_blueprint.route('/dm-notifications')
     def dm_notifications():
-      return render_template('dm_notifications.html')
+        user = common.get_user_from_token()
+        if is_admin_user(user) == False:
+            return redirect('/404-not-found')
+        return render_template('data_management/dm_notifications.html', user=user)
 
     @fullstack_blueprint.route('/dm-notifications', methods=['POST'])
     def dm_notifications_post():
+        
       return redirect(url_for('fullstack_blueprint.dm_notifications'))
