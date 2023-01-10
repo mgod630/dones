@@ -13,7 +13,7 @@ def make_routes(fullstack_blueprint):
             return redirect('/')
         user_notifications = notifications_orm.Notifications.get_all_notifications_by_receiver_id(user['id'])
         for notification in user_notifications:
-            notification['jalali_date'] = date_converter.Date_converter.unix_timestamp_to_jalali(notification['unix_datetime'])
+            notification['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(notification['unix_datetime'])
         unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])[0]
         return render_template('notifications.html', user=user, user_notifications=user_notifications, unread_notifications_count=unread_notifications_count)
 
@@ -31,6 +31,6 @@ def make_routes(fullstack_blueprint):
         if notification == None:
             flash(f'{user_full_name} گرامی پیامی برای نمایش وجود ندارد.', 'danger')
             return redirect('/notifications')
-        notification['jalali_date'] = date_converter.Date_converter.unix_timestamp_to_jalali(notification['unix_datetime'])
+        notification['jalali_datetime'] = date_converter.Date_converter.unix_timestamp_to_jalali(notification['unix_datetime'])
         unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])[0]
         return render_template('notification.html', user=user, notification=notification, user_notifications=user_notifications, unread_notifications_count=unread_notifications_count)
