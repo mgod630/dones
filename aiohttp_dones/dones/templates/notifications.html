@@ -7,7 +7,11 @@
     href="/notifications/notification_{{notif.id}}"
   >
     <div class="card notifCard">
-      <p class="notifText">متن اطلاعیه: {{notif.notification_text}}</p>
+      {% set date, time = notif.jalali_datetime.split(' ') %}
+      <span>{{time}} - {{date}}</span>
+      <p class="notifText notifText2">
+        متن اطلاعیه: {{notif.notification_text}}
+      </p>
     </div>
   </a>
 </div>

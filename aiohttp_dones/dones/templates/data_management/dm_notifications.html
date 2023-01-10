@@ -16,4 +16,33 @@
     </button>
   </form>
 </div>
+
+<p class="mt-5 mb-5 warningTitle d-flex justify-content-center">
+  لیست اطلاعیه ها
+</p>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>نام</th>
+        <th>موبایل</th>
+        <th>تاریخ</th>
+        <th>متن اطلاعیه</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for notif in all_notifications %}
+      <tr>
+        <td></td>
+        <td>{{notif.full_name}}</td>
+        <td>{{notif.mobile}}</td>
+        {% set date,time = notif.jalali_date.split(' ') %}
+        <td>{{date}}</td>
+        <td>{{notif.notification_text}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

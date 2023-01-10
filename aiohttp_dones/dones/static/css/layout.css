@@ -717,8 +717,12 @@ i {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.notifText2 {
+  margin: 5px;
+}
 .bellIcon {
-  font-size: 20px;
+  font-size: 18px;
+  margin: 0 5px 5px;
 }
 .notifCard span {
   font-size: 12px;

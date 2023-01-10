@@ -3,7 +3,7 @@
   <div class="card notifCard mt-5">
     {% set date, time = notification.jalali_datetime.split(' ') %}
     <span>{{time}} - {{date}}</span>
-    <p>{{notification.notification_text}}</p>
+    <p class="notifText2">{{notification.notification_text}}</p>
   </div>
 </div>
 {% endif %} {% endblock %}
