@@ -104,9 +104,11 @@
           </div>
           <div class="v-divider"></div>
           <div class="dropdown shopping-cart">
-            <a href="/notifications"><i class="far fa-bell"></i></a>
+            <a href="/notifications"><i class="bellIcon far fa-bell"></i></a>
+            {% if unread_notifications_count %}
+            <div class="cart-items-count">{{unread_notifications_count}}</div>
           </div>
-          {% else %}
+          {% endif %} {% else %}
           <a href="/login" class="btn btn-outline-primary">
             <i class="fas fa-user"></i>
             ورود
