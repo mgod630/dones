@@ -222,17 +222,7 @@
         <th>تنظیمات</th>
       </tr>
     </thead>
-    <tr>
-      <td></td>
-      <td id="listing_table_user_type"></td>
-      <td id="listing_table_full_name"></td>
-      <td id="listing_table_mobile"></td>
-      <td>
-        <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
-          ><i class="far fa-cog"></i
-        ></a>
-      </td>
-    </tr>
+    <tbody id="rowTable"></tbody>
   </table>
 </div>
 
@@ -275,30 +265,42 @@
             function changePage(page) {
               var btn_next = document.getElementById("btn_next");
               var btn_prev = document.getElementById("btn_prev");
-              var listing_table_full_name = document.getElementById("listing_table_full_name");
-              var listing_table_mobile = document.getElementById("listing_table_mobile");
-              var listing_table_user_type = document.getElementById("listing_table_user_type");
+              // var listing_table_full_name = document.getElementById("listing_table_full_name");
+              // var listing_table_mobile = document.getElementById("listing_table_mobile");
+              // var listing_table_user_type = document.getElementById("listing_table_user_type");
               var page_span = document.getElementById("page");
               // Validate page
               if (page < 1) page = 1;
               if (page > numPages()) page = numPages();
-              listing_table_full_name.innerHTML = "";
-              listing_table_mobile.innerHTML = "";
-              listing_table_user_type.innerHTML = "";
+              // listing_table_full_name.innerHTML = "";
+              // listing_table_mobile.innerHTML = "";
+              // listing_table_user_type.innerHTML = "";
+              $('#rowTable').empty()
               for (
                 var i = (page - 1) * records_per_page;
                 i < page * records_per_page;
                 i++
               ) {
-                // $("#comments_container").empty().append($.parseHTML('<div class="busy-overlay"><div class="spinner"></div></div>'))
-                listing_table_full_name.innerHTML += JSON.stringify(objJson[i].full_name);
-                listing_table_mobile.innerHTML += JSON.stringify(objJson[i].mobile);
                 if (JSON.stringify(objJson[i].user_type) == -2 || JSON.stringify(objJson[i].user_type) == -1){
-                  listing_table_user_type.innerHTML = 'ادمین';
+                  x = 'ادمین';
                 }
                 else{
-                  listing_table_user_type.innerHTML = 'عادی'
+                  x = 'عادی'
                 }
+                var rows = $.parseHTML(`<tr>
+                                        <td></td>
+                                        <td>${x}</td>
+                                        <td>${JSON.stringify(objJson[i].full_name)}</td>
+                                        <td>${JSON.stringify(objJson[i].mobile)}</td>
+                                        <td>
+                                          <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
+                                            ><i class="far fa-cog"></i
+                                          ></a>
+                                        </td>
+                                      </tr>`)
+                  $('#rowTable').append(rows)
+                // listing_table_full_name.innerHTML += JSON.stringify(objJson[i].full_name);
+                // listing_table_mobile.innerHTML += JSON.stringify(objJson[i].mobile);
                 // listing_table_user_type.innerHTML += JSON.stringify(objJson[i].user_type);
               }
               page_span.innerHTML = page;
