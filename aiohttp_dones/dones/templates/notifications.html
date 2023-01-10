@@ -7,11 +7,11 @@
     href="/notifications/notification_{{notif.id}}"
   >
     <div class="card notifCard">
-      <div class="notifText">متن اطلاعیه: {{notif.notification_text}}</div>
+      <p class="notifText">متن اطلاعیه: {{notif.notification_text}}</p>
     </div>
   </a>
 </div>
-{{user_notifications}} {% endfor %} {% else %}
+{% endfor %} {% else %}
 <div class="card notifCard">
   <div class="notifText">اطلاعیه ای</div>
 </div>

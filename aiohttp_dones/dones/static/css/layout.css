@@ -704,7 +704,7 @@ i {
   min-height: 70px;
   margin: 15px 50px;
   padding: 15px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
 }
 .noifTitle {
@@ -712,7 +712,16 @@ i {
 }
 .notifText {
   color: #000;
+  width: 450px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .bellIcon {
   font-size: 20px;
+}
+.notifCard span {
+  font-size: 12px;
+  margin: 5px;
+  color: #aaa;
 }

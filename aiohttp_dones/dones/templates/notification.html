@@ -1,9 +1,9 @@
 {% extends "layout.html" %} {% block content %} {% if user_notifications %}
 <div class="container">
-  <div class="card notifCard">
-    <p>{{user_notifications}}</p>
-    <p>{{user_notifications}}</p>
-    <p>{{user_notifications}}</p>
+  <div class="card notifCard mt-5">
+    {% set date, time = notification.jalali_datetime.split(' ') %}
+    <span>{{time}} - {{date}}</span>
+    <p>{{notification.notification_text}}</p>
   </div>
 </div>
 {% endif %} {% endblock %}
