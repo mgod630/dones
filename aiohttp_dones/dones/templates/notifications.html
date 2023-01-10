@@ -1,0 +1,15 @@
+{% extends "layout.html" %} {% block content %} {% if user_notifications %}
+<div class="d-flex justify-content-center my-5 noifTitle">اطلاعیه های شما</div>
+{% for notif in user_notifications %}
+<div class="container">
+  <a
+    style="display: block; text-decoration: none"
+    href="/notifications/notification_{{notif.id}}"
+  >
+    <div class="card notifCard">
+      <div class="notifText">متن اطلاعیه: {{notif.notification_text}}</div>
+    </div>
+  </a>
+</div>
+
+{% endfor %} {% endif %} {% endblock %}
