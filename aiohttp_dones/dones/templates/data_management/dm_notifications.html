@@ -1,7 +1,7 @@
 {% extends "data_management/dm_layout.html" %} {% set current_tab =
 'notifications' %} {% block inner_content %}
 <div class="d-flex flex-column m-4">
-  <form action="/dm-notifications" methods="post">
+  <form action="/dm-notifications" method="post">
     <span>مخاطب اطلاعیه:</span>
     <input class="my-2" type="text" name="mobile" placeholder="شماره موبایل" />
     <div>متن اطلاعیه</div>

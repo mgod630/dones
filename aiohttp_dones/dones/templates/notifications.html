@@ -11,5 +11,8 @@
     </div>
   </a>
 </div>
-
-{% endfor %} {% endif %} {% endblock %}
+{{user_notifications}} {% endfor %} {% else %}
+<div class="card notifCard">
+  <div class="notifText">اطلاعیه ای</div>
+</div>
+{% endif %} {% endblock %}
