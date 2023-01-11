@@ -293,7 +293,7 @@
                                         <td>${JSON.stringify(objJson[i].full_name)}</td>
                                         <td>${JSON.stringify(objJson[i].mobile)}</td>
                                         <td>
-                                          <a class="btn btn-success btn-sm" href="/dm-users/{{user.id}}"
+                                          <a class="btn btn-success btn-sm" href="/dm-users/${JSON.stringify(objJson[i].mobile)}"
                                             ><i class="far fa-cog"></i
                                           ></a>
                                         </td>
