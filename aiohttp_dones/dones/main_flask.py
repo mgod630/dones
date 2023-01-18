@@ -12,7 +12,7 @@ def init(config_file="settings.py"):
     app.config["SECRET_KEY"] = 'secrets.token_hex(16)'
     # TODO Use pure in production
     app.config['mysql_connection_pool'] = mysql.connector.pooling.MySQLConnectionPool(
-        user="root", password="", database='goldis', use_pure=True, pool_name="my_pool", pool_size=32, buffered=True)
+        user="root", password="", database='full_stack', use_pure=True, pool_name="my_pool", pool_size=32, buffered=True)
     no_login_need_urls = ["/login", "/login-post", "/signup", "/signup-post"]
     fullstack_blueprint = make_routes()
     app.register_blueprint(fullstack_blueprint)

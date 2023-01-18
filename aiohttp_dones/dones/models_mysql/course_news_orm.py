@@ -117,5 +117,5 @@ class Courses_news:
 
 if __name__ == '__main__':
     connection_pool = mysql.connector.pooling.MySQLConnectionPool(
-        user="root", password="", database='goldis', use_pure=False, pool_name="my_pool", pool_size=32, buffered=True)
+        user="root", password="", database='full_stack', use_pure=False, pool_name="my_pool", pool_size=32, buffered=True)
 

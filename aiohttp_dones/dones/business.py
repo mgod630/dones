@@ -4,7 +4,7 @@ from date_converter.datetime_converter import Datetime_converter
 from flask import current_app as app
 
 connection_pool = mysql.connector.pooling.MySQLConnectionPool(
-    user="root", password="", database='goldis', use_pure=False, pool_name="my_pool", pool_size=32, buffered=True)
+    user="root", password="", database='full_stack', use_pure=False, pool_name="my_pool", pool_size=32, buffered=True)
 transactions_orm.connection_pool = accounts_orm.connection_pool = assets_orm.connection_pool = connection_pool
 
 

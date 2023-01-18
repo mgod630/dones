@@ -17,8 +17,8 @@ def make_routes(fullstack_blueprint):
                 course['unix_end_datetime'])
         all_courses_news = course_news_orm.Courses_news.get_courses_news_by_section_id(
             section_id)
-        unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])[0]
-        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_courses_news=all_courses_news, unread_notifications_count=unread_notifications_count)
+        # unread_notifications_count = notifications_orm.Notifications.get_unread_notifications_count_by_receiver_id(user['id'])[0]
+        return render_template("index.html", user=user, user_account=None, all_courses=all_courses, all_courses_news=all_courses_news)
 
     @fullstack_blueprint.route("/landing-page")
     def landing_page():
