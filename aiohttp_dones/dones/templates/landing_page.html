@@ -62,7 +62,14 @@
         </a>
       </div>
       <div class="col-12 col-lg-6">
-        <video id="hajiVideo" class="vHaji" controls>
+        <video
+          id="hajiVideo"
+          class="vHaji"
+          controls
+          autoplay
+          controlsList="nodownload"
+          oncontextmenu="return false;"
+        >
           <source src="../static/template/Dsc 0654 2.m4v" />
           Your browser does not support HTML video.
         </video>
@@ -294,27 +301,42 @@
         });
       });
 
-      var replaceDigits = function () {
-        var map = [
-          "&\#1776;",
-          "&\#1777;",
-          "&\#1778;",
-          "&\#1779;",
-          "&\#1780;",
-          "&\#1781;",
-          "&\#1782;",
-          "&\#1783;",
-          "&\#1784;",
-          "&\#1785;",
-        ];
-        document.body.innerHTML = document.body.innerHTML.replace(
-          /\d(?=[^<>]*(<|$))/g,
-          function ($0) {
-            return map[$0];
+      // var replaceDigits = function () {
+      //   var map = [
+      //     "&\#1776;",
+      //     "&\#1777;",
+      //     "&\#1778;",
+      //     "&\#1779;",
+      //     "&\#1780;",
+      //     "&\#1781;",
+      //     "&\#1782;",
+      //     "&\#1783;",
+      //     "&\#1784;",
+      //     "&\#1785;",
+      //   ];
+      //   document.body.innerHTML = document.body.innerHTML.replace(
+      //     /\d(?=[^<>]*(<|$))/g,
+      //     function ($0) {
+      //       return map[$0];
+      //     }
+      //   );
+      // };
+      // replaceDigits();
+
+      function convertEnglishDigitsToFarsi(inp, separator) {
+        let result = "";
+        input = separator ? Number(inp).toLocaleString() : inp.toString();
+        for (let i in input) {
+          if (input[i] === undefined) break;
+          let charCode = input[i].charCodeAt(0);
+          if (charCode < 58 && charCode > 47) {
+            result += String.fromCharCode(charCode + 1728);
+          } else {
+            result += input[i];
           }
-        );
-      };
-      replaceDigits();
+        }
+        return result;
+      }
 
       const TI11 = "22 march 2023";
       const daysEl = document.getElementById("days");
@@ -335,7 +357,7 @@
         secondsEl.innerHTML = seconds;
       }
       countdown();
-      setInterval(countdown, 1000);
+      convertEnglishDigitsToFarsi(countdown, 1000);
     </script>
   </body>
 </html>
